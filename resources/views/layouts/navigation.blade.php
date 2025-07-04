@@ -23,7 +23,7 @@
                     @endcan
 
                     @can('view-realisasi')
-                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Realisasi sedang dalam pengembangan')">
+                        <x-nav-link :href="route('realisasi.index')" :active="request()->routeIs('realisasi.*')">
                             {{ __('Realisasi') }}
                         </x-nav-link>
                     @endcan

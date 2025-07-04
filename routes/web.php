@@ -21,6 +21,10 @@ Route::middleware('auth')->group(function () {
     Route::post('kegiatan/{kegiatan}/verify', [App\Http\Controllers\KegiatanController::class, 'verify'])->name('kegiatan.verify');
     Route::post('kegiatan/{kegiatan}/approve', [App\Http\Controllers\KegiatanController::class, 'approve'])->name('kegiatan.approve');
     Route::post('kegiatan/{kegiatan}/reject', [App\Http\Controllers\KegiatanController::class, 'reject'])->name('kegiatan.reject');
+
+    // Realisasi routes
+    Route::resource('realisasi', App\Http\Controllers\RealisasiController::class);
+    Route::delete('bukti-file/{buktiFile}', [App\Http\Controllers\RealisasiController::class, 'deleteBukti'])->name('bukti-file.delete');
 });
 
 require __DIR__.'/auth.php';
