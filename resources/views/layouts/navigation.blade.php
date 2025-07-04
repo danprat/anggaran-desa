@@ -35,13 +35,13 @@
                     @endcan
 
                     @can('manage-users')
-                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Admin sedang dalam pengembangan')">
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.*')">
                             {{ __('Admin') }}
                         </x-nav-link>
                     @endcan
 
                     @can('view-log')
-                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Log Aktivitas sedang dalam pengembangan')">
+                        <x-nav-link :href="route('log.index')" :active="request()->routeIs('log.*')">
                             {{ __('Log Aktivitas') }}
                         </x-nav-link>
                     @endcan

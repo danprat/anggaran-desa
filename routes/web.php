@@ -31,6 +31,18 @@ Route::middleware('auth')->group(function () {
     Route::get('laporan/{type}', [App\Http\Controllers\LaporanController::class, 'show'])->name('laporan.show');
     Route::post('laporan/{type}/pdf', [App\Http\Controllers\LaporanController::class, 'exportPdf'])->name('laporan.pdf');
     Route::post('laporan/{type}/excel', [App\Http\Controllers\LaporanController::class, 'exportExcel'])->name('laporan.excel');
+
+    // Admin routes
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+        Route::resource('tahun-anggaran', App\Http\Controllers\Admin\TahunAnggaranController::class);
+        Route::post('tahun-anggaran/{tahunAnggaran}/set-aktif', [App\Http\Controllers\Admin\TahunAnggaranController::class, 'setAktif'])->name('tahun-anggaran.set-aktif');
+    });
+
+    // Log Aktivitas routes
+    Route::get('log', [App\Http\Controllers\LogAktivitasController::class, 'index'])->name('log.index');
+    Route::get('log/{log}', [App\Http\Controllers\LogAktivitasController::class, 'show'])->name('log.show');
+    Route::get('log-export', [App\Http\Controllers\LogAktivitasController::class, 'export'])->name('log.export');
 });
 
 require __DIR__.'/auth.php';
