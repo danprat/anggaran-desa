@@ -66,11 +66,11 @@ class LaporanController extends Controller
                 return $item;
             });
 
-        // Data realisasi per bulan
+        // Data realisasi per bulan (SQLite compatible)
         $realisasiPerBulan = Realisasi::whereHas('kegiatan', function($q) use ($selectedTahun) {
                 $q->where('tahun_id', $selectedTahun->id);
             })
-            ->selectRaw('MONTH(tanggal) as bulan')
+            ->selectRaw("CAST(strftime('%m', tanggal) AS INTEGER) as bulan")
             ->selectRaw('SUM(jumlah_realisasi) as total')
             ->groupBy('bulan')
             ->orderBy('bulan')
@@ -163,7 +163,7 @@ class LaporanController extends Controller
         }
 
         if ($request->filled('bulan')) {
-            $query->whereMonth('tanggal', $request->bulan);
+            $query->whereRaw("CAST(strftime('%m', tanggal) AS INTEGER) = ?", [$request->bulan]);
         }
 
         $realisasi = $query->orderBy('tanggal', 'desc')->paginate(20);

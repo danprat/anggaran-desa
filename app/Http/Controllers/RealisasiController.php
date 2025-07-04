@@ -47,7 +47,7 @@ class RealisasiController extends Controller
         }
 
         if ($request->filled('bulan')) {
-            $query->whereMonth('tanggal', $request->bulan);
+            $query->whereRaw("CAST(strftime('%m', tanggal) AS INTEGER) = ?", [$request->bulan]);
         }
 
         $realisasi = $query->orderBy('tanggal', 'desc')->paginate(10);
