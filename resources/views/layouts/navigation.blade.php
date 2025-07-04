@@ -15,6 +15,36 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @can('view-kegiatan')
+                        <x-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
+                            {{ __('Kegiatan') }}
+                        </x-nav-link>
+                    @endcan
+
+                    @can('view-realisasi')
+                        <x-nav-link :href="route('realisasi.index')" :active="request()->routeIs('realisasi.*')">
+                            {{ __('Realisasi') }}
+                        </x-nav-link>
+                    @endcan
+
+                    @can('view-laporan')
+                        <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.*')">
+                            {{ __('Laporan') }}
+                        </x-nav-link>
+                    @endcan
+
+                    @can('manage-users')
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.*')">
+                            {{ __('Admin') }}
+                        </x-nav-link>
+                    @endcan
+
+                    @can('view-log')
+                        <x-nav-link :href="route('log.index')" :active="request()->routeIs('log.*')">
+                            {{ __('Log Aktivitas') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -23,7 +53,10 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>
+                                <div>{{ Auth::user()->name }}</div>
+                                <div class="text-xs text-gray-400">{{ Auth::user()->getRoleName() }}</div>
+                            </div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
