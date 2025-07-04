@@ -23,25 +23,25 @@
                     @endcan
 
                     @can('view-realisasi')
-                        <x-nav-link :href="route('realisasi.index')" :active="request()->routeIs('realisasi.*')">
+                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Realisasi sedang dalam pengembangan')">
                             {{ __('Realisasi') }}
                         </x-nav-link>
                     @endcan
 
                     @can('view-laporan')
-                        <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.*')">
+                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Laporan sedang dalam pengembangan')">
                             {{ __('Laporan') }}
                         </x-nav-link>
                     @endcan
 
                     @can('manage-users')
-                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.*')">
+                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Admin sedang dalam pengembangan')">
                             {{ __('Admin') }}
                         </x-nav-link>
                     @endcan
 
                     @can('view-log')
-                        <x-nav-link :href="route('log.index')" :active="request()->routeIs('log.*')">
+                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Log Aktivitas sedang dalam pengembangan')">
                             {{ __('Log Aktivitas') }}
                         </x-nav-link>
                     @endcan

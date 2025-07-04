@@ -16,9 +16,22 @@ class DashboardController extends Controller
         $tahunAktif = TahunAnggaran::getTahunAktif();
 
         if (!$tahunAktif) {
-            // Jika belum ada tahun aktif, redirect ke halaman setup
-            return redirect()->route('admin.tahun-anggaran.index')
-                ->with('warning', 'Silakan set tahun anggaran aktif terlebih dahulu.');
+            // Jika belum ada tahun aktif, tampilkan dashboard kosong dengan pesan
+            return view('dashboard', [
+                'tahunAktif' => null,
+                'stats' => [
+                    'total_kegiatan' => 0,
+                    'kegiatan_disetujui' => 0,
+                    'kegiatan_belum_disetujui' => 0,
+                    'total_pagu' => 0,
+                    'total_realisasi' => 0,
+                    'total_bukti' => 0,
+                    'persentase_realisasi' => 0,
+                ],
+                'chartData' => collect(),
+                'kegiatanTerbaru' => collect(),
+                'realisasiTerbaru' => collect(),
+            ]);
         }
 
         // Statistik dasar
