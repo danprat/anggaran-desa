@@ -13,6 +13,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $tahunAktif = TahunAnggaran::getTahunAktif();
 
         if (!$tahunAktif) {
@@ -31,6 +32,8 @@ class DashboardController extends Controller
                 'chartData' => collect(),
                 'kegiatanTerbaru' => collect(),
                 'realisasiTerbaru' => collect(),
+                'roleSpecificData' => [],
+                'quickActions' => [],
             ]);
         }
 
@@ -78,12 +81,287 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        // Role-specific data dan quick actions
+        $roleSpecificData = $this->getRoleSpecificData($user, $tahunAktif);
+        $quickActions = $this->getQuickActions($user);
+
         return view('dashboard', compact(
             'tahunAktif',
             'stats',
             'chartData',
             'kegiatanTerbaru',
-            'realisasiTerbaru'
+            'realisasiTerbaru',
+            'roleSpecificData',
+            'quickActions'
         ));
+    }
+
+    /**
+     * Get role-specific data for dashboard
+     */
+    private function getRoleSpecificData($user, $tahunAktif)
+    {
+        $data = [];
+
+        if ($user->hasRole('admin')) {
+            $data = [
+                'title' => 'Panel Administrator',
+                'total_users' => \App\Models\User::count(),
+                'total_tahun_anggaran' => TahunAnggaran::count(),
+                'recent_activities' => \App\Models\LogAktivitas::with('user')
+                    ->latest()
+                    ->limit(5)
+                    ->get(),
+                'system_stats' => [
+                    'total_files' => \App\Models\BuktiFile::count(),
+                    'total_logs' => \App\Models\LogAktivitas::count(),
+                ]
+            ];
+        } elseif ($user->hasRole('kepala-desa')) {
+            $pendingApprovals = Kegiatan::byTahun($tahunAktif->id)
+                ->byStatus('verifikasi')
+                ->count();
+
+            $data = [
+                'title' => 'Panel Kepala Desa',
+                'pending_approvals' => $pendingApprovals,
+                'approved_this_month' => Kegiatan::byTahun($tahunAktif->id)
+                    ->byStatus('disetujui')
+                    ->whereMonth('updated_at', now()->month)
+                    ->count(),
+                'pending_kegiatan' => Kegiatan::byTahun($tahunAktif->id)
+                    ->byStatus('verifikasi')
+                    ->with('pembuatKegiatan')
+                    ->latest()
+                    ->limit(5)
+                    ->get(),
+                'budget_summary' => [
+                    'total_approved' => Kegiatan::byTahun($tahunAktif->id)
+                        ->byStatus('disetujui')
+                        ->sum('pagu_anggaran'),
+                ]
+            ];
+        } elseif ($user->hasRole('sekretaris')) {
+            $pendingVerifications = Kegiatan::byTahun($tahunAktif->id)
+                ->byStatus('draft')
+                ->count();
+
+            $data = [
+                'title' => 'Panel Sekretaris',
+                'pending_verifications' => $pendingVerifications,
+                'verified_this_month' => Kegiatan::byTahun($tahunAktif->id)
+                    ->whereIn('status', ['verifikasi', 'disetujui'])
+                    ->whereMonth('updated_at', now()->month)
+                    ->count(),
+                'pending_kegiatan' => Kegiatan::byTahun($tahunAktif->id)
+                    ->byStatus('draft')
+                    ->with('pembuatKegiatan')
+                    ->latest()
+                    ->limit(5)
+                    ->get(),
+                'verification_stats' => [
+                    'total_draft' => Kegiatan::byTahun($tahunAktif->id)
+                        ->byStatus('draft')
+                        ->count(),
+                ]
+            ];
+        } elseif ($user->hasRole('bendahara')) {
+            $totalRealisasi = Realisasi::whereHas('kegiatan', function($q) use ($tahunAktif) {
+                $q->where('tahun_id', $tahunAktif->id);
+            })->sum('jumlah_realisasi');
+
+            $data = [
+                'title' => 'Panel Bendahara',
+                'total_realisasi' => $totalRealisasi,
+                'realisasi_this_month' => Realisasi::whereHas('kegiatan', function($q) use ($tahunAktif) {
+                    $q->where('tahun_id', $tahunAktif->id);
+                })
+                ->whereMonth('created_at', now()->month)
+                ->sum('jumlah_realisasi'),
+                'recent_realisasi' => Realisasi::whereHas('kegiatan', function($q) use ($tahunAktif) {
+                    $q->where('tahun_id', $tahunAktif->id);
+                })
+                ->with(['kegiatan'])
+                ->latest()
+                ->limit(5)
+                ->get(),
+                'budget_utilization' => [
+                    'approved_budget' => Kegiatan::byTahun($tahunAktif->id)
+                        ->byStatus('disetujui')
+                        ->sum('pagu_anggaran'),
+                    'remaining_budget' => Kegiatan::byTahun($tahunAktif->id)
+                        ->byStatus('disetujui')
+                        ->sum('pagu_anggaran') - $totalRealisasi,
+                ]
+            ];
+        } elseif ($user->hasRole('operator')) {
+            $myKegiatan = Kegiatan::byTahun($tahunAktif->id)
+                ->where('dibuat_oleh', $user->id);
+
+            $data = [
+                'title' => 'Panel Operator',
+                'my_kegiatan_total' => $myKegiatan->count(),
+                'my_kegiatan_approved' => $myKegiatan->byStatus('disetujui')->count(),
+                'my_kegiatan_draft' => $myKegiatan->byStatus('draft')->count(),
+                'my_recent_kegiatan' => $myKegiatan
+                    ->with('tahunAnggaran')
+                    ->latest()
+                    ->limit(5)
+                    ->get(),
+                'my_stats' => [
+                    'total_budget_proposed' => $myKegiatan->sum('pagu_anggaran'),
+                    'approved_budget' => $myKegiatan->byStatus('disetujui')->sum('pagu_anggaran'),
+                ]
+            ];
+        } elseif ($user->hasRole('auditor')) {
+            $data = [
+                'title' => 'Panel Auditor',
+                'total_activities' => \App\Models\LogAktivitas::count(),
+                'activities_this_month' => \App\Models\LogAktivitas::whereMonth('created_at', now()->month)->count(),
+                'recent_logs' => \App\Models\LogAktivitas::with('user')
+                    ->latest()
+                    ->limit(5)
+                    ->get(),
+                'audit_summary' => [
+                    'total_kegiatan' => Kegiatan::byTahun($tahunAktif->id)->count(),
+                    'total_realisasi' => Realisasi::whereHas('kegiatan', function($q) use ($tahunAktif) {
+                        $q->where('tahun_id', $tahunAktif->id);
+                    })->count(),
+                    'total_files' => \App\Models\BuktiFile::whereHas('realisasi.kegiatan', function($q) use ($tahunAktif) {
+                        $q->where('tahun_id', $tahunAktif->id);
+                    })->count(),
+                ]
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get quick actions based on user role
+     */
+    private function getQuickActions($user)
+    {
+        $actions = [];
+
+        if ($user->hasRole('admin')) {
+            $actions = [
+                [
+                    'title' => 'Kelola User',
+                    'description' => 'Tambah atau edit user sistem',
+                    'url' => route('admin.users.index'),
+                    'icon' => 'users',
+                    'color' => 'blue'
+                ],
+                [
+                    'title' => 'Tahun Anggaran',
+                    'description' => 'Kelola tahun anggaran',
+                    'url' => route('admin.tahun-anggaran.index'),
+                    'icon' => 'calendar',
+                    'color' => 'green'
+                ],
+                [
+                    'title' => 'Log Aktivitas',
+                    'description' => 'Lihat log sistem',
+                    'url' => route('log.index'),
+                    'icon' => 'document',
+                    'color' => 'gray'
+                ]
+            ];
+        } elseif ($user->hasRole('kepala-desa')) {
+            $actions = [
+                [
+                    'title' => 'Persetujuan Pending',
+                    'description' => 'Lihat kegiatan yang perlu disetujui',
+                    'url' => route('kegiatan.index', ['status' => 'verifikasi']),
+                    'icon' => 'check',
+                    'color' => 'green'
+                ],
+                [
+                    'title' => 'Laporan Anggaran',
+                    'description' => 'Lihat laporan keuangan',
+                    'url' => route('laporan.show', ['type' => 'keuangan']),
+                    'icon' => 'chart',
+                    'color' => 'blue'
+                ]
+            ];
+        } elseif ($user->hasRole('sekretaris')) {
+            $actions = [
+                [
+                    'title' => 'Verifikasi Kegiatan',
+                    'description' => 'Verifikasi kegiatan draft',
+                    'url' => route('kegiatan.index', ['status' => 'draft']),
+                    'icon' => 'check',
+                    'color' => 'yellow'
+                ],
+                [
+                    'title' => 'Laporan Kegiatan',
+                    'description' => 'Lihat laporan kegiatan',
+                    'url' => route('laporan.show', ['type' => 'kegiatan']),
+                    'icon' => 'document',
+                    'color' => 'blue'
+                ]
+            ];
+        } elseif ($user->hasRole('bendahara')) {
+            $actions = [
+                [
+                    'title' => 'Tambah Realisasi',
+                    'description' => 'Input realisasi anggaran',
+                    'url' => route('realisasi.create'),
+                    'icon' => 'plus',
+                    'color' => 'green'
+                ],
+                [
+                    'title' => 'Kelola Realisasi',
+                    'description' => 'Lihat semua realisasi',
+                    'url' => route('realisasi.index'),
+                    'icon' => 'money',
+                    'color' => 'blue'
+                ],
+                [
+                    'title' => 'Laporan Realisasi',
+                    'description' => 'Lihat laporan realisasi',
+                    'url' => route('laporan.show', ['type' => 'realisasi']),
+                    'icon' => 'chart',
+                    'color' => 'purple'
+                ]
+            ];
+        } elseif ($user->hasRole('operator')) {
+            $actions = [
+                [
+                    'title' => 'Tambah Kegiatan',
+                    'description' => 'Buat kegiatan baru',
+                    'url' => route('kegiatan.create'),
+                    'icon' => 'plus',
+                    'color' => 'green'
+                ],
+                [
+                    'title' => 'Kegiatan Saya',
+                    'description' => 'Lihat kegiatan yang saya buat',
+                    'url' => route('kegiatan.index', ['created_by' => $user->id]),
+                    'icon' => 'document',
+                    'color' => 'blue'
+                ]
+            ];
+        } elseif ($user->hasRole('auditor')) {
+            $actions = [
+                [
+                    'title' => 'Log Aktivitas',
+                    'description' => 'Lihat log sistem',
+                    'url' => route('log.index'),
+                    'icon' => 'document',
+                    'color' => 'gray'
+                ],
+                [
+                    'title' => 'Export Laporan',
+                    'description' => 'Export semua laporan',
+                    'url' => route('laporan.index'),
+                    'icon' => 'download',
+                    'color' => 'blue'
+                ]
+            ];
+        }
+
+        return $actions;
     }
 }
