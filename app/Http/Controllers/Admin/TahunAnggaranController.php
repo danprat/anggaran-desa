@@ -10,11 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class TahunAnggaranController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:manage-tahun-anggaran');
-    }
+    // Middleware akan dihandle di routes
 
     /**
      * Display a listing of the resource.

@@ -13,15 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RealisasiController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:view-realisasi')->only(['index', 'show']);
-        $this->middleware('permission:create-realisasi')->only(['create', 'store']);
-        $this->middleware('permission:edit-realisasi')->only(['edit', 'update']);
-        $this->middleware('permission:delete-realisasi')->only(['destroy']);
-        $this->middleware('permission:upload-bukti')->only(['uploadBukti', 'deleteBukti']);
-    }
+    // Middleware akan dihandle di routes
 
     /**
      * Display a listing of the resource.

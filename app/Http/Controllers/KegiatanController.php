@@ -10,16 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class KegiatanController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:view-kegiatan')->only(['index', 'show']);
-        $this->middleware('permission:create-kegiatan')->only(['create', 'store']);
-        $this->middleware('permission:edit-kegiatan')->only(['edit', 'update']);
-        $this->middleware('permission:delete-kegiatan')->only(['destroy']);
-        $this->middleware('permission:verify-kegiatan')->only(['verify']);
-        $this->middleware('permission:approve-kegiatan')->only(['approve', 'reject']);
-    }
+    // Middleware akan dihandle di routes
 
     /**
      * Display a listing of the resource.

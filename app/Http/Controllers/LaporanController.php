@@ -13,12 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:view-laporan')->only(['index', 'show']);
-        $this->middleware('permission:export-laporan')->only(['exportPdf', 'exportExcel']);
-    }
+    // Middleware akan dihandle di routes
 
     /**
      * Display laporan dashboard

@@ -8,11 +8,7 @@ use App\Models\User;
 
 class LogAktivitasController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('permission:view-log');
-    }
+    // Middleware akan dihandle di routes
 
     /**
      * Display a listing of log aktivitas
