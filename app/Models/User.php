@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -44,5 +45,41 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relationships
+     */
+    public function kegiatan()
+    {
+        return $this->hasMany(Kegiatan::class, 'dibuat_oleh');
+    }
+
+    public function realisasi()
+    {
+        return $this->hasMany(Realisasi::class, 'dibuat_oleh');
+    }
+
+    public function buktiFiles()
+    {
+        return $this->hasMany(BuktiFile::class, 'uploaded_by');
+    }
+
+    public function logAktivitas()
+    {
+        return $this->hasMany(LogAktivitas::class);
+    }
+
+    /**
+     * Helper methods
+     */
+    public function getRoleName()
+    {
+        return $this->roles->first()?->name ?? 'No Role';
+    }
+
+    public function hasRoleByName($role)
+    {
+        return $this->roles->contains('name', $role);
     }
 }
