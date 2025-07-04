@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LogAktivitas;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class LogAktivitasController extends Controller
 {
+    use AuthorizesRequests;
+
     // Middleware akan dihandle di routes
 
     /**

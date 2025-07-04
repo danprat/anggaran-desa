@@ -10,9 +10,12 @@ use App\Models\TahunAnggaran;
 use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RealisasiController extends Controller
 {
+    use AuthorizesRequests;
+
     // Middleware akan dihandle di routes
 
     /**

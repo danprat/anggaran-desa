@@ -7,9 +7,12 @@ use App\Models\Kegiatan;
 use App\Models\TahunAnggaran;
 use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class KegiatanController extends Controller
 {
+    use AuthorizesRequests;
+
     // Middleware akan dihandle di routes
 
     /**

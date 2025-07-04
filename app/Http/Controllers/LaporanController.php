@@ -10,9 +10,12 @@ use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class LaporanController extends Controller
 {
+    use AuthorizesRequests;
+
     // Middleware akan dihandle di routes
 
     /**

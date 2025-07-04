@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\TahunAnggaran;
 use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TahunAnggaranController extends Controller
 {
+    use AuthorizesRequests;
+
     // Middleware akan dihandle di routes
 
     /**
