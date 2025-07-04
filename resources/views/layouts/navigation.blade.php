@@ -29,7 +29,7 @@
                     @endcan
 
                     @can('view-laporan')
-                        <x-nav-link :href="'#'" :active="false" onclick="alert('Fitur Laporan sedang dalam pengembangan')">
+                        <x-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.*')">
                             {{ __('Laporan') }}
                         </x-nav-link>
                     @endcan

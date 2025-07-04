@@ -25,6 +25,12 @@ Route::middleware('auth')->group(function () {
     // Realisasi routes
     Route::resource('realisasi', App\Http\Controllers\RealisasiController::class);
     Route::delete('bukti-file/{buktiFile}', [App\Http\Controllers\RealisasiController::class, 'deleteBukti'])->name('bukti-file.delete');
+
+    // Laporan routes
+    Route::get('laporan', [App\Http\Controllers\LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('laporan/{type}', [App\Http\Controllers\LaporanController::class, 'show'])->name('laporan.show');
+    Route::post('laporan/{type}/pdf', [App\Http\Controllers\LaporanController::class, 'exportPdf'])->name('laporan.pdf');
+    Route::post('laporan/{type}/excel', [App\Http\Controllers\LaporanController::class, 'exportExcel'])->name('laporan.excel');
 });
 
 require __DIR__.'/auth.php';
