@@ -115,4 +115,91 @@
     .admin-table-container table {
         @apply min-w-full;
     }
+
+    /* Desa Profile Form Responsive Improvements */
+    .desa-profile-container {
+        @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+        @apply overflow-x-hidden;
+    }
+
+    .desa-profile-tab-nav {
+        @apply overflow-x-auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .desa-profile-tab-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .desa-profile-form-section {
+        @apply w-full max-w-none;
+        @apply overflow-x-hidden;
+    }
+
+    /* Ensure form elements don't overflow */
+    .village-input,
+    .village-label {
+        @apply w-full;
+        min-width: 0; /* Prevent flex items from overflowing */
+        word-wrap: break-word;
+    }
+
+    /* Ensure form sections don't overflow */
+    .tab-content {
+        @apply w-full;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Grid responsive improvements */
+    .desa-profile-grid {
+        @apply grid grid-cols-1 gap-4 sm:gap-6;
+    }
+
+    @media (min-width: 768px) {
+        .desa-profile-grid {
+            @apply md:grid-cols-2;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .desa-profile-grid {
+            @apply lg:grid-cols-3;
+        }
+    }
+
+    /* Mobile-specific improvements */
+    @media (max-width: 640px) {
+        .desa-profile-container {
+            @apply px-2;
+        }
+
+        .tab-button {
+            @apply text-xs px-2 py-2;
+            min-width: auto;
+        }
+
+        .village-input {
+            @apply text-sm px-3 py-2;
+        }
+
+        .village-label {
+            @apply text-sm;
+        }
+
+        /* Stack buttons vertically on mobile */
+        .desa-profile-buttons {
+            @apply flex-col space-y-2;
+        }
+
+        .desa-profile-buttons > * {
+            @apply w-full;
+        }
+    }
+
+    /* Button container responsive */
+    .desa-profile-buttons {
+        @apply flex space-x-3;
+    }
 }

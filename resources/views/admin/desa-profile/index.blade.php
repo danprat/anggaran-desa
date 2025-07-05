@@ -11,7 +11,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+        <div class="desa-profile-container">
 
             <!-- Success/Error Messages -->
             @if(session('success'))
@@ -40,7 +40,7 @@
                 <!-- Tab Navigation -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                     <div class="border-b border-gray-200">
-                        <nav class="-mb-px flex space-x-8 px-6" aria-label="Tabs">
+                        <nav class="desa-profile-tab-nav -mb-px flex space-x-2 sm:space-x-8 px-4 sm:px-6" aria-label="Tabs">
                             <button type="button" onclick="showTab('basic')"
                                     class="tab-button active border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
                                     id="tab-basic">
@@ -75,7 +75,7 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('admin.desa-profile.update-profile') }}" enctype="multipart/form-data" class="space-y-6">
+                <form method="POST" action="{{ route('admin.desa-profile.update-profile') }}" enctype="multipart/form-data" class="desa-profile-form-section space-y-6">
                     @csrf
 
                     <!-- Tab Content: Basic Information -->
@@ -165,6 +165,18 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Save Button for Basic Information -->
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <div class="flex justify-end desa-profile-buttons">
+                                    <button type="button" onclick="resetSection('basic')" class="village-button-secondary">
+                                        Reset Section
+                                    </button>
+                                    <button type="submit" name="section" value="basic" class="village-button-primary">
+                                        💾 Simpan Informasi Dasar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     </div>
@@ -213,6 +225,18 @@
                                                class="village-input block w-full">
                                     </div>
                                 </div>
+
+                                <!-- Save Button for Leadership -->
+                                <div class="mt-6 pt-6 border-t border-gray-200">
+                                    <div class="flex justify-end desa-profile-buttons">
+                                        <button type="button" onclick="resetSection('leadership')" class="village-button-secondary">
+                                            Reset Section
+                                        </button>
+                                        <button type="submit" name="section" value="leadership" class="village-button-primary">
+                                            💾 Simpan Informasi Kepemimpinan
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -251,6 +275,18 @@
                                         <textarea name="sejarah_singkat" id="sejarah_singkat" rows="4"
                                                   class="village-input block w-full"
                                               placeholder="Masukkan sejarah singkat desa...">{{ old('sejarah_singkat', $desaProfile->sejarah_singkat) }}</textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Save Button for Content -->
+                                <div class="mt-6 pt-6 border-t border-gray-200">
+                                    <div class="flex justify-end desa-profile-buttons">
+                                        <button type="button" onclick="resetSection('content')" class="village-button-secondary">
+                                            Reset Section
+                                        </button>
+                                        <button type="submit" name="section" value="content" class="village-button-primary">
+                                            💾 Simpan Visi, Misi & Sejarah
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -297,6 +333,18 @@
                                                class="village-input block w-full"
                                                min="0"
                                                placeholder="0">
+                                    </div>
+                                </div>
+
+                                <!-- Save Button for Demographics -->
+                                <div class="mt-6 pt-6 border-t border-gray-200">
+                                    <div class="flex justify-end desa-profile-buttons">
+                                        <button type="button" onclick="resetSection('demographics')" class="village-button-secondary">
+                                            Reset Section
+                                        </button>
+                                        <button type="submit" name="section" value="demographics" class="village-button-primary">
+                                            💾 Simpan Data Demografis
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -347,6 +395,18 @@
                                                value="{{ old('batas_barat', $desaProfile->batas_barat) }}"
                                                class="village-input block w-full"
                                                placeholder="Sebelah barat berbatasan dengan...">
+                                    </div>
+                                </div>
+
+                                <!-- Save Button for Geography -->
+                                <div class="mt-6 pt-6 border-t border-gray-200">
+                                    <div class="flex justify-end desa-profile-buttons">
+                                        <button type="button" onclick="resetSection('geography')" class="village-button-secondary">
+                                            Reset Section
+                                        </button>
+                                        <button type="submit" name="section" value="geography" class="village-button-primary">
+                                            💾 Simpan Informasi Geografis
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -405,28 +465,23 @@
                                         <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
                                     </div>
                                 </div>
+
+                                <!-- Save Button for Media -->
+                                <div class="mt-6 pt-6 border-t border-gray-200">
+                                    <div class="flex justify-end desa-profile-buttons">
+                                        <button type="button" onclick="resetSection('media')" class="village-button-secondary">
+                                            Reset Section
+                                        </button>
+                                        <button type="submit" name="section" value="media" class="village-button-primary">
+                                            💾 Simpan Logo & Media
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Submit Button (Fixed at bottom) -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg sticky bottom-0 z-10 border-t-2 border-blue-200">
-                        <div class="p-6">
-                            <div class="flex justify-between items-center">
-                                <div class="text-sm text-gray-600">
-                                    <span class="font-medium">💡 Tips:</span> Gunakan tab di atas untuk navigasi yang mudah
-                                </div>
-                                <div class="flex space-x-3">
-                                    <button type="button" onclick="resetForm()" class="village-button-secondary">
-                                        Reset Form
-                                    </button>
-                                    <button type="submit" class="village-button-primary">
-                                        💾 Simpan Profil Desa
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </form>
             @else
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -542,5 +597,45 @@
                 }
             }
         });
+
+        // Reset specific section function
+        function resetSection(sectionName) {
+            if (confirm('Apakah Anda yakin ingin mereset section ini? Semua perubahan yang belum disimpan akan hilang.')) {
+                const sectionSelectors = {
+                    'basic': '#content-basic input, #content-basic textarea',
+                    'leadership': '#content-leadership input, #content-leadership textarea',
+                    'content': '#content-content input, #content-content textarea',
+                    'demographics': '#content-demographics input, #content-demographics textarea',
+                    'geography': '#content-geography input, #content-geography textarea',
+                    'media': '#content-media input[type="file"]'
+                };
+
+                const selector = sectionSelectors[sectionName];
+                if (selector) {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach(element => {
+                        if (element.type === 'file') {
+                            element.value = '';
+                        } else if (element.tagName === 'TEXTAREA') {
+                            element.value = element.defaultValue || '';
+                        } else {
+                            element.value = element.defaultValue || '';
+                        }
+                    });
+
+                    // Show success message
+                    const sectionNames = {
+                        'basic': 'Informasi Dasar',
+                        'leadership': 'Kepemimpinan',
+                        'content': 'Visi, Misi & Sejarah',
+                        'demographics': 'Data Demografis',
+                        'geography': 'Geografis',
+                        'media': 'Logo & Media'
+                    };
+
+                    alert(`Section ${sectionNames[sectionName]} telah direset.`);
+                }
+            }
+        }
     </script>
 </x-app-layout>

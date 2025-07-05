@@ -44,35 +44,13 @@ class DesaProfileController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $validated = $request->validate([
-            'nama_desa' => 'required|string|max:255',
-            'kecamatan' => 'required|string|max:255',
-            'kabupaten' => 'required|string|max:255',
-            'provinsi' => 'required|string|max:255',
-            'kode_pos' => 'nullable|string|max:10',
-            'alamat_lengkap' => 'required|string',
-            'kepala_desa' => 'required|string|max:255',
-            'nip_kepala_desa' => 'nullable|string|max:30',
-            'periode_jabatan_mulai' => 'nullable|date',
-            'periode_jabatan_selesai' => 'nullable|date|after_or_equal:periode_jabatan_mulai',
-            'logo_desa' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'logo_kabupaten' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'logo_provinsi' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'website' => 'nullable|url',
-            'email' => 'nullable|email',
-            'telepon' => 'nullable|string|max:20',
-            'fax' => 'nullable|string|max:20',
-            'visi' => 'nullable|string',
-            'misi' => 'nullable|string',
-            'sejarah_singkat' => 'nullable|string',
-            'luas_wilayah' => 'nullable|numeric|min:0',
-            'jumlah_penduduk' => 'nullable|integer|min:0',
-            'jumlah_kk' => 'nullable|integer|min:0',
-            'batas_utara' => 'nullable|string|max:255',
-            'batas_selatan' => 'nullable|string|max:255',
-            'batas_timur' => 'nullable|string|max:255',
-            'batas_barat' => 'nullable|string|max:255',
-        ]);
+        // Get the section being saved
+        $section = $request->input('section', 'all');
+
+        // Define validation rules for each section
+        $validationRules = $this->getValidationRulesForSection($section);
+
+        $validated = $request->validate($validationRules);
 
         try {
             DB::beginTransaction();
@@ -122,8 +100,20 @@ class DesaProfileController extends Controller
 
             DB::commit();
 
+            // Get section-specific success message
+            $sectionNames = [
+                'basic' => 'Informasi Dasar',
+                'leadership' => 'Informasi Kepemimpinan',
+                'content' => 'Visi, Misi & Sejarah',
+                'demographics' => 'Data Demografis',
+                'geography' => 'Informasi Geografis',
+                'media' => 'Logo & Media'
+            ];
+
+            $sectionName = $sectionNames[$section] ?? 'Profil Desa';
+
             return redirect()->route('admin.desa-profile.index')
-                ->with('success', 'Profil desa berhasil disimpan.');
+                ->with('success', $sectionName . ' berhasil disimpan.');
 
         } catch (\Exception $e) {
             DB::rollback();
@@ -131,6 +121,77 @@ class DesaProfileController extends Controller
                 ->withInput()
                 ->with('error', 'Terjadi kesalahan saat menyimpan profil desa.');
         }
+    }
+
+    /**
+     * Get validation rules for specific section
+     */
+    private function getValidationRulesForSection($section)
+    {
+        $allRules = [
+            'nama_desa' => 'required|string|max:255',
+            'kecamatan' => 'required|string|max:255',
+            'kabupaten' => 'required|string|max:255',
+            'provinsi' => 'required|string|max:255',
+            'kode_pos' => 'nullable|string|max:10',
+            'alamat_lengkap' => 'required|string',
+            'kepala_desa' => 'required|string|max:255',
+            'nip_kepala_desa' => 'nullable|string|max:30',
+            'periode_jabatan_mulai' => 'nullable|date',
+            'periode_jabatan_selesai' => 'nullable|date|after_or_equal:periode_jabatan_mulai',
+            'logo_desa' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_kabupaten' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_provinsi' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'website' => 'nullable|url',
+            'email' => 'nullable|email',
+            'telepon' => 'nullable|string|max:20',
+            'fax' => 'nullable|string|max:20',
+            'visi' => 'nullable|string',
+            'misi' => 'nullable|string',
+            'sejarah_singkat' => 'nullable|string',
+            'luas_wilayah' => 'nullable|numeric|min:0',
+            'jumlah_penduduk' => 'nullable|integer|min:0',
+            'jumlah_kk' => 'nullable|integer|min:0',
+            'batas_utara' => 'nullable|string|max:255',
+            'batas_selatan' => 'nullable|string|max:255',
+            'batas_timur' => 'nullable|string|max:255',
+            'batas_barat' => 'nullable|string|max:255',
+        ];
+
+        $sectionRules = [
+            'basic' => [
+                'nama_desa', 'kecamatan', 'kabupaten', 'provinsi', 'kode_pos',
+                'alamat_lengkap', 'website', 'email', 'telepon', 'fax'
+            ],
+            'leadership' => [
+                'kepala_desa', 'nip_kepala_desa', 'periode_jabatan_mulai', 'periode_jabatan_selesai'
+            ],
+            'content' => [
+                'visi', 'misi', 'sejarah_singkat'
+            ],
+            'demographics' => [
+                'luas_wilayah', 'jumlah_penduduk', 'jumlah_kk'
+            ],
+            'geography' => [
+                'batas_utara', 'batas_selatan', 'batas_timur', 'batas_barat'
+            ],
+            'media' => [
+                'logo_desa', 'logo_kabupaten', 'logo_provinsi'
+            ]
+        ];
+
+        if ($section === 'all' || !isset($sectionRules[$section])) {
+            return $allRules;
+        }
+
+        $rules = [];
+        foreach ($sectionRules[$section] as $field) {
+            if (isset($allRules[$field])) {
+                $rules[$field] = $allRules[$field];
+            }
+        }
+
+        return $rules;
     }
 
     /**
