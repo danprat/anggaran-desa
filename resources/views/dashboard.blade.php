@@ -107,7 +107,7 @@
                 </div>
 
                 <!-- Status Kegiatan dan Recent Activity -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
                     <!-- Status Kegiatan -->
                     <div class="village-card p-6">
                         <h4 class="text-lg font-semibold text-gray-900 mb-4">Status Kegiatan</h4>
@@ -132,6 +132,13 @@
                                     <span class="text-sm font-medium text-gray-700">Disetujui</span>
                                 </div>
                                 <span class="text-lg font-bold text-green-600">{{ $stats['kegiatan_disetujui'] }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                                    <span class="text-sm font-medium text-gray-700">Ditolak</span>
+                                </div>
+                                <span class="text-lg font-bold text-red-600">{{ $stats['kegiatan_ditolak'] ?? 0 }}</span>
                             </div>
                         </div>
                     </div>
@@ -194,86 +201,34 @@
                             </p>
                         </div>
                     </div>
-                </div>
-
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-xs text-gray-600">Ditolak</p>
-                                <p class="text-lg font-semibold text-red-600">{{ $stats['kegiatan_ditolak'] ?? 0 }}</p>
-                            </div>
-                            <div class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                                <span class="text-xs text-white">❌</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            @endif
-
-            <!-- Recent Activities -->
-            @if($tahunAktif)
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <!-- Kegiatan Terbaru -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-3">Kegiatan Terbaru</h3>
-                        @if($kegiatanTerbaru->count() > 0)
-                            <div class="space-y-2">
-                                @foreach($kegiatanTerbaru->take(3) as $kegiatan)
-                                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">{{ $kegiatan->nama_kegiatan }}</p>
-                                            <p class="text-xs text-gray-500">{{ $kegiatan->bidang }} - Rp {{ number_format($kegiatan->pagu_anggaran, 0, ',', '.') }}</p>
-                                        </div>
-                                        <span class="ml-2 px-2 py-1 text-xs font-medium rounded-full
-                                            @if($kegiatan->status === 'draft') bg-gray-100 text-gray-800
-                                            @elseif($kegiatan->status === 'verifikasi') bg-yellow-100 text-yellow-800
-                                            @elseif($kegiatan->status === 'disetujui') bg-green-100 text-green-800
-                                            @else bg-red-100 text-red-800
-                                            @endif">
-                                            {{ ucfirst($kegiatan->status) }}
-                                        </span>
-                                    </div>
-                                @endforeach
-                            </div>
-                            @if($kegiatanTerbaru->count() > 3)
-                                <div class="mt-3 text-center">
-                                    <a href="{{ route('kegiatan.index') }}" class="text-xs text-blue-600 hover:text-blue-800">Lihat semua kegiatan</a>
-                                </div>
-                            @endif
-                        @else
-                            <p class="text-sm text-gray-500">Belum ada kegiatan.</p>
-                        @endif
-                    </div>
 
                     <!-- Realisasi Terbaru -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-3">Realisasi Terbaru</h3>
-                        @if($realisasiTerbaru->count() > 0)
-                            <div class="space-y-2">
+                    <div class="village-card p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Realisasi Terbaru</h4>
+                        @if(isset($realisasiTerbaru) && $realisasiTerbaru->count() > 0)
+                            <div class="space-y-3">
                                 @foreach($realisasiTerbaru->take(3) as $realisasi)
-                                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">{{ $realisasi->kegiatan->nama_kegiatan }}</p>
-                                            <p class="text-xs text-gray-500">Rp {{ number_format($realisasi->jumlah_realisasi, 0, ',', '.') }} - {{ $realisasi->tanggal->format('d/m/Y') }}</p>
-                                        </div>
-                                        <span class="ml-2 px-2 py-1 text-xs font-medium rounded-full
-                                            @if($realisasi->status === 'belum') bg-gray-100 text-gray-800
-                                            @elseif($realisasi->status === 'sebagian') bg-yellow-100 text-yellow-800
-                                            @else bg-green-100 text-green-800
-                                            @endif">
-                                            {{ ucfirst($realisasi->status) }}
-                                        </span>
+                                    <div class="border-l-4 border-green-500 pl-3 py-2">
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ $realisasi->kegiatan->nama_kegiatan }}</p>
+                                        <p class="text-xs text-gray-500">Rp {{ number_format($realisasi->jumlah_realisasi, 0, ',', '.') }}</p>
+                                        <p class="text-xs text-gray-400">{{ $realisasi->tanggal->format('d/m/Y') }}</p>
                                     </div>
                                 @endforeach
                             </div>
-                            @if($realisasiTerbaru->count() > 3)
-                                <div class="mt-3 text-center">
-                                    <a href="{{ route('realisasi.index') }}" class="text-xs text-blue-600 hover:text-blue-800">Lihat semua realisasi</a>
-                                </div>
-                            @endif
+                            <div class="mt-4">
+                                <a href="{{ route('realisasi.index') }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                    Lihat semua realisasi →
+                                </a>
+                            </div>
                         @else
-                            <p class="text-sm text-gray-500">Belum ada realisasi.</p>
+                            <div class="text-center py-4">
+                                <p class="text-sm text-gray-500">Belum ada realisasi</p>
+                                @can('create-realisasi')
+                                    <a href="{{ route('realisasi.create') }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                        Tambah realisasi pertama →
+                                    </a>
+                                @endcan
+                            </div>
                         @endif
                     </div>
                 </div>
