@@ -41,16 +41,4 @@
     $classes = $sizeClasses[$size] . ' ' . $class;
 @endphp
 
-@if($logoUrl)
-    <img src="{{ $logoUrl }}"
-         alt="{{ $altText }}"
-         class="{{ $classes }} object-contain"
-         onerror="@if($showFallback) this.src='{{ asset('images/default-logo-' . $type . '.svg') }}'; @endif"
-         {{ $attributes }}>
-@elseif($showFallback)
-    <!-- Use default SVG logo -->
-    <img src="{{ asset('images/default-logo-' . $type . '.svg') }}"
-         alt="{{ $altText }}"
-         class="{{ $classes }} object-contain"
-         {{ $attributes }}>
-@endif
+@if($logoUrl)<img src="{{ $logoUrl }}" alt="{{ $altText }}" class="{{ $classes }} object-contain" onerror="@if($showFallback) this.src='{{ asset('images/default-logo-' . $type . '.svg') }}'; @endif" {{ $attributes }}>@elseif($showFallback)<img src="{{ asset('images/default-logo-' . $type . '.svg') }}" alt="{{ $altText }}" class="{{ $classes }} object-contain" {{ $attributes }}>@endif

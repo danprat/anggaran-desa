@@ -429,10 +429,16 @@
 
                                 <!-- Logo Desa Display -->
                                 <div class="text-center mb-6">
-                                    <x-desa-logo type="desa" size="xl" class="mx-auto mb-3" :profile="$desaProfile" />
-                                    @if($desaProfile->logo_desa)
+                                    @if($desaProfile && $desaProfile->logo_desa)
+                                        <img src="{{ $desaProfile->logo_desa_url }}"
+                                             alt="Logo {{ $desaProfile->nama_desa }}"
+                                             class="w-24 h-24 mx-auto mb-3 object-contain"
+                                             onerror="this.src='{{ asset('images/default-logo-desa.svg') }}';">
                                         <p class="text-sm text-green-600 font-medium">✓ Logo desa tersedia</p>
                                     @else
+                                        <img src="{{ asset('images/default-logo-desa.svg') }}"
+                                             alt="Logo Desa Default"
+                                             class="w-24 h-24 mx-auto mb-3 object-contain">
                                         <p class="text-sm text-gray-500">Belum ada logo desa</p>
                                     @endif
                                 </div>
