@@ -427,6 +427,7 @@
                                     </div>
                                 </div>
 
+                                <!-- First row: Logo Desa & Logo Kabupaten -->
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label for="logo_desa" class="village-label">Logo Desa</label>
@@ -461,7 +462,10 @@
                                             <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
                                         </div>
                                     </div>
+                                </div>
 
+                                <!-- Second row: Logo Provinsi only -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label for="logo_provinsi" class="village-label">Logo Provinsi</label>
                                         @if($desaProfile->logo_provinsi)
@@ -478,9 +482,6 @@
                                             <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
                                         </div>
                                     </div>
-
-                                    <!-- Empty div to balance the grid -->
-                                    <div></div>
                                 </div>
 
                                 <!-- Save Button for Media -->
