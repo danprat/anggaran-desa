@@ -211,23 +211,6 @@
         width: 100%;
     }
 
-    /* Force Logo & Media section to use proper grid layout */
-    #content-media .grid {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
-    }
 
-    @media (min-width: 768px) {
-        #content-media .grid {
-            grid-template-columns: 1fr 1fr !important;
-        }
-    }
-
-    #content-media .grid > div {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-    }
 
 }

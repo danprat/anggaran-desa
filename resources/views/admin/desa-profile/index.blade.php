@@ -416,7 +416,7 @@
                     <!-- Tab Content: Media -->
                     <div id="content-media" class="tab-content hidden">
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 w-full max-w-none overflow-x-hidden">
+                            <div class="p-6">
                                 <div class="flex items-center mb-6">
                                     <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
                                         <span class="text-indigo-600 text-xl">🖼️</span>
