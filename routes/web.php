@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
 
         // Desa Profile routes
         Route::resource('desa-profile', App\Http\Controllers\Admin\DesaProfileController::class);
+        Route::post('desa-profile/update-profile', [App\Http\Controllers\Admin\DesaProfileController::class, 'updateProfile'])->name('desa-profile.update-profile');
         Route::post('desa-profile/{desa_profile}/set-active', [App\Http\Controllers\Admin\DesaProfileController::class, 'setActive'])->name('desa-profile.set-active');
         Route::get('desa-profile/{desa_profile}/export-pdf', [App\Http\Controllers\Admin\DesaProfileController::class, 'exportPdf'])->name('desa-profile.export-pdf');
     });

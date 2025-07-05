@@ -16,7 +16,7 @@ class DesaProfileController extends Controller
 {
     use AuthorizesRequests;
     /**
-     * Display a listing of the resource.
+     * Display the single desa profile for editing
      */
     public function index()
     {
@@ -24,11 +24,113 @@ class DesaProfileController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $profiles = DesaProfile::orderBy('is_active', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        // Get the active profile or create a new one if none exists
+        $desaProfile = DesaProfile::getActive();
 
-        return view('admin.desa-profile.index', compact('profiles'));
+        if (!$desaProfile) {
+            // If no active profile exists, create a default one
+            $desaProfile = new DesaProfile();
+        }
+
+        return view('admin.desa-profile.index', compact('desaProfile'));
+    }
+
+    /**
+     * Update the desa profile directly from index page
+     */
+    public function updateProfile(Request $request)
+    {
+        if (!auth()->user()->can('manage-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'nama_desa' => 'required|string|max:255',
+            'kecamatan' => 'required|string|max:255',
+            'kabupaten' => 'required|string|max:255',
+            'provinsi' => 'required|string|max:255',
+            'kode_pos' => 'nullable|string|max:10',
+            'alamat_lengkap' => 'required|string',
+            'kepala_desa' => 'required|string|max:255',
+            'nip_kepala_desa' => 'nullable|string|max:30',
+            'periode_jabatan_mulai' => 'nullable|date',
+            'periode_jabatan_selesai' => 'nullable|date|after_or_equal:periode_jabatan_mulai',
+            'logo_desa' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_kabupaten' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo_provinsi' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'website' => 'nullable|url',
+            'email' => 'nullable|email',
+            'telepon' => 'nullable|string|max:20',
+            'fax' => 'nullable|string|max:20',
+            'visi' => 'nullable|string',
+            'misi' => 'nullable|string',
+            'sejarah_singkat' => 'nullable|string',
+            'luas_wilayah' => 'nullable|numeric|min:0',
+            'jumlah_penduduk' => 'nullable|integer|min:0',
+            'jumlah_kk' => 'nullable|integer|min:0',
+            'batas_utara' => 'nullable|string|max:255',
+            'batas_selatan' => 'nullable|string|max:255',
+            'batas_timur' => 'nullable|string|max:255',
+            'batas_barat' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Get existing profile or create new one
+            $desaProfile = DesaProfile::getActive();
+
+            if (!$desaProfile) {
+                $validated['is_active'] = true;
+                $desaProfile = DesaProfile::create($validated);
+                $action = 'Membuat profil desa baru';
+                $oldData = null;
+            } else {
+                $oldData = $desaProfile->toArray();
+                $action = 'Mengupdate profil desa';
+            }
+
+            // Handle logo uploads
+            $logoFields = ['logo_desa', 'logo_kabupaten', 'logo_provinsi'];
+            foreach ($logoFields as $field) {
+                if ($request->hasFile($field)) {
+                    // Delete old logo if exists
+                    if ($desaProfile->$field && Storage::disk('public')->exists($desaProfile->$field)) {
+                        Storage::disk('public')->delete($desaProfile->$field);
+                    }
+
+                    // Upload new logo
+                    $file = $request->file($field);
+                    $filename = time() . '_' . $field . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('logos', $filename, 'public');
+                    $validated[$field] = $path;
+                }
+            }
+
+            if ($desaProfile->exists) {
+                $desaProfile->update($validated);
+            }
+
+            // Log activity
+            LogAktivitas::log(
+                $action . ": {$desaProfile->nama_desa}",
+                'desa_profile',
+                $desaProfile->id,
+                $oldData,
+                $desaProfile->fresh()->toArray()
+            );
+
+            DB::commit();
+
+            return redirect()->route('admin.desa-profile.index')
+                ->with('success', 'Profil desa berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat menyimpan profil desa.');
+        }
     }
 
     /**

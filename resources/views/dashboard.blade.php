@@ -19,54 +19,7 @@
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <!-- Compact Desa Header -->
-            @php $desaProfile = \App\Models\DesaProfile::getActive(); @endphp
-            @if($desaProfile)
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 p-4">
-                    <div class="flex items-center justify-between">
-                        <!-- Logo Section -->
-                        <div class="flex items-center space-x-3">
-                            <x-desa-logo type="provinsi" size="sm" />
-                            <x-desa-logo type="kabupaten" size="sm" />
-                            <x-desa-logo type="desa" size="sm" />
-                        </div>
 
-                        <!-- Desa Info -->
-                        <div class="text-center flex-1 mx-4">
-                            <h3 class="text-sm font-bold text-gray-900 uppercase">{{ $desaProfile->provinsi }}</h3>
-                            <h4 class="text-sm font-bold text-gray-800 uppercase">{{ $desaProfile->kabupaten }}</h4>
-                            <h4 class="text-sm font-bold text-gray-800 uppercase">{{ $desaProfile->kecamatan }}</h4>
-                            <h2 class="text-lg font-bold text-gray-900 uppercase border-b border-gray-300 pb-1">{{ $desaProfile->nama_desa }}</h2>
-                            <p class="text-xs text-gray-600 mt-1">{{ $desaProfile->alamat_lengkap }}</p>
-                        </div>
-
-                        <!-- Contact Info -->
-                        <div class="text-right text-xs text-gray-600 space-y-1">
-                            @if($desaProfile->telepon)
-                                <div class="flex items-center justify-end">
-                                    <span>📞</span>
-                                    <span class="ml-1">{{ $desaProfile->telepon }}</span>
-                                </div>
-                            @endif
-                            @if($desaProfile->email)
-                                <div class="flex items-center justify-end">
-                                    <span>✉️</span>
-                                    <span class="ml-1">{{ $desaProfile->email }}</span>
-                                </div>
-                            @endif
-                            @if($desaProfile->website)
-                                <div class="flex items-center justify-end">
-                                    <span>🌐</span>
-                                    <span class="ml-1">{{ $desaProfile->website }}</span>
-                                </div>
-                            @endif
-                            @if($desaProfile->kode_pos)
-                                <div class="text-center mt-2 font-medium">{{ $desaProfile->kode_pos }}</div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            @endif
 
             <!-- Welcome & Alert Section -->
             <div class="flex items-center justify-between village-card p-6 mb-6">
