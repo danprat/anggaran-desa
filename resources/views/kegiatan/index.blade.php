@@ -110,10 +110,10 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($kegiatan as $item)
-                                        <tr>
+                                        <tr class="hover:bg-gray-50 cursor-pointer transition-colors duration-200" onclick="window.location='{{ route('kegiatan.show', $item) }}'">
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div>
-                                                    <div class="text-sm font-medium text-gray-900">
+                                                    <div class="text-sm font-medium text-blue-600 hover:text-blue-800">
                                                         {{ $item->nama_kegiatan }}
                                                     </div>
                                                     <div class="text-sm text-gray-500">
@@ -140,7 +140,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {{ $item->waktu_mulai->format('d/m/Y') }} - {{ $item->waktu_selesai->format('d/m/Y') }}
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" onclick="event.stopPropagation();">
                                                 <div class="flex space-x-1">
                                                     @can('view', $item)
                                                         <x-action-button

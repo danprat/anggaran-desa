@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::post('kegiatan/{kegiatan}/verify', [App\Http\Controllers\KegiatanController::class, 'verify'])->name('kegiatan.verify');
     Route::post('kegiatan/{kegiatan}/approve', [App\Http\Controllers\KegiatanController::class, 'approve'])->name('kegiatan.approve');
     Route::post('kegiatan/{kegiatan}/reject', [App\Http\Controllers\KegiatanController::class, 'reject'])->name('kegiatan.reject');
+    Route::get('kegiatan/{kegiatan}/export-pdf', [App\Http\Controllers\KegiatanController::class, 'exportPdf'])->name('kegiatan.export-pdf');
+    Route::get('kegiatan/{kegiatan}/print', [App\Http\Controllers\KegiatanController::class, 'print'])->name('kegiatan.print');
 
     // Realisasi routes
     Route::resource('realisasi', App\Http\Controllers\RealisasiController::class);

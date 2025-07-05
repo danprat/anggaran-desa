@@ -440,4 +440,43 @@ class KegiatanController extends Controller
                 ->with('error', 'Terjadi kesalahan saat menolak kegiatan.');
         }
     }
+
+    /**
+     * Export kegiatan detail to PDF
+     */
+    public function exportPdf(Kegiatan $kegiatan)
+    {
+        $this->authorize('view', $kegiatan);
+
+        $data = [
+            'kegiatan' => $kegiatan->load(['realisasi.buktiFiles', 'tahunAnggaran', 'pembuatKegiatan']),
+            'totalRealisasi' => $kegiatan->getTotalRealisasi(),
+            'persentaseRealisasi' => $kegiatan->getPersentaseRealisasi(),
+            'sisaAnggaran' => $kegiatan->getSisaAnggaran(),
+        ];
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('kegiatan.pdf.detail', $data);
+
+        $filename = 'Kegiatan_' . Str::slug($kegiatan->nama_kegiatan) . '_' . date('Y-m-d') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Print kegiatan detail
+     */
+    public function print(Kegiatan $kegiatan)
+    {
+        $this->authorize('view', $kegiatan);
+
+        $data = [
+            'kegiatan' => $kegiatan->load(['realisasi.buktiFiles', 'tahunAnggaran', 'pembuatKegiatan']),
+            'totalRealisasi' => $kegiatan->getTotalRealisasi(),
+            'persentaseRealisasi' => $kegiatan->getPersentaseRealisasi(),
+            'sisaAnggaran' => $kegiatan->getSisaAnggaran(),
+        ];
+
+        return view('kegiatan.print.detail', $data);
+    }
 }

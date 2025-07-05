@@ -41,6 +41,22 @@ $iconClass = $class . ' ' . ($attributes->get('class') ?? '');
     <svg class="{{ $iconClass }}" fill="currentColor" viewBox="0 0 20 20" title="{{ $title }}">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
     </svg>
+@elseif($name === 'printer')
+    <svg class="{{ $iconClass }}" fill="currentColor" viewBox="0 0 20 20" title="{{ $title }}">
+        <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zM5 14H4v-3h1v3zm6 0H9v2h2v-2z" clip-rule="evenodd"></path>
+    </svg>
+@elseif($name === 'upload')
+    <svg class="{{ $iconClass }}" fill="currentColor" viewBox="0 0 20 20" title="{{ $title }}">
+        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+    </svg>
+@elseif($name === 'refresh')
+    <svg class="{{ $iconClass }}" fill="currentColor" viewBox="0 0 20 20" title="{{ $title }}">
+        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+    </svg>
+@elseif($name === 'filter')
+    <svg class="{{ $iconClass }}" fill="currentColor" viewBox="0 0 20 20" title="{{ $title }}">
+        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"></path>
+    </svg>
 @elseif($name === 'x')
     <svg class="{{ $iconClass }}" fill="currentColor" viewBox="0 0 20 20" title="{{ $title }}">
         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
