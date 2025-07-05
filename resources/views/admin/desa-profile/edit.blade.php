@@ -8,10 +8,10 @@
                 <p class="text-gray-600 text-sm mt-1">Update informasi profil desa</p>
             </div>
             <div class="flex space-x-2">
-                <x-action-button 
-                    href="{{ route('admin.desa-profile.show', $desaProfile) }}" 
-                    icon="eye" 
-                    variant="info" 
+                <x-action-button
+                    href="{{ route('admin.desa-profile.show', $desaProfile->id) }}"
+                    icon="eye"
+                    variant="info"
                     size="md"
                     tooltip="Lihat Detail"
                 >
@@ -44,7 +44,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.desa-profile.update', $desaProfile) }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('admin.desa-profile.update', $desaProfile->id) }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PUT')
 
@@ -149,7 +149,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div class="text-center">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Logo Desa</label>
-                                <x-desa-logo type="desa" size="xl" class="mx-auto mb-2" />
+                                <x-desa-logo type="desa" size="xl" class="mx-auto mb-2" :profile="$desaProfile" />
                                 @if($desaProfile->logo_desa)
                                     <p class="text-xs text-green-600">✓ Logo tersedia</p>
                                 @else
@@ -159,7 +159,7 @@
 
                             <div class="text-center">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Logo Kabupaten</label>
-                                <x-desa-logo type="kabupaten" size="xl" class="mx-auto mb-2" />
+                                <x-desa-logo type="kabupaten" size="xl" class="mx-auto mb-2" :profile="$desaProfile" />
                                 @if($desaProfile->logo_kabupaten)
                                     <p class="text-xs text-green-600">✓ Logo tersedia</p>
                                 @else
@@ -169,7 +169,7 @@
 
                             <div class="text-center">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Logo Provinsi</label>
-                                <x-desa-logo type="provinsi" size="xl" class="mx-auto mb-2" />
+                                <x-desa-logo type="provinsi" size="xl" class="mx-auto mb-2" :profile="$desaProfile" />
                                 @if($desaProfile->logo_provinsi)
                                     <p class="text-xs text-green-600">✓ Logo tersedia</p>
                                 @else
@@ -249,6 +249,36 @@
                     </div>
                 </div>
 
+                <!-- Visi, Misi, dan Sejarah -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-6">Visi, Misi, dan Sejarah</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label for="visi" class="block text-sm font-medium text-gray-700">Visi</label>
+                                <textarea name="visi" id="visi" rows="3"
+                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                          placeholder="Masukkan visi desa...">{{ old('visi', $desaProfile->visi) }}</textarea>
+                            </div>
+
+                            <div>
+                                <label for="misi" class="block text-sm font-medium text-gray-700">Misi</label>
+                                <textarea name="misi" id="misi" rows="4"
+                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                          placeholder="Masukkan misi desa...">{{ old('misi', $desaProfile->misi) }}</textarea>
+                            </div>
+
+                            <div>
+                                <label for="sejarah_singkat" class="block text-sm font-medium text-gray-700">Sejarah Singkat</label>
+                                <textarea name="sejarah_singkat" id="sejarah_singkat" rows="5"
+                                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                          placeholder="Masukkan sejarah singkat desa...">{{ old('sejarah_singkat', $desaProfile->sejarah_singkat) }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Status -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
@@ -281,18 +311,19 @@
                                 Batal
                             </x-action-button>
                             
-                            <x-action-button 
-                                type="submit" 
-                                icon="check" 
-                                variant="success" 
-                                size="md"
+                            <button
+                                type="submit"
+                                class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 h-10 px-4 text-base min-w-10 bg-green-600 text-white hover:bg-green-700 focus:ring-green-500"
                             >
-                                Update Profil
-                            </x-action-button>
+                                <x-icon name="check" class="w-5 h-5" />
+                                <span class="ml-2 whitespace-nowrap">Update Profil</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+
 </x-app-layout>

@@ -3,11 +3,12 @@
     'size' => 'md', // xs, sm, md, lg, xl
     'showFallback' => true,
     'class' => '',
-    'alt' => null
+    'alt' => null,
+    'profile' => null // Optional specific profile to use
 ])
 
 @php
-    $desaProfile = \App\Models\DesaProfile::getActive();
+    $desaProfile = $profile ?: \App\Models\DesaProfile::getActive();
     
     $sizeClasses = [
         'xs' => 'w-6 h-6',

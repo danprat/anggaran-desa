@@ -144,16 +144,16 @@
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-700 mb-2">Data Sebelum</h4>
                                         <div class="bg-red-50 border border-red-200 rounded-lg p-3">
-                                            <pre class="text-xs text-red-800 whitespace-pre-wrap">{{ json_encode(json_decode($log->data_lama), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                                            <pre class="text-xs text-red-800 whitespace-pre-wrap">{{ json_encode($log->data_lama, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 @if($log->data_baru)
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-700 mb-2">Data Sesudah</h4>
                                         <div class="bg-green-50 border border-green-200 rounded-lg p-3">
-                                            <pre class="text-xs text-green-800 whitespace-pre-wrap">{{ json_encode(json_decode($log->data_baru), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                                            <pre class="text-xs text-green-800 whitespace-pre-wrap">{{ json_encode($log->data_baru, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                                         </div>
                                     </div>
                                 @endif

@@ -15,15 +15,54 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+        @php $desaProfile = \App\Models\DesaProfile::getActive(); @endphp
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 village-header">
+            <!-- Village Branding Header -->
+            <div class="text-center mb-8">
+                <a href="/" class="inline-block">
+                    <x-application-logo class="w-24 h-24 fill-current text-white mx-auto mb-4" />
                 </a>
+                @if($desaProfile)
+                    <h1 class="text-2xl font-bold text-white mb-2">{{ $desaProfile->nama_desa }}</h1>
+                    <p class="text-blue-100 text-lg">{{ $desaProfile->full_name }}</p>
+                    @if($desaProfile->visi)
+                        <p class="text-blue-100 text-sm mt-2 max-w-md mx-auto italic">"{{ $desaProfile->visi }}"</p>
+                    @endif
+                @else
+                    <h1 class="text-2xl font-bold text-white mb-2">Sistem Anggaran Desa</h1>
+                    <p class="text-blue-100 text-lg">Portal Administrasi Desa</p>
+                @endif
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <!-- Login Form Card -->
+            <div class="w-full sm:max-w-md px-8 py-8 bg-white shadow-xl overflow-hidden sm:rounded-xl border border-gray-200">
+                <div class="text-center mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800">Masuk ke Sistem</h2>
+                    <p class="text-gray-600 text-base mt-2">Silakan masukkan kredensial Anda</p>
+                </div>
                 {{ $slot }}
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-8 text-center">
+                <p class="text-blue-100 text-sm">
+                    © {{ date('Y') }} {{ $desaProfile ? $desaProfile->nama_desa : 'Sistem Anggaran Desa' }}.
+                    Semua hak dilindungi.
+                </p>
+                @if($desaProfile && ($desaProfile->website || $desaProfile->email))
+                    <div class="mt-2 space-x-4">
+                        @if($desaProfile->website)
+                            <a href="{{ $desaProfile->website }}" target="_blank" class="text-blue-100 hover:text-white text-sm underline">
+                                Website Desa
+                            </a>
+                        @endif
+                        @if($desaProfile->email)
+                            <a href="mailto:{{ $desaProfile->email }}" class="text-blue-100 hover:text-white text-sm underline">
+                                Kontak
+                            </a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
     </body>

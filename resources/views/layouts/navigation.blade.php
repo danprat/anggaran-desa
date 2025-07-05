@@ -5,8 +5,15 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
+                        <x-application-logo class="block h-12 w-auto fill-current text-gray-800" />
+                        @php $desaProfile = \App\Models\DesaProfile::getActive(); @endphp
+                        @if($desaProfile)
+                            <div class="hidden sm:block">
+                                <div class="text-sm font-semibold text-gray-800">{{ $desaProfile->nama_desa }}</div>
+                                <div class="text-xs text-gray-600">{{ $desaProfile->kabupaten }}</div>
+                            </div>
+                        @endif
                     </a>
                 </div>
 

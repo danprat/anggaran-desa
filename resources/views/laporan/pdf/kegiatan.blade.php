@@ -6,27 +6,74 @@
     <title>Laporan Kegiatan - {{ $selectedTahun->tahun }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', serif;
             font-size: 12px;
-            line-height: 1.4;
+            line-height: 1.5;
             margin: 0;
-            padding: 20px;
+            padding: 30px;
+            color: #000;
         }
+
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #333;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #000;
             padding-bottom: 20px;
         }
+
+        .logo-container {
+            display: table;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: table-cell;
+            width: 80px;
+            vertical-align: middle;
+            text-align: left;
+        }
+
+        .logo img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+        }
+
+        .header-text {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            padding-left: 20px;
+        }
+
         .header h1 {
-            margin: 0;
+            margin: 2px 0;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .header h2 {
+            margin: 2px 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .header h3 {
+            margin: 2px 0;
             font-size: 18px;
             font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: underline;
         }
-        .header h2 {
-            margin: 5px 0;
-            font-size: 16px;
-            font-weight: normal;
+
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 10px;
+            font-style: italic;
         }
         .info-table {
             width: 100%;
@@ -101,15 +148,27 @@
 
     <div class="header">
         @if($desaProfile)
-            <h1>PEMERINTAH {{ strtoupper($desaProfile->provinsi) }}</h1>
-            <h2>{{ strtoupper($desaProfile->kabupaten) }}</h2>
-            <h3>{{ strtoupper($desaProfile->kecamatan) }}</h3>
-            <h1 style="margin-top: 10px; border-bottom: 2px solid #333; padding-bottom: 10px;">{{ strtoupper($desaProfile->nama_desa) }}</h1>
-            <p style="margin-top: 10px;">{{ $desaProfile->alamat_lengkap }}</p>
+            <div class="logo-container">
+                <div class="logo">
+                    @if($desaProfile->logo_desa && file_exists(storage_path('app/public/' . $desaProfile->logo_desa)))
+                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(storage_path('app/public/' . $desaProfile->logo_desa))) }}" alt="Logo Desa">
+                    @else
+                        <img src="data:image/svg+xml;base64,{{ base64_encode(file_get_contents(public_path('images/default-logo-desa.svg'))) }}" alt="Logo Desa">
+                    @endif
+                </div>
+                <div class="header-text">
+                    <h1>PEMERINTAH KABUPATEN {{ strtoupper($desaProfile->kabupaten) }}</h1>
+                    <h2>KECAMATAN {{ strtoupper($desaProfile->kecamatan) }}</h2>
+                    <h3>DESA {{ strtoupper($desaProfile->nama_desa) }}</h3>
+                    <p>{{ $desaProfile->alamat_lengkap }}</p>
+                </div>
+            </div>
         @endif
 
-        <h2 style="margin-top: 20px; color: #333;">LAPORAN KEGIATAN</h2>
-        <h3>TAHUN ANGGARAN {{ $selectedTahun->tahun }}</h3>
+        <div style="margin-top: 30px; text-align: center;">
+            <h2 style="margin: 0; font-size: 16px; font-weight: bold; text-decoration: underline; text-transform: uppercase;">LAPORAN KEGIATAN</h2>
+            <p style="margin: 5px 0 0 0; font-size: 12px;">TAHUN ANGGARAN {{ $selectedTahun->tahun }}</p>
+        </div>
     </div>
 
     <!-- Summary Section -->

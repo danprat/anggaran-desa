@@ -1,3 +1,81 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Village Branding & Typography Improvements */
+@layer base {
+    /* Improved base font sizes for better readability */
+    html {
+        font-size: 16px; /* Increase base font size */
+    }
+
+    body {
+        @apply text-base leading-relaxed;
+    }
+
+    /* Enhanced heading sizes */
+    h1 { @apply text-3xl font-bold leading-tight; }
+    h2 { @apply text-2xl font-semibold leading-tight; }
+    h3 { @apply text-xl font-semibold leading-snug; }
+    h4 { @apply text-lg font-medium leading-snug; }
+    h5 { @apply text-base font-medium leading-normal; }
+    h6 { @apply text-sm font-medium leading-normal; }
+}
+
+@layer components {
+    /* Village-themed components */
+    .village-header {
+        @apply bg-gradient-to-r from-blue-600 to-green-600 text-white;
+    }
+
+    .village-card {
+        @apply bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200;
+    }
+
+    .village-button {
+        @apply px-4 py-2 text-base font-medium rounded-md transition-colors duration-200;
+    }
+
+    .village-button-primary {
+        @apply village-button bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    }
+
+    .village-button-secondary {
+        @apply village-button bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+    }
+
+    /* Enhanced form elements */
+    .village-input {
+        @apply text-base px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+    }
+
+    .village-label {
+        @apply text-base font-medium text-gray-700 mb-2 block;
+    }
+
+    /* Dashboard specific improvements */
+    .dashboard-stat-card {
+        @apply village-card p-6;
+    }
+
+    .dashboard-stat-value {
+        @apply text-3xl font-bold text-gray-900;
+    }
+
+    .dashboard-stat-label {
+        @apply text-base font-medium text-gray-600 mt-2;
+    }
+
+    /* Table improvements */
+    .village-table {
+        @apply text-base;
+    }
+
+    .village-table th {
+        @apply text-base font-semibold text-gray-900 py-4 px-4;
+    }
+
+    .village-table td {
+        @apply text-base text-gray-700 py-4 px-4;
+    }
+}

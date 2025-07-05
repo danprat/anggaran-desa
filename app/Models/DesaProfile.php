@@ -113,7 +113,7 @@ class DesaProfile extends Model
         if ($this->logo_desa && Storage::disk('public')->exists($this->logo_desa)) {
             return Storage::disk('public')->url($this->logo_desa);
         }
-        return asset('images/default-logo-desa.png');
+        return asset('images/default-logo-desa.svg');
     }
 
     /**
@@ -124,7 +124,7 @@ class DesaProfile extends Model
         if ($this->logo_kabupaten && Storage::disk('public')->exists($this->logo_kabupaten)) {
             return Storage::disk('public')->url($this->logo_kabupaten);
         }
-        return asset('images/default-logo-kabupaten.png');
+        return asset('images/default-logo-kabupaten.svg');
     }
 
     /**
@@ -135,7 +135,7 @@ class DesaProfile extends Model
         if ($this->logo_provinsi && Storage::disk('public')->exists($this->logo_provinsi)) {
             return Storage::disk('public')->url($this->logo_provinsi);
         }
-        return asset('images/default-logo-provinsi.png');
+        return asset('images/default-logo-provinsi.svg');
     }
 
     /**

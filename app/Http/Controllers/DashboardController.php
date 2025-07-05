@@ -23,6 +23,9 @@ class DashboardController extends Controller
                 'stats' => [
                     'total_kegiatan' => 0,
                     'kegiatan_disetujui' => 0,
+                    'kegiatan_draft' => 0,
+                    'kegiatan_verifikasi' => 0,
+                    'kegiatan_ditolak' => 0,
                     'kegiatan_belum_disetujui' => 0,
                     'total_pagu' => 0,
                     'total_realisasi' => 0,
@@ -41,6 +44,9 @@ class DashboardController extends Controller
         $stats = [
             'total_kegiatan' => Kegiatan::byTahun($tahunAktif->id)->count(),
             'kegiatan_disetujui' => Kegiatan::byTahun($tahunAktif->id)->byStatus('disetujui')->count(),
+            'kegiatan_draft' => Kegiatan::byTahun($tahunAktif->id)->byStatus('draft')->count(),
+            'kegiatan_verifikasi' => Kegiatan::byTahun($tahunAktif->id)->byStatus('verifikasi')->count(),
+            'kegiatan_ditolak' => Kegiatan::byTahun($tahunAktif->id)->byStatus('ditolak')->count(),
             'kegiatan_belum_disetujui' => Kegiatan::byTahun($tahunAktif->id)
                 ->whereIn('status', ['draft', 'verifikasi'])->count(),
             'total_pagu' => Kegiatan::byTahun($tahunAktif->id)->sum('pagu_anggaran'),
