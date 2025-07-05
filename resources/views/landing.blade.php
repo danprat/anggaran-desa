@@ -220,6 +220,22 @@
                 <p class="text-sm text-gray-400 mt-2">
                     Sistem Informasi Anggaran Desa - Transparansi dan Akuntabilitas
                 </p>
+                <div class="mt-4 pt-4 border-t border-gray-700">
+                    <p class="text-sm text-gray-400">
+                        Dibuat oleh
+                        <a href="https://wa.me/6208974041777"
+                           target="_blank"
+                           class="font-medium text-gray-300 hover:text-white transition-colors duration-200">
+                            Dany Pratmanto
+                        </a>
+                        • WA:
+                        <a href="https://wa.me/6208974041777"
+                           target="_blank"
+                           class="font-medium text-green-400 hover:text-green-300 transition-colors duration-200">
+                            08974041777
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     </footer>

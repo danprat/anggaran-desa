@@ -31,6 +31,31 @@
             <main>
                 {{ $slot }}
             </main>
+
+            <!-- Footer -->
+            <footer class="bg-gray-50 border-t border-gray-200 mt-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Dibuat oleh
+                            <a href="https://wa.me/6208974041777"
+                               target="_blank"
+                               class="font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                                Dany Pratmanto
+                            </a>
+                            • WA:
+                            <a href="https://wa.me/6208974041777"
+                               target="_blank"
+                               class="font-medium text-green-600 hover:text-green-800 transition-colors duration-200">
+                                08974041777
+                            </a>
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            © {{ date('Y') }} Sistem Anggaran Desa. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

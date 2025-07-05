@@ -163,6 +163,113 @@
                         </div>
                     </div>
 
+                    <!-- Visi, Misi, dan Sejarah -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-6">Visi, Misi, dan Sejarah</h3>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="visi" class="village-label">Visi Desa</label>
+                                    <textarea name="visi" id="visi" rows="3"
+                                              class="village-input block w-full"
+                                              placeholder="Masukkan visi desa...">{{ old('visi', $desaProfile->visi) }}</textarea>
+                                </div>
+
+                                <div>
+                                    <label for="misi" class="village-label">Misi Desa</label>
+                                    <textarea name="misi" id="misi" rows="5"
+                                              class="village-input block w-full"
+                                              placeholder="Masukkan misi desa...">{{ old('misi', $desaProfile->misi) }}</textarea>
+                                </div>
+
+                                <div>
+                                    <label for="sejarah_singkat" class="village-label">Sejarah Singkat</label>
+                                    <textarea name="sejarah_singkat" id="sejarah_singkat" rows="4"
+                                              class="village-input block w-full"
+                                              placeholder="Masukkan sejarah singkat desa...">{{ old('sejarah_singkat', $desaProfile->sejarah_singkat) }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Demografis -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-6">Data Demografis</h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label for="luas_wilayah" class="village-label">Luas Wilayah (Ha)</label>
+                                    <input type="number" name="luas_wilayah" id="luas_wilayah"
+                                           value="{{ old('luas_wilayah', $desaProfile->luas_wilayah) }}"
+                                           class="village-input block w-full"
+                                           step="0.01" min="0"
+                                           placeholder="0.00">
+                                </div>
+
+                                <div>
+                                    <label for="jumlah_penduduk" class="village-label">Jumlah Penduduk</label>
+                                    <input type="number" name="jumlah_penduduk" id="jumlah_penduduk"
+                                           value="{{ old('jumlah_penduduk', $desaProfile->jumlah_penduduk) }}"
+                                           class="village-input block w-full"
+                                           min="0"
+                                           placeholder="0">
+                                </div>
+
+                                <div>
+                                    <label for="jumlah_kk" class="village-label">Jumlah Kepala Keluarga</label>
+                                    <input type="number" name="jumlah_kk" id="jumlah_kk"
+                                           value="{{ old('jumlah_kk', $desaProfile->jumlah_kk) }}"
+                                           class="village-input block w-full"
+                                           min="0"
+                                           placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Batas Wilayah -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-6">Batas Wilayah</h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="batas_utara" class="village-label">Batas Utara</label>
+                                    <input type="text" name="batas_utara" id="batas_utara"
+                                           value="{{ old('batas_utara', $desaProfile->batas_utara) }}"
+                                           class="village-input block w-full"
+                                           placeholder="Sebelah utara berbatasan dengan...">
+                                </div>
+
+                                <div>
+                                    <label for="batas_selatan" class="village-label">Batas Selatan</label>
+                                    <input type="text" name="batas_selatan" id="batas_selatan"
+                                           value="{{ old('batas_selatan', $desaProfile->batas_selatan) }}"
+                                           class="village-input block w-full"
+                                           placeholder="Sebelah selatan berbatasan dengan...">
+                                </div>
+
+                                <div>
+                                    <label for="batas_timur" class="village-label">Batas Timur</label>
+                                    <input type="text" name="batas_timur" id="batas_timur"
+                                           value="{{ old('batas_timur', $desaProfile->batas_timur) }}"
+                                           class="village-input block w-full"
+                                           placeholder="Sebelah timur berbatasan dengan...">
+                                </div>
+
+                                <div>
+                                    <label for="batas_barat" class="village-label">Batas Barat</label>
+                                    <input type="text" name="batas_barat" id="batas_barat"
+                                           value="{{ old('batas_barat', $desaProfile->batas_barat) }}"
+                                           class="village-input block w-full"
+                                           placeholder="Sebelah barat berbatasan dengan...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Logo Upload -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">

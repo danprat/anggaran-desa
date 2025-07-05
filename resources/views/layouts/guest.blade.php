@@ -63,6 +63,22 @@
                         @endif
                     </div>
                 @endif
+                <div class="mt-3 pt-3 border-t border-blue-400">
+                    <p class="text-blue-200 text-xs">
+                        Dibuat oleh
+                        <a href="https://wa.me/6208974041777"
+                           target="_blank"
+                           class="font-medium text-white hover:text-blue-100 transition-colors duration-200">
+                            Dany Pratmanto
+                        </a>
+                        • WA:
+                        <a href="https://wa.me/6208974041777"
+                           target="_blank"
+                           class="font-medium text-white hover:text-blue-100 transition-colors duration-200">
+                            08974041777
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     </body>
