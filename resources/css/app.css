@@ -149,7 +149,6 @@ html, body {
     .desa-profile-form-section {
         @apply w-full;
         @apply overflow-x-hidden;
-        max-width: 100%;
     }
 
     /* Ensure form elements don't overflow */

@@ -75,7 +75,7 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('admin.desa-profile.update-profile') }}" enctype="multipart/form-data" class="desa-profile-form-section space-y-6 w-full max-w-4xl mx-auto">
+                <form method="POST" action="{{ route('admin.desa-profile.update-profile') }}" enctype="multipart/form-data" class="desa-profile-form-section space-y-6">
                     @csrf
 
                     <!-- Tab Content: Basic Information -->
