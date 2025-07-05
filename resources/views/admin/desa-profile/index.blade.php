@@ -427,8 +427,8 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-                                    <div class="w-full min-w-0">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
                                         <label for="logo_desa" class="village-label">Logo Desa</label>
                                         @if($desaProfile->logo_desa)
                                             <div class="mb-2">
@@ -445,7 +445,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="w-full min-w-0">
+                                    <div>
                                         <label for="logo_kabupaten" class="village-label">Logo Kabupaten</label>
                                         @if($desaProfile->logo_kabupaten)
                                             <div class="mb-2">
@@ -462,7 +462,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="w-full min-w-0">
+                                    <div>
                                         <label for="logo_provinsi" class="village-label">Logo Provinsi</label>
                                         @if($desaProfile->logo_provinsi)
                                             <div class="mb-2">
