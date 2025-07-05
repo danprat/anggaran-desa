@@ -89,93 +89,7 @@
                 </div>
             @endif
 
-            <!-- Quick Actions Section -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
-                <div class="p-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <!-- Status & Workflow Actions -->
-                        <div class="flex flex-wrap items-center gap-2">
-                            <!-- Current Status Badge -->
-                            <span class="px-3 py-1 text-sm font-medium rounded-full
-                                @if($kegiatan->status === 'draft') bg-gray-100 text-gray-800
-                                @elseif($kegiatan->status === 'verifikasi') bg-yellow-100 text-yellow-800
-                                @elseif($kegiatan->status === 'disetujui') bg-green-100 text-green-800
-                                @else bg-red-100 text-red-800
-                                @endif">
-                                Status: {{ ucfirst($kegiatan->status) }}
-                            </span>
 
-                            <!-- Workflow Actions -->
-                            @can('verify', $kegiatan)
-                                @if($kegiatan->status === 'draft')
-                                    <form method="POST" action="{{ route('kegiatan.verify', $kegiatan) }}" class="inline">
-                                        @csrf
-                                        <x-action-button
-                                            type="button"
-                                            icon="verify"
-                                            variant="verify"
-                                            size="md"
-                                            tooltip="Verifikasi Kegiatan"
-                                            onclick="if(confirm('Yakin ingin memverifikasi kegiatan ini?')) this.closest('form').submit();"
-                                        >
-                                            Verifikasi
-                                        </x-action-button>
-                                    </form>
-                                @endif
-                            @endcan
-
-                            @can('approve', $kegiatan)
-                                @if($kegiatan->status === 'verifikasi')
-                                    <form method="POST" action="{{ route('kegiatan.approve', $kegiatan) }}" class="inline">
-                                        @csrf
-                                        <x-action-button
-                                            type="button"
-                                            icon="approve"
-                                            variant="success"
-                                            size="md"
-                                            tooltip="Setujui Kegiatan"
-                                            onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
-                                        >
-                                            Setujui
-                                        </x-action-button>
-                                    </form>
-                                @endif
-                            @endcan
-
-                            <!-- Status Information for Approved -->
-                            @if($kegiatan->status === 'disetujui')
-                                <span class="text-sm text-green-600 font-medium">
-                                    ✓ Kegiatan telah disetujui dan dapat direalisasikan
-                                </span>
-                            @endif
-                        </div>
-
-                        <!-- Export Actions -->
-                        <div class="flex flex-wrap gap-2">
-                            <x-action-button
-                                href="{{ route('kegiatan.export-pdf', $kegiatan) }}"
-                                icon="download"
-                                variant="outline"
-                                size="md"
-                                tooltip="Export PDF"
-                            >
-                                Export PDF
-                            </x-action-button>
-
-                            <x-action-button
-                                href="{{ route('kegiatan.print', $kegiatan) }}"
-                                icon="printer"
-                                variant="outline"
-                                size="md"
-                                tooltip="Print"
-                                target="_blank"
-                            >
-                                Print
-                            </x-action-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Budget Progress Overview -->
             @php
@@ -459,6 +373,65 @@
                 <!-- Sidebar -->
                 <div class="space-y-4">
 
+                    <!-- Actions -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-4">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">Aksi Cepat</h3>
+
+                            <div class="space-y-3">
+                                @can('verify', $kegiatan)
+                                    @if($kegiatan->status === 'draft')
+                                        <form method="POST" action="{{ route('kegiatan.verify', $kegiatan) }}">
+                                            @csrf
+                                            <x-action-button
+                                                type="button"
+                                                icon="verify"
+                                                variant="verify"
+                                                size="md"
+                                                tooltip="Verifikasi Kegiatan"
+                                                class="w-full justify-center"
+                                                onclick="if(confirm('Yakin ingin memverifikasi kegiatan ini?')) this.closest('form').submit();"
+                                            >
+                                                Verifikasi Kegiatan
+                                            </x-action-button>
+                                        </form>
+                                    @endif
+                                @endcan
+
+                                @can('approve', $kegiatan)
+                                    @if($kegiatan->status === 'verifikasi')
+                                        <form method="POST" action="{{ route('kegiatan.approve', $kegiatan) }}">
+                                            @csrf
+                                            <x-action-button
+                                                type="button"
+                                                icon="approve"
+                                                variant="success"
+                                                size="md"
+                                                tooltip="Setujui Kegiatan"
+                                                class="w-full justify-center"
+                                                onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
+                                            >
+                                                Setujui Kegiatan
+                                            </x-action-button>
+                                        </form>
+
+                                        <x-action-button
+                                            type="button"
+                                            icon="x"
+                                            variant="danger"
+                                            size="md"
+                                            tooltip="Tolak Kegiatan"
+                                            class="w-full justify-center"
+                                            onclick="showRejectModal()"
+                                        >
+                                            Tolak Kegiatan
+                                        </x-action-button>
+                                    @endif
+                                @endcan
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Quick Stats -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-4">
@@ -566,117 +539,7 @@
                         </div>
                     </div>
 
-                    <!-- Actions -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Aksi Cepat</h3>
 
-                            <div class="space-y-3">
-                                @can('verify', $kegiatan)
-                                    @if($kegiatan->status === 'draft')
-                                        <form method="POST" action="{{ route('kegiatan.verify', $kegiatan) }}">
-                                            @csrf
-                                            <x-action-button
-                                                type="button"
-                                                icon="verify"
-                                                variant="verify"
-                                                size="md"
-                                                tooltip="Verifikasi Kegiatan"
-                                                class="w-full justify-center"
-                                                onclick="if(confirm('Yakin ingin memverifikasi kegiatan ini?')) this.closest('form').submit();"
-                                            >
-                                                Verifikasi Kegiatan
-                                            </x-action-button>
-                                        </form>
-                                    @endif
-                                @endcan
-
-                                @can('approve', $kegiatan)
-                                    @if($kegiatan->status === 'verifikasi')
-                                        <form method="POST" action="{{ route('kegiatan.approve', $kegiatan) }}">
-                                            @csrf
-                                            <x-action-button
-                                                type="button"
-                                                icon="approve"
-                                                variant="success"
-                                                size="md"
-                                                tooltip="Setujui Kegiatan"
-                                                class="w-full justify-center"
-                                                onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
-                                            >
-                                                Setujui Kegiatan
-                                            </x-action-button>
-                                        </form>
-
-                                        <x-action-button
-                                            type="button"
-                                            icon="x"
-                                            variant="danger"
-                                            size="md"
-                                            tooltip="Tolak Kegiatan"
-                                            class="w-full justify-center"
-                                            onclick="showRejectModal()"
-                                        >
-                                            Tolak Kegiatan
-                                        </x-action-button>
-                                    @endif
-                                @endcan
-
-                                @if($kegiatan->status === 'disetujui')
-                                    @can('create-realisasi')
-                                        <x-action-button
-                                            href="{{ route('realisasi.create', ['kegiatan_id' => $kegiatan->id]) }}"
-                                            icon="plus"
-                                            variant="success"
-                                            size="md"
-                                            tooltip="Tambah Realisasi"
-                                            class="w-full justify-center"
-                                        >
-                                            Tambah Realisasi
-                                        </x-action-button>
-                                    @endcan
-
-                                    <x-action-button
-                                        href="{{ route('realisasi.index', ['kegiatan_id' => $kegiatan->id]) }}"
-                                        icon="eye"
-                                        variant="primary"
-                                        size="md"
-                                        tooltip="Lihat Semua Realisasi"
-                                        class="w-full justify-center"
-                                    >
-                                        Kelola Realisasi
-                                    </x-action-button>
-                                @endif
-
-                                <!-- Export Actions -->
-                                <div class="border-t pt-3 mt-3">
-                                    <h4 class="text-sm font-medium text-gray-700 mb-2">Export</h4>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <x-action-button
-                                            href="{{ route('kegiatan.export-pdf', $kegiatan) }}"
-                                            icon="download"
-                                            variant="danger"
-                                            size="sm"
-                                            tooltip="Export PDF"
-                                            class="justify-center"
-                                        >
-                                            PDF
-                                        </x-action-button>
-                                        <x-action-button
-                                            href="{{ route('kegiatan.print', $kegiatan) }}"
-                                            icon="printer"
-                                            variant="secondary"
-                                            size="sm"
-                                            tooltip="Print"
-                                            class="justify-center"
-                                        >
-                                            Print
-                                        </x-action-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>
