@@ -69,10 +69,20 @@
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Aksi Cepat</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($quickActions as $action)
-                                <a href="{{ $action['url'] }}" class="block p-4 border border-gray-200 rounded-lg hover:border-{{ $action['color'] }}-300 hover:shadow-md transition-all duration-200">
+                                <a href="{{ $action['url'] }}" class="block p-4 border border-gray-200 rounded-lg hover:shadow-md transition-all duration-200
+                                    @if($action['color'] === 'blue') hover:border-blue-300 @endif
+                                    @if($action['color'] === 'green') hover:border-green-300 @endif
+                                    @if($action['color'] === 'yellow') hover:border-yellow-300 @endif
+                                    @if($action['color'] === 'purple') hover:border-purple-300 @endif
+                                    @if($action['color'] === 'gray') hover:border-gray-300 @endif">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0">
-                                            <div class="w-8 h-8 bg-{{ $action['color'] }}-500 rounded-full flex items-center justify-center">
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center
+                                                @if($action['color'] === 'blue') bg-blue-500 @endif
+                                                @if($action['color'] === 'green') bg-green-500 @endif
+                                                @if($action['color'] === 'yellow') bg-yellow-500 @endif
+                                                @if($action['color'] === 'purple') bg-purple-500 @endif
+                                                @if($action['color'] === 'gray') bg-gray-500 @endif">
                                                 @if($action['icon'] === 'users')
                                                     <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                         <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
