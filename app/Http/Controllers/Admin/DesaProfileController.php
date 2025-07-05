@@ -129,35 +129,39 @@ class DesaProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DesaProfile $desaProfile)
+    public function show(DesaProfile $desa_profile)
     {
         if (!auth()->user()->can('view-desa-profile')) {
             abort(403, 'Unauthorized action.');
         }
 
+        $desaProfile = $desa_profile; // For backward compatibility with view
         return view('admin.desa-profile.show', compact('desaProfile'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DesaProfile $desaProfile)
+    public function edit(DesaProfile $desa_profile)
     {
         if (!auth()->user()->can('manage-desa-profile')) {
             abort(403, 'Unauthorized action.');
         }
 
+        $desaProfile = $desa_profile; // For backward compatibility with view
         return view('admin.desa-profile.edit', compact('desaProfile'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DesaProfile $desaProfile)
+    public function update(Request $request, DesaProfile $desa_profile)
     {
         if (!auth()->user()->can('manage-desa-profile')) {
             abort(403, 'Unauthorized action.');
         }
+
+        $desaProfile = $desa_profile; // For backward compatibility
 
         $validated = $request->validate([
             'nama_desa' => 'required|string|max:255',
@@ -246,11 +250,13 @@ class DesaProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DesaProfile $desaProfile)
+    public function destroy(DesaProfile $desa_profile)
     {
         if (!auth()->user()->can('manage-desa-profile')) {
             abort(403, 'Unauthorized action.');
         }
+
+        $desaProfile = $desa_profile; // For backward compatibility
 
         try {
             DB::beginTransaction();
@@ -283,11 +289,13 @@ class DesaProfileController extends Controller
     /**
      * Set profile as active
      */
-    public function setActive(DesaProfile $desaProfile)
+    public function setActive(DesaProfile $desa_profile)
     {
         if (!auth()->user()->can('manage-desa-profile')) {
             abort(403, 'Unauthorized action.');
         }
+
+        $desaProfile = $desa_profile; // For backward compatibility
 
         try {
             DB::beginTransaction();
@@ -322,11 +330,13 @@ class DesaProfileController extends Controller
     /**
      * Export profile to PDF
      */
-    public function exportPdf(DesaProfile $desaProfile)
+    public function exportPdf(DesaProfile $desa_profile)
     {
         if (!auth()->user()->can('view-desa-profile')) {
             abort(403, 'Unauthorized action.');
         }
+
+        $desaProfile = $desa_profile; // For backward compatibility
 
         $data = ['profile' => $desaProfile];
 
