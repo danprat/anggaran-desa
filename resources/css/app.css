@@ -229,8 +229,7 @@ html, body {
     }
 
     /* Prevent horizontal overflow globally for desa profile pages */
-    .desa-profile-container * {
-        max-width: 100%;
+    .desa-profile-container {
         box-sizing: border-box;
     }
 

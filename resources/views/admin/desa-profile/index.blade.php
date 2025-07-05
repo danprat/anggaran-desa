@@ -437,8 +437,6 @@
                                     @endif
                                 </div>
 
-                                <div>
-                                    <!-- Form Fields - Same structure as Geography -->
                                     <div>
                                         <label for="logo_desa" class="village-label">Logo Desa Baru</label>
                                         <input type="file" name="logo_desa" id="logo_desa"
