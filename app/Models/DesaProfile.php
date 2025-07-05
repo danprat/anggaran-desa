@@ -50,7 +50,7 @@ class DesaProfile extends Model
         'jumlah_penduduk' => 'integer',
         'jumlah_kk' => 'integer',
         'is_active' => 'boolean',
-        'additional_settings' => 'array'
+        'additional_settings' => 'json'
     ];
 
     /**
@@ -59,6 +59,26 @@ class DesaProfile extends Model
     public static function getActive()
     {
         return static::where('is_active', true)->first();
+    }
+
+    /**
+     * Handle additional_settings accessor to prevent JSON decode errors
+     */
+    public function getAdditionalSettingsAttribute($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            return json_decode($value, true) ?: [];
+        }
+
+        return [];
     }
 
     /**

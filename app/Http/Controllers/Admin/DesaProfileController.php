@@ -10,15 +10,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class DesaProfileController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $this->authorize('view-admin');
+        if (!auth()->user()->can('view-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $profiles = DesaProfile::orderBy('is_active', 'desc')
             ->orderBy('created_at', 'desc')
@@ -32,7 +36,9 @@ class DesaProfileController extends Controller
      */
     public function create()
     {
-        $this->authorize('manage-desa-profile');
+        if (!auth()->user()->can('manage-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         return view('admin.desa-profile.create');
     }
@@ -42,7 +48,9 @@ class DesaProfileController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('manage-desa-profile');
+        if (!auth()->user()->can('manage-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $validated = $request->validate([
             'nama_desa' => 'required|string|max:255',
@@ -123,7 +131,9 @@ class DesaProfileController extends Controller
      */
     public function show(DesaProfile $desaProfile)
     {
-        $this->authorize('view-admin');
+        if (!auth()->user()->can('view-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         return view('admin.desa-profile.show', compact('desaProfile'));
     }
@@ -133,7 +143,9 @@ class DesaProfileController extends Controller
      */
     public function edit(DesaProfile $desaProfile)
     {
-        $this->authorize('manage-desa-profile');
+        if (!auth()->user()->can('manage-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         return view('admin.desa-profile.edit', compact('desaProfile'));
     }
@@ -143,7 +155,9 @@ class DesaProfileController extends Controller
      */
     public function update(Request $request, DesaProfile $desaProfile)
     {
-        $this->authorize('manage-desa-profile');
+        if (!auth()->user()->can('manage-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $validated = $request->validate([
             'nama_desa' => 'required|string|max:255',
@@ -234,7 +248,9 @@ class DesaProfileController extends Controller
      */
     public function destroy(DesaProfile $desaProfile)
     {
-        $this->authorize('manage-desa-profile');
+        if (!auth()->user()->can('manage-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         try {
             DB::beginTransaction();
@@ -269,7 +285,9 @@ class DesaProfileController extends Controller
      */
     public function setActive(DesaProfile $desaProfile)
     {
-        $this->authorize('manage-desa-profile');
+        if (!auth()->user()->can('manage-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         try {
             DB::beginTransaction();
@@ -306,7 +324,9 @@ class DesaProfileController extends Controller
      */
     public function exportPdf(DesaProfile $desaProfile)
     {
-        $this->authorize('view-admin');
+        if (!auth()->user()->can('view-desa-profile')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $data = ['profile' => $desaProfile];
 
