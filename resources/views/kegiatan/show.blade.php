@@ -376,9 +376,9 @@
                     <!-- Actions -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-3">Aksi Cepat</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Aksi Cepat</h3>
 
-                            <div class="space-y-3">
+                            <div class="space-y-2">
                                 @can('verify', $kegiatan)
                                     @if($kegiatan->status === 'draft')
                                         <form method="POST" action="{{ route('kegiatan.verify', $kegiatan) }}">
@@ -387,7 +387,7 @@
                                                 type="button"
                                                 icon="verify"
                                                 variant="verify"
-                                                size="md"
+                                                size="sm"
                                                 tooltip="Verifikasi Kegiatan"
                                                 class="w-full justify-center"
                                                 onclick="if(confirm('Yakin ingin memverifikasi kegiatan ini?')) this.closest('form').submit();"
@@ -406,7 +406,7 @@
                                                 type="button"
                                                 icon="approve"
                                                 variant="success"
-                                                size="md"
+                                                size="sm"
                                                 tooltip="Setujui Kegiatan"
                                                 class="w-full justify-center"
                                                 onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
@@ -419,7 +419,7 @@
                                             type="button"
                                             icon="x"
                                             variant="danger"
-                                            size="md"
+                                            size="sm"
                                             tooltip="Tolak Kegiatan"
                                             class="w-full justify-center"
                                             onclick="showRejectModal()"
@@ -435,9 +435,9 @@
                     <!-- Quick Stats -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-3">Statistik Cepat</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Statistik Cepat</h3>
 
-                            <div class="space-y-3">
+                            <div class="space-y-2">
                                 <div class="flex items-center justify-between p-2 bg-blue-50 rounded-lg">
                                     <div class="flex items-center">
                                         <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
@@ -471,12 +471,12 @@
                                 @php
                                     $totalFiles = $kegiatan->realisasi->sum(function($r) { return $r->buktiFiles->count(); });
                                 @endphp
-                                <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                                <div class="flex items-center justify-between p-2 bg-purple-50 rounded-lg">
                                     <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                                            <x-icon name="upload" class="w-4 h-4 text-white" />
+                                        <div class="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                                            <x-icon name="upload" class="w-3 h-3 text-white" />
                                         </div>
-                                        <span class="ml-3 text-sm font-medium text-purple-900">File Bukti</span>
+                                        <span class="ml-2 text-sm font-medium text-purple-900">File Bukti</span>
                                     </div>
                                     <span class="text-sm font-bold text-purple-900">{{ $totalFiles }}</span>
                                 </div>
@@ -484,60 +484,7 @@
                         </div>
                     </div>
 
-                    <!-- Budget Summary -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Ringkasan Anggaran</h3>
 
-                            <div class="space-y-4">
-                                <div>
-                                    <div class="flex justify-between text-sm mb-2">
-                                        <span class="text-gray-500">Progress Realisasi</span>
-                                        <span class="font-medium">{{ number_format($persentaseRealisasi, 1) }}%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-3">
-                                        <div class="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500"
-                                             style="width: {{ min($persentaseRealisasi, 100) }}%"></div>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-2 pt-4 border-t">
-                                    <div class="flex justify-between">
-                                        <span class="text-sm text-gray-500">Pagu Anggaran</span>
-                                        <span class="text-sm font-medium">Rp {{ number_format($kegiatan->pagu_anggaran, 0, ',', '.') }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-sm text-gray-500">Total Realisasi</span>
-                                        <span class="text-sm font-medium text-green-600">Rp {{ number_format($totalRealisasi, 0, ',', '.') }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span class="text-sm text-gray-500">Sisa Anggaran</span>
-                                        <span class="text-sm font-medium {{ $sisaAnggaran >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                                            Rp {{ number_format($sisaAnggaran, 0, ',', '.') }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                @if($persentaseRealisasi > 100)
-                                    <div class="bg-red-50 border border-red-200 rounded-lg p-3">
-                                        <div class="flex">
-                                            <div class="flex-shrink-0">
-                                                <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                </svg>
-                                            </div>
-                                            <div class="ml-3">
-                                                <h3 class="text-sm font-medium text-red-800">Peringatan</h3>
-                                                <div class="mt-2 text-sm text-red-700">
-                                                    <p>Realisasi melebihi pagu anggaran yang ditetapkan.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
 
 
 
