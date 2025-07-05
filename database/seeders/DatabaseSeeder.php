@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             TahunAnggaranSeeder::class,
+            DesaProfileSeeder::class,
             KegiatanSeeder::class,
             RealisasiSeeder::class,
 

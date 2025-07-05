@@ -123,9 +123,27 @@
     </style>
 </head>
 <body>
+    @php
+        $desaProfile = \App\Models\DesaProfile::getActive();
+    @endphp
+
     <div class="header">
-        <h1>DETAIL KEGIATAN</h1>
-        <h2>{{ strtoupper($kegiatan->nama_kegiatan) }}</h2>
+        @if($desaProfile)
+            <h1>PEMERINTAH {{ strtoupper($desaProfile->provinsi) }}</h1>
+            <h2>{{ strtoupper($desaProfile->kabupaten) }}</h2>
+            <h3>{{ strtoupper($desaProfile->kecamatan) }}</h3>
+            <h1 style="margin-top: 10px; border-bottom: 2px solid #333; padding-bottom: 10px;">{{ strtoupper($desaProfile->nama_desa) }}</h1>
+            <p style="margin-top: 10px;">{{ $desaProfile->alamat_lengkap }}</p>
+            @if($desaProfile->telepon || $desaProfile->email)
+                <p style="font-size: 10px;">
+                    @if($desaProfile->telepon) Telp: {{ $desaProfile->telepon }} @endif
+                    @if($desaProfile->email) | Email: {{ $desaProfile->email }} @endif
+                </p>
+            @endif
+        @endif
+
+        <h2 style="margin-top: 20px; color: #333;">DETAIL KEGIATAN</h2>
+        <h3>{{ strtoupper($kegiatan->nama_kegiatan) }}</h3>
         <p>Tahun Anggaran {{ $kegiatan->tahunAnggaran->tahun }}</p>
     </div>
 
@@ -249,7 +267,11 @@
 
     <div class="footer">
         <p>Dicetak pada: {{ now()->format('d/m/Y H:i:s') }}</p>
-        <p>Sistem Informasi Anggaran Desa</p>
+        @if($desaProfile)
+            <p>{{ $desaProfile->full_name }}</p>
+        @else
+            <p>Sistem Informasi Anggaran Desa</p>
+        @endif
     </div>
 </body>
 </html>

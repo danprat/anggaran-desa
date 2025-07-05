@@ -86,10 +86,21 @@
     </style>
 </head>
 <body>
+    @php
+        $desaProfile = \App\Models\DesaProfile::getActive();
+    @endphp
+
     <div class="header">
-        <h1>LAPORAN KEUANGAN</h1>
-        <h2>TAHUN ANGGARAN {{ $selectedTahun->tahun }}</h2>
-        <p>Desa [Nama Desa] - Kecamatan [Nama Kecamatan] - Kabupaten [Nama Kabupaten]</p>
+        @if($desaProfile)
+            <h1>PEMERINTAH {{ strtoupper($desaProfile->provinsi) }}</h1>
+            <h2>{{ strtoupper($desaProfile->kabupaten) }}</h2>
+            <h3>{{ strtoupper($desaProfile->kecamatan) }}</h3>
+            <h1 style="margin-top: 10px; border-bottom: 2px solid #333; padding-bottom: 10px;">{{ strtoupper($desaProfile->nama_desa) }}</h1>
+            <p style="margin-top: 10px;">{{ $desaProfile->alamat_lengkap }}</p>
+        @endif
+
+        <h2 style="margin-top: 20px; color: #333;">LAPORAN KEUANGAN</h2>
+        <h3>TAHUN ANGGARAN {{ $selectedTahun->tahun }}</h3>
     </div>
 
     <!-- Summary Section -->
@@ -245,7 +256,11 @@
 
     <div class="footer">
         <p>Dicetak pada: {{ now()->format('d/m/Y H:i:s') }}</p>
-        <p>Sistem Informasi Anggaran Desa</p>
+        @if($desaProfile)
+            <p>{{ $desaProfile->full_name }}</p>
+        @else
+            <p>Sistem Informasi Anggaran Desa</p>
+        @endif
     </div>
 </body>
 </html>

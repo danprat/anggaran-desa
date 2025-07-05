@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', App\Http\Controllers\Admin\UserController::class);
         Route::resource('tahun-anggaran', App\Http\Controllers\Admin\TahunAnggaranController::class);
         Route::post('tahun-anggaran/{tahunAnggaran}/set-aktif', [App\Http\Controllers\Admin\TahunAnggaranController::class, 'setAktif'])->name('tahun-anggaran.set-aktif');
+
+        // Desa Profile routes
+        Route::resource('desa-profile', App\Http\Controllers\Admin\DesaProfileController::class);
+        Route::post('desa-profile/{desaProfile}/set-active', [App\Http\Controllers\Admin\DesaProfileController::class, 'setActive'])->name('desa-profile.set-active');
+        Route::get('desa-profile/{desaProfile}/export-pdf', [App\Http\Controllers\Admin\DesaProfileController::class, 'exportPdf'])->name('desa-profile.export-pdf');
     });
 
     // Log Aktivitas routes

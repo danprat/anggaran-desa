@@ -52,7 +52,7 @@ class RoleSeeder extends Seeder
         ];
 
         foreach ($roles as $roleData) {
-            Role::create([
+            Role::firstOrCreate([
                 'name' => $roleData['name'],
                 'guard_name' => 'web'
             ]);
@@ -63,6 +63,10 @@ class RoleSeeder extends Seeder
             // User management
             'manage-users',
             'view-users',
+
+            // Desa Profile permissions
+            'manage-desa-profile',
+            'view-desa-profile',
 
             // Kegiatan permissions
             'create-kegiatan',
@@ -91,7 +95,7 @@ class RoleSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create([
+            Permission::firstOrCreate([
                 'name' => $permission,
                 'guard_name' => 'web'
             ]);
@@ -107,6 +111,7 @@ class RoleSeeder extends Seeder
             'edit-kegiatan',
             'view-kegiatan',
             'view-laporan',
+            'view-desa-profile',
         ]);
 
         $sekretaris = Role::findByName('sekretaris');
@@ -117,6 +122,7 @@ class RoleSeeder extends Seeder
             'view-realisasi',
             'view-laporan',
             'export-laporan',
+            'view-desa-profile',
         ]);
 
         $kepalaDesa = Role::findByName('kepala-desa');
@@ -126,6 +132,8 @@ class RoleSeeder extends Seeder
             'view-realisasi',
             'view-laporan',
             'export-laporan',
+            'manage-desa-profile',
+            'view-desa-profile',
         ]);
 
         $bendahara = Role::findByName('bendahara');
@@ -137,6 +145,7 @@ class RoleSeeder extends Seeder
             'upload-bukti',
             'view-laporan',
             'export-laporan',
+            'view-desa-profile',
         ]);
 
         $auditor = Role::findByName('auditor');
@@ -146,6 +155,7 @@ class RoleSeeder extends Seeder
             'view-laporan',
             'export-laporan',
             'view-log',
+            'view-desa-profile',
         ]);
     }
 }
