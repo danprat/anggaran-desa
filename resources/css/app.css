@@ -239,10 +239,7 @@ html, body {
         @apply max-w-full h-auto;
     }
 
-    /* Logo form sections responsive */
-    .logo-form-section {
-        @apply w-full max-w-md mx-auto px-4;
-    }
+
 
     /* Tab content responsive */
     .tab-content {
