@@ -19,6 +19,12 @@ class DatabaseSeeder extends Seeder
             TahunAnggaranSeeder::class,
             KegiatanSeeder::class,
             RealisasiSeeder::class,
+
+            // Dummy data seeders
+            DummyUsersSeeder::class,
+            DummyKegiatanSeeder::class,
+            DummyRealisasiSeeder::class,
+            DummyLogAktivitasSeeder::class,
         ]);
     }
 }

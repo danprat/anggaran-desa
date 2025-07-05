@@ -4,9 +4,15 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Manajemen User
             </h2>
-            <a href="{{ route('admin.users.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <x-action-button
+                href="{{ route('admin.users.create') }}"
+                icon="plus"
+                variant="primary"
+                size="md"
+                tooltip="Tambah User Baru"
+            >
                 Tambah User
-            </a>
+            </x-action-button>
         </div>
     </x-slot>
 
@@ -130,21 +136,33 @@
                                                 {{ $user->created_at->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <div class="flex space-x-2">
-                                                    <a href="{{ route('admin.users.show', $user) }}" class="text-indigo-600 hover:text-indigo-900">
-                                                        Lihat
-                                                    </a>
-                                                    <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:text-blue-900">
-                                                        Edit
-                                                    </a>
+                                                <div class="flex space-x-1">
+                                                    <x-action-button
+                                                        href="{{ route('admin.users.show', $user) }}"
+                                                        icon="eye"
+                                                        variant="info"
+                                                        size="sm"
+                                                        tooltip="Lihat Detail User"
+                                                    />
+                                                    <x-action-button
+                                                        href="{{ route('admin.users.edit', $user) }}"
+                                                        icon="edit"
+                                                        variant="primary"
+                                                        size="sm"
+                                                        tooltip="Edit User"
+                                                    />
                                                     @if($user->id !== auth()->id())
                                                         <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="text-red-600 hover:text-red-900" 
-                                                                    onclick="return confirm('Yakin ingin menghapus user ini?')">
-                                                                Hapus
-                                                            </button>
+                                                            <x-action-button
+                                                                type="button"
+                                                                icon="delete"
+                                                                variant="danger"
+                                                                size="sm"
+                                                                tooltip="Hapus User"
+                                                                onclick="if(confirm('Yakin ingin menghapus user ini?')) this.closest('form').submit();"
+                                                            />
                                                         </form>
                                                     @endif
                                                 </div>
@@ -165,9 +183,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                             </svg>
                             <p class="text-gray-500 mb-4">Belum ada user yang ditemukan.</p>
-                            <a href="{{ route('admin.users.create') }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <x-action-button
+                                href="{{ route('admin.users.create') }}"
+                                icon="plus"
+                                variant="primary"
+                                size="md"
+                                tooltip="Tambah User Pertama"
+                            >
                                 Tambah User Pertama
-                            </a>
+                            </x-action-button>
                         </div>
                     @endif
                 </div>

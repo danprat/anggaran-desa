@@ -13,16 +13,32 @@ class TahunAnggaranSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create tahun anggaran untuk beberapa tahun
-        $tahunList = [
-            ['tahun' => 2023, 'status' => 'nonaktif'],
-            ['tahun' => 2024, 'status' => 'nonaktif'],
-            ['tahun' => 2025, 'status' => 'aktif'], // Tahun aktif
-            ['tahun' => 2026, 'status' => 'nonaktif'],
+        $tahunAnggaran = [
+            [
+                'tahun' => 2023,
+                'status' => 'nonaktif',
+                'created_at' => '2023-01-01 00:00:00',
+                'updated_at' => '2023-01-01 00:00:00',
+            ],
+            [
+                'tahun' => 2024,
+                'status' => 'nonaktif',
+                'created_at' => '2024-01-01 00:00:00',
+                'updated_at' => '2024-01-01 00:00:00',
+            ],
+            [
+                'tahun' => 2025,
+                'status' => 'aktif',
+                'created_at' => '2025-01-01 00:00:00',
+                'updated_at' => '2025-01-01 00:00:00',
+            ],
         ];
 
-        foreach ($tahunList as $tahun) {
-            TahunAnggaran::create($tahun);
+        foreach ($tahunAnggaran as $tahun) {
+            TahunAnggaran::updateOrCreate(
+                ['tahun' => $tahun['tahun']],
+                $tahun
+            );
         }
     }
 }

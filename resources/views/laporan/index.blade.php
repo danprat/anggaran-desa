@@ -138,10 +138,16 @@
                                 </svg>
                             </div>
                             <div class="mt-4">
-                                <a href="{{ route('laporan.show', ['type' => 'kegiatan', 'tahun_id' => $selectedTahun->id]) }}" 
-                                   class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center block">
+                                <x-action-button
+                                    href="{{ route('laporan.show', ['type' => 'kegiatan', 'tahun_id' => $selectedTahun->id]) }}"
+                                    icon="eye"
+                                    variant="primary"
+                                    size="md"
+                                    tooltip="Lihat Laporan Kegiatan"
+                                    class="w-full justify-center"
+                                >
                                     Lihat Laporan
-                                </a>
+                                </x-action-button>
                             </div>
                         </div>
                     </div>
@@ -158,10 +164,16 @@
                                 </svg>
                             </div>
                             <div class="mt-4">
-                                <a href="{{ route('laporan.show', ['type' => 'realisasi', 'tahun_id' => $selectedTahun->id]) }}" 
-                                   class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center block">
+                                <x-action-button
+                                    href="{{ route('laporan.show', ['type' => 'realisasi', 'tahun_id' => $selectedTahun->id]) }}"
+                                    icon="eye"
+                                    variant="success"
+                                    size="md"
+                                    tooltip="Lihat Laporan Realisasi"
+                                    class="w-full justify-center"
+                                >
                                     Lihat Laporan
-                                </a>
+                                </x-action-button>
                             </div>
                         </div>
                     </div>
@@ -179,10 +191,16 @@
                                 </svg>
                             </div>
                             <div class="mt-4">
-                                <a href="{{ route('laporan.show', ['type' => 'keuangan', 'tahun_id' => $selectedTahun->id]) }}" 
-                                   class="w-full bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded text-center block">
+                                <x-action-button
+                                    href="{{ route('laporan.show', ['type' => 'keuangan', 'tahun_id' => $selectedTahun->id]) }}"
+                                    icon="eye"
+                                    variant="warning"
+                                    size="md"
+                                    tooltip="Lihat Laporan Keuangan"
+                                    class="w-full justify-center"
+                                >
                                     Lihat Laporan
-                                </a>
+                                </x-action-button>
                             </div>
                         </div>
                     </div>

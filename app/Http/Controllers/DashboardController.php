@@ -250,21 +250,21 @@ class DashboardController extends Controller
                     'title' => 'Kelola User',
                     'description' => 'Tambah atau edit user sistem',
                     'url' => route('admin.users.index'),
-                    'icon' => 'users',
+                    'icon' => 'plus',
                     'color' => 'blue'
                 ],
                 [
                     'title' => 'Tahun Anggaran',
                     'description' => 'Kelola tahun anggaran',
                     'url' => route('admin.tahun-anggaran.index'),
-                    'icon' => 'calendar',
+                    'icon' => 'plus',
                     'color' => 'green'
                 ],
                 [
                     'title' => 'Log Aktivitas',
                     'description' => 'Lihat log sistem',
                     'url' => route('log.index'),
-                    'icon' => 'document',
+                    'icon' => 'eye',
                     'color' => 'gray'
                 ]
             ];
@@ -281,7 +281,7 @@ class DashboardController extends Controller
                     'title' => 'Laporan Anggaran',
                     'description' => 'Lihat laporan keuangan',
                     'url' => route('laporan.show', ['type' => 'keuangan']),
-                    'icon' => 'chart',
+                    'icon' => 'eye',
                     'color' => 'blue'
                 ]
             ];
@@ -298,7 +298,7 @@ class DashboardController extends Controller
                     'title' => 'Laporan Kegiatan',
                     'description' => 'Lihat laporan kegiatan',
                     'url' => route('laporan.show', ['type' => 'kegiatan']),
-                    'icon' => 'document',
+                    'icon' => 'eye',
                     'color' => 'blue'
                 ]
             ];
@@ -315,14 +315,14 @@ class DashboardController extends Controller
                     'title' => 'Kelola Realisasi',
                     'description' => 'Lihat semua realisasi',
                     'url' => route('realisasi.index'),
-                    'icon' => 'money',
+                    'icon' => 'eye',
                     'color' => 'blue'
                 ],
                 [
                     'title' => 'Laporan Realisasi',
                     'description' => 'Lihat laporan realisasi',
                     'url' => route('laporan.show', ['type' => 'realisasi']),
-                    'icon' => 'chart',
+                    'icon' => 'eye',
                     'color' => 'purple'
                 ]
             ];
@@ -339,7 +339,7 @@ class DashboardController extends Controller
                     'title' => 'Kegiatan Saya',
                     'description' => 'Lihat kegiatan yang saya buat',
                     'url' => route('kegiatan.index', ['created_by' => $user->id]),
-                    'icon' => 'document',
+                    'icon' => 'eye',
                     'color' => 'blue'
                 ]
             ];
@@ -349,7 +349,7 @@ class DashboardController extends Controller
                     'title' => 'Log Aktivitas',
                     'description' => 'Lihat log sistem',
                     'url' => route('log.index'),
-                    'icon' => 'document',
+                    'icon' => 'eye',
                     'color' => 'gray'
                 ],
                 [

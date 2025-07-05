@@ -5,9 +5,15 @@
                 Manajemen Realisasi Anggaran
             </h2>
             @can('create-realisasi')
-                <a href="{{ route('realisasi.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <x-action-button
+                    href="{{ route('realisasi.create') }}"
+                    icon="plus"
+                    variant="primary"
+                    size="md"
+                    tooltip="Tambah Realisasi Baru"
+                >
                     Tambah Realisasi
-                </a>
+                </x-action-button>
             @endcan
         </div>
     </x-slot>
@@ -149,27 +155,39 @@
                                                 {{ $item->pembuat->name }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <div class="flex space-x-2">
+                                                <div class="flex space-x-1">
                                                     @can('view', $item)
-                                                        <a href="{{ route('realisasi.show', $item) }}" class="text-indigo-600 hover:text-indigo-900">
-                                                            Lihat
-                                                        </a>
+                                                        <x-action-button
+                                                            href="{{ route('realisasi.show', $item) }}"
+                                                            icon="eye"
+                                                            variant="info"
+                                                            size="sm"
+                                                            tooltip="Lihat Detail"
+                                                        />
                                                     @endcan
-                                                    
+
                                                     @can('update', $item)
-                                                        <a href="{{ route('realisasi.edit', $item) }}" class="text-blue-600 hover:text-blue-900">
-                                                            Edit
-                                                        </a>
+                                                        <x-action-button
+                                                            href="{{ route('realisasi.edit', $item) }}"
+                                                            icon="edit"
+                                                            variant="primary"
+                                                            size="sm"
+                                                            tooltip="Edit Realisasi"
+                                                        />
                                                     @endcan
-                                                    
+
                                                     @can('delete', $item)
                                                         <form method="POST" action="{{ route('realisasi.destroy', $item) }}" class="inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="text-red-600 hover:text-red-900" 
-                                                                    onclick="return confirm('Yakin ingin menghapus realisasi ini?')">
-                                                                Hapus
-                                                            </button>
+                                                            <x-action-button
+                                                                type="button"
+                                                                icon="delete"
+                                                                variant="danger"
+                                                                size="sm"
+                                                                tooltip="Hapus Realisasi"
+                                                                onclick="if(confirm('Yakin ingin menghapus realisasi ini?')) this.closest('form').submit();"
+                                                            />
                                                         </form>
                                                     @endcan
                                                 </div>

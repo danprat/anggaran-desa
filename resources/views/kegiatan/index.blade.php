@@ -5,9 +5,15 @@
                 Manajemen Kegiatan
             </h2>
             @can('create-kegiatan')
-                <a href="{{ route('kegiatan.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <x-action-button
+                    href="{{ route('kegiatan.create') }}"
+                    icon="plus"
+                    variant="primary"
+                    size="md"
+                    tooltip="Tambah Kegiatan Baru"
+                >
                     Tambah Kegiatan
-                </a>
+                </x-action-button>
             @endcan
         </div>
     </x-slot>
@@ -135,51 +141,71 @@
                                                 {{ $item->waktu_mulai->format('d/m/Y') }} - {{ $item->waktu_selesai->format('d/m/Y') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <div class="flex space-x-2">
+                                                <div class="flex space-x-1">
                                                     @can('view', $item)
-                                                        <a href="{{ route('kegiatan.show', $item) }}" class="text-indigo-600 hover:text-indigo-900">
-                                                            Lihat
-                                                        </a>
+                                                        <x-action-button
+                                                            href="{{ route('kegiatan.show', $item) }}"
+                                                            icon="eye"
+                                                            variant="info"
+                                                            size="sm"
+                                                            tooltip="Lihat Detail"
+                                                        />
                                                     @endcan
-                                                    
+
                                                     @can('update', $item)
-                                                        <a href="{{ route('kegiatan.edit', $item) }}" class="text-blue-600 hover:text-blue-900">
-                                                            Edit
-                                                        </a>
+                                                        <x-action-button
+                                                            href="{{ route('kegiatan.edit', $item) }}"
+                                                            icon="edit"
+                                                            variant="primary"
+                                                            size="sm"
+                                                            tooltip="Edit Kegiatan"
+                                                        />
                                                     @endcan
                                                     
                                                     @can('verify', $item)
                                                         @if($item->status === 'draft')
                                                             <form method="POST" action="{{ route('kegiatan.verify', $item) }}" class="inline">
                                                                 @csrf
-                                                                <button type="submit" class="text-yellow-600 hover:text-yellow-900" 
-                                                                        onclick="return confirm('Yakin ingin memverifikasi kegiatan ini?')">
-                                                                    Verifikasi
-                                                                </button>
+                                                                <x-action-button
+                                                                    type="button"
+                                                                    icon="check"
+                                                                    variant="warning"
+                                                                    size="sm"
+                                                                    tooltip="Verifikasi Kegiatan"
+                                                                    onclick="if(confirm('Yakin ingin memverifikasi kegiatan ini?')) this.closest('form').submit();"
+                                                                />
                                                             </form>
                                                         @endif
                                                     @endcan
-                                                    
+
                                                     @can('approve', $item)
                                                         @if($item->status === 'verifikasi')
                                                             <form method="POST" action="{{ route('kegiatan.approve', $item) }}" class="inline">
                                                                 @csrf
-                                                                <button type="submit" class="text-green-600 hover:text-green-900" 
-                                                                        onclick="return confirm('Yakin ingin menyetujui kegiatan ini?')">
-                                                                    Setujui
-                                                                </button>
+                                                                <x-action-button
+                                                                    type="button"
+                                                                    icon="check"
+                                                                    variant="success"
+                                                                    size="sm"
+                                                                    tooltip="Setujui Kegiatan"
+                                                                    onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
+                                                                />
                                                             </form>
                                                         @endif
                                                     @endcan
-                                                    
+
                                                     @can('delete', $item)
                                                         <form method="POST" action="{{ route('kegiatan.destroy', $item) }}" class="inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="text-red-600 hover:text-red-900" 
-                                                                    onclick="return confirm('Yakin ingin menghapus kegiatan ini?')">
-                                                                Hapus
-                                                            </button>
+                                                            <x-action-button
+                                                                type="button"
+                                                                icon="delete"
+                                                                variant="danger"
+                                                                size="sm"
+                                                                tooltip="Hapus Kegiatan"
+                                                                onclick="if(confirm('Yakin ingin menghapus kegiatan ini?')) this.closest('form').submit();"
+                                                            />
                                                         </form>
                                                     @endcan
                                                 </div>
@@ -198,9 +224,16 @@
                         <div class="text-center py-8">
                             <p class="text-gray-500">Belum ada kegiatan yang tersedia.</p>
                             @can('create-kegiatan')
-                                <a href="{{ route('kegiatan.create') }}" class="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                <x-action-button
+                                    href="{{ route('kegiatan.create') }}"
+                                    icon="plus"
+                                    variant="primary"
+                                    size="md"
+                                    tooltip="Tambah Kegiatan Pertama"
+                                    class="mt-4"
+                                >
                                     Tambah Kegiatan Pertama
-                                </a>
+                                </x-action-button>
                             @endcan
                         </div>
                     @endif
