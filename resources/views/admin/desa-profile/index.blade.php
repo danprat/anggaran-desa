@@ -416,7 +416,7 @@
                     <!-- Tab Content: Media -->
                     <div id="content-media" class="tab-content hidden">
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6">
+                            <div class="p-6 w-full max-w-none overflow-x-hidden">
                                 <div class="flex items-center mb-6">
                                     <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
                                         <span class="text-indigo-600 text-xl">🖼️</span>
@@ -427,8 +427,8 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                                    <div class="w-full min-w-0">
                                         <label for="logo_desa" class="village-label">Logo Desa</label>
                                         @if($desaProfile->logo_desa)
                                             <div class="mb-2">
@@ -445,7 +445,7 @@
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div class="w-full min-w-0">
                                         <label for="logo_kabupaten" class="village-label">Logo Kabupaten</label>
                                         @if($desaProfile->logo_kabupaten)
                                             <div class="mb-2">
@@ -462,7 +462,7 @@
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div class="w-full min-w-0">
                                         <label for="logo_provinsi" class="village-label">Logo Provinsi</label>
                                         @if($desaProfile->logo_provinsi)
                                             <div class="mb-2">
