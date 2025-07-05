@@ -435,8 +435,14 @@
                                                 <img src="{{ $desaProfile->logo_desa_url }}" alt="Logo Desa" class="h-16 w-16 object-contain">
                                             </div>
                                         @endif
-                                               class="village-input block w-full">
+                                        <input type="file" name="logo_desa" id="logo_desa"
+                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                               class="village-input block w-full"
+                                               onchange="previewImage(this, 'preview-logo-desa')">
                                         <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                        <div id="preview-logo-desa" class="mt-2 hidden">
+                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
+                                        </div>
                                     </div>
 
                                     <div>
@@ -447,9 +453,13 @@
                                             </div>
                                         @endif
                                         <input type="file" name="logo_kabupaten" id="logo_kabupaten"
-                                               accept="image/*"
-                                               class="village-input block w-full">
+                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                               class="village-input block w-full"
+                                               onchange="previewImage(this, 'preview-logo-kabupaten')">
                                         <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                        <div id="preview-logo-kabupaten" class="mt-2 hidden">
+                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
+                                        </div>
                                     </div>
 
                                     <div>
@@ -460,9 +470,13 @@
                                             </div>
                                         @endif
                                         <input type="file" name="logo_provinsi" id="logo_provinsi"
-                                               accept="image/*"
-                                               class="village-input block w-full">
+                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                               class="village-input block w-full"
+                                               onchange="previewImage(this, 'preview-logo-provinsi')">
                                         <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                        <div id="preview-logo-provinsi" class="mt-2 hidden">
+                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
+                                        </div>
                                     </div>
                                 </div>
 
@@ -635,6 +649,25 @@
 
                     alert(`Section ${sectionNames[sectionName]} telah direset.`);
                 }
+            }
+        }
+
+        // Image preview function
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const img = preview.querySelector('img');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.classList.add('hidden');
             }
         }
     </script>
