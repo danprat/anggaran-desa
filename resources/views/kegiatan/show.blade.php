@@ -400,32 +400,34 @@
 
                                 @can('approve', $kegiatan)
                                     @if($kegiatan->status === 'verifikasi')
-                                        <form method="POST" action="{{ route('kegiatan.approve', $kegiatan) }}">
-                                            @csrf
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <form method="POST" action="{{ route('kegiatan.approve', $kegiatan) }}">
+                                                @csrf
+                                                <x-action-button
+                                                    type="button"
+                                                    icon="approve"
+                                                    variant="success"
+                                                    size="sm"
+                                                    tooltip="Setujui Kegiatan"
+                                                    class="w-full justify-center"
+                                                    onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
+                                                >
+                                                    Setujui
+                                                </x-action-button>
+                                            </form>
+
                                             <x-action-button
                                                 type="button"
-                                                icon="approve"
-                                                variant="success"
+                                                icon="x"
+                                                variant="danger"
                                                 size="sm"
-                                                tooltip="Setujui Kegiatan"
+                                                tooltip="Tolak Kegiatan"
                                                 class="w-full justify-center"
-                                                onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
+                                                onclick="showRejectModal()"
                                             >
-                                                Setujui Kegiatan
+                                                Tolak
                                             </x-action-button>
-                                        </form>
-
-                                        <x-action-button
-                                            type="button"
-                                            icon="x"
-                                            variant="danger"
-                                            size="sm"
-                                            tooltip="Tolak Kegiatan"
-                                            class="w-full justify-center"
-                                            onclick="showRejectModal()"
-                                        >
-                                            Tolak Kegiatan
-                                        </x-action-button>
+                                        </div>
                                     @endif
                                 @endcan
                             </div>
