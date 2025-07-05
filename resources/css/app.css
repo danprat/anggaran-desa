@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global overflow prevention */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
 /* Village Branding & Typography Improvements */
 @layer base {
     /* Improved base font sizes for better readability */
@@ -118,7 +124,7 @@
 
     /* Desa Profile Form Responsive Improvements */
     .desa-profile-container {
-        @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+        @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
         @apply overflow-x-hidden;
     }
 
@@ -126,15 +132,24 @@
         @apply overflow-x-auto;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        min-width: 0;
+        flex-shrink: 0;
     }
 
     .desa-profile-tab-nav::-webkit-scrollbar {
         display: none;
     }
 
+    /* Tab button responsive */
+    .tab-button {
+        @apply flex-shrink-0;
+        min-width: fit-content;
+    }
+
     .desa-profile-form-section {
-        @apply w-full max-w-none;
+        @apply w-full;
         @apply overflow-x-hidden;
+        max-width: 100%;
     }
 
     /* Ensure form elements don't overflow */
@@ -207,8 +222,34 @@
     .village-input[type="file"] {
         @apply text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100;
         @apply border border-gray-300 rounded-md;
+        @apply w-full;
         max-width: 100%;
-        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    /* Prevent horizontal overflow globally for desa profile pages */
+    .desa-profile-container * {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Ensure images in logo sections are responsive */
+    .desa-profile-container img {
+        @apply max-w-full h-auto;
+    }
+
+    /* Logo form sections responsive */
+    .logo-form-section {
+        @apply w-full max-w-md mx-auto px-4;
+    }
+
+    /* Tab content responsive */
+    .tab-content {
+        @apply w-full;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     /* Logo Section Styling - Enhanced */

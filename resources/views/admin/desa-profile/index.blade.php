@@ -11,7 +11,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="desa-profile-container">
+        <div class="desa-profile-container overflow-x-hidden">
 
             <!-- Success/Error Messages -->
             @if(session('success'))
@@ -38,9 +38,9 @@
 
             @can('manage-desa-profile')
                 <!-- Tab Navigation -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 w-full">
                     <div class="border-b border-gray-200">
-                        <nav class="desa-profile-tab-nav -mb-px flex space-x-2 sm:space-x-8 px-4 sm:px-6" aria-label="Tabs">
+                        <nav class="desa-profile-tab-nav -mb-px flex space-x-2 sm:space-x-8 px-4 sm:px-6 overflow-x-auto" aria-label="Tabs">
                             <button type="button" onclick="showTab('basic')"
                                     class="tab-button active border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
                                     id="tab-basic">
@@ -75,7 +75,7 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('admin.desa-profile.update-profile') }}" enctype="multipart/form-data" class="desa-profile-form-section space-y-6">
+                <form method="POST" action="{{ route('admin.desa-profile.update-profile') }}" enctype="multipart/form-data" class="desa-profile-form-section space-y-6 w-full max-w-4xl mx-auto">
                     @csrf
 
                     <!-- Tab Content: Basic Information -->
@@ -437,8 +437,8 @@
                                     @endif
                                 </div>
 
-                                <!-- Form Fields - Same structure as Geography -->
-                                <div class="mx-auto" style="max-width: 24rem;">
+                                <!-- Form Fields - Responsive Layout -->
+                                <div class="w-full max-w-md mx-auto px-4">
                                     <label for="logo_desa" class="village-label">Logo Desa Baru</label>
                                     <input type="file" name="logo_desa" id="logo_desa"
                                            accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
@@ -446,7 +446,7 @@
                                            onchange="previewImage(this, 'preview-logo-desa')">
                                     <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
                                     <div id="preview-logo-desa" class="mt-3 text-center hidden">
-                                        <img class="h-20 w-20 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Desa">
+                                        <img class="h-20 w-20 object-contain border border-gray-200 rounded mx-auto max-w-full" alt="Preview Logo Desa">
                                     </div>
                                 </div>
 
@@ -460,9 +460,9 @@
                                         </svg>
                                     </button>
 
-                                    <div id="additional-logos-content" class="hidden mt-4">
+                                    <div id="additional-logos-content" class="hidden mt-4 space-y-6">
                                         <!-- Logo Kabupaten -->
-                                        <div class="mb-6 mx-auto" style="max-width: 24rem;">
+                                        <div class="w-full max-w-md mx-auto px-4">
                                             <div class="text-center mb-3">
                                                 <x-desa-logo type="kabupaten" size="lg" class="mx-auto mb-2" :profile="$desaProfile" />
                                                 @if($desaProfile->logo_kabupaten)
@@ -477,10 +477,13 @@
                                                    class="village-input block w-full"
                                                    onchange="previewImage(this, 'preview-logo-kabupaten')">
                                             <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                            <div id="preview-logo-kabupaten" class="mt-3 text-center hidden">
+                                                <img class="h-20 w-20 object-contain border border-gray-200 rounded mx-auto max-w-full" alt="Preview Logo Kabupaten">
+                                            </div>
                                         </div>
 
                                         <!-- Logo Provinsi -->
-                                        <div class="mx-auto" style="max-width: 24rem;">
+                                        <div class="w-full max-w-md mx-auto px-4">
                                             <div class="text-center mb-3">
                                                 <x-desa-logo type="provinsi" size="lg" class="mx-auto mb-2" :profile="$desaProfile" />
                                                 @if($desaProfile->logo_provinsi)
@@ -495,6 +498,9 @@
                                                    class="village-input block w-full"
                                                    onchange="previewImage(this, 'preview-logo-provinsi')">
                                             <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                            <div id="preview-logo-provinsi" class="mt-3 text-center hidden">
+                                                <img class="h-20 w-20 object-contain border border-gray-200 rounded mx-auto max-w-full" alt="Preview Logo Provinsi">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
