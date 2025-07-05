@@ -442,8 +442,7 @@
                                     <label for="logo_desa" class="village-label">Logo Desa Baru</label>
                                     <input type="file" name="logo_desa" id="logo_desa"
                                            accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                           class="village-input block"
-                                           style="width: 100%;"
+                                           class="village-input block w-full"
                                            onchange="previewImage(this, 'preview-logo-desa')">
                                     <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
                                     <div id="preview-logo-desa" class="mt-3 text-center hidden">
@@ -475,8 +474,7 @@
                                             <label for="logo_kabupaten" class="village-label">Logo Kabupaten</label>
                                             <input type="file" name="logo_kabupaten" id="logo_kabupaten"
                                                    accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                                   class="village-input block"
-                                                   style="width: 100%;"
+                                                   class="village-input block w-full"
                                                    onchange="previewImage(this, 'preview-logo-kabupaten')">
                                             <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
                                         </div>
@@ -494,8 +492,7 @@
                                             <label for="logo_provinsi" class="village-label">Logo Provinsi</label>
                                             <input type="file" name="logo_provinsi" id="logo_provinsi"
                                                    accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                                   class="village-input block"
-                                                   style="width: 100%;"
+                                                   class="village-input block w-full"
                                                    onchange="previewImage(this, 'preview-logo-provinsi')">
                                             <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
                                         </div>
