@@ -102,7 +102,31 @@ class DesaProfile extends Model
      */
     public function getFullNameAttribute()
     {
-        return "Desa {$this->nama_desa}, Kec. {$this->kecamatan}, {$this->kabupaten}";
+        return "Desa {$this->nama_desa}, Kecamatan {$this->kecamatan}, Kabupaten {$this->kabupaten}";
+    }
+
+    /**
+     * Get formatted desa name with prefix
+     */
+    public function getFormattedNamaDesaAttribute()
+    {
+        return "Desa {$this->nama_desa}";
+    }
+
+    /**
+     * Get formatted kecamatan name with prefix
+     */
+    public function getFormattedKecamatanAttribute()
+    {
+        return "Kecamatan {$this->kecamatan}";
+    }
+
+    /**
+     * Get formatted kabupaten name with prefix
+     */
+    public function getFormattedKabupatenAttribute()
+    {
+        return "Kabupaten {$this->kabupaten}";
     }
 
     /**

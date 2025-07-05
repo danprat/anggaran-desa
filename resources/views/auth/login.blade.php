@@ -8,7 +8,7 @@
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" class="village-label" />
-            <x-text-input id="email" class="village-input block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-text-input id="email" class="village-input block mt-1 w-full text-gray-900 placeholder-gray-500" type="email" name="email" :value="old('email')" placeholder="Masukkan email Anda" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -16,9 +16,10 @@
         <div class="mt-6">
             <x-input-label for="password" :value="__('Password')" class="village-label" />
 
-            <x-text-input id="password" class="village-input block mt-1 w-full"
+            <x-text-input id="password" class="village-input block mt-1 w-full text-gray-900 placeholder-gray-500"
                             type="password"
                             name="password"
+                            placeholder="Masukkan password Anda"
                             required autocomplete="current-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />

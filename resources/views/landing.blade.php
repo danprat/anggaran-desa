@@ -21,8 +21,8 @@
                     @if($desaProfile)
                         <x-desa-logo type="desa" size="sm" />
                         <div>
-                            <div class="text-lg font-semibold text-gray-900">{{ $desaProfile->nama_desa }}</div>
-                            <div class="text-sm text-gray-600">{{ $desaProfile->kabupaten }}</div>
+                            <div class="text-lg font-semibold text-gray-900">{{ $desaProfile->formatted_nama_desa }}</div>
+                            <div class="text-sm text-gray-600">{{ $desaProfile->formatted_kabupaten }}</div>
                         </div>
                     @else
                         <div class="text-lg font-semibold text-gray-900">Sistem Anggaran Desa</div>
@@ -49,16 +49,14 @@
         <section class="village-header py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="flex justify-center mb-8">
-                    <x-desa-logo type="desa" size="xl" class="mx-2" />
-                    <x-desa-logo type="kabupaten" size="xl" class="mx-2" />
-                    <x-desa-logo type="provinsi" size="xl" class="mx-2" />
+                    <x-desa-logo type="desa" size="xl" />
                 </div>
                 
                 <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
-                    {{ $desaProfile->nama_desa }}
+                    {{ $desaProfile->formatted_nama_desa }}
                 </h1>
                 <p class="text-xl md:text-2xl text-blue-100 mb-2">
-                    {{ $desaProfile->full_name }}
+                    {{ $desaProfile->formatted_kecamatan }}, {{ $desaProfile->formatted_kabupaten }}
                 </p>
                 @if($desaProfile->kepala_desa)
                     <p class="text-lg text-blue-200 mb-8">
@@ -210,8 +208,8 @@
                     @if($desaProfile)
                         <x-desa-logo type="desa" size="sm" class="text-white" />
                         <div>
-                            <div class="text-lg font-semibold">{{ $desaProfile->nama_desa }}</div>
-                            <div class="text-sm text-gray-300">{{ $desaProfile->kabupaten }}</div>
+                            <div class="text-lg font-semibold">{{ $desaProfile->formatted_nama_desa }}</div>
+                            <div class="text-sm text-gray-300">{{ $desaProfile->formatted_kabupaten }}</div>
                         </div>
                     @endif
                 </div>

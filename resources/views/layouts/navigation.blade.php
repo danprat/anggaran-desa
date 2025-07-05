@@ -10,8 +10,8 @@
                         @php $desaProfile = \App\Models\DesaProfile::getActive(); @endphp
                         @if($desaProfile)
                             <div class="hidden sm:block">
-                                <div class="text-sm font-semibold text-gray-800">{{ $desaProfile->nama_desa }}</div>
-                                <div class="text-xs text-gray-600">{{ $desaProfile->kabupaten }}</div>
+                                <div class="text-sm font-semibold text-gray-800">{{ $desaProfile->formatted_nama_desa }}</div>
+                                <div class="text-xs text-gray-600">{{ $desaProfile->formatted_kabupaten }}</div>
                             </div>
                         @endif
                     </a>

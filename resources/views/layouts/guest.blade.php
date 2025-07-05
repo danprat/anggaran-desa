@@ -23,8 +23,8 @@
                     <x-application-logo class="w-24 h-24 fill-current text-white mx-auto mb-4" />
                 </a>
                 @if($desaProfile)
-                    <h1 class="text-2xl font-bold text-white mb-2">{{ $desaProfile->nama_desa }}</h1>
-                    <p class="text-blue-100 text-lg">{{ $desaProfile->full_name }}</p>
+                    <h1 class="text-2xl font-bold text-white mb-2">{{ $desaProfile->formatted_nama_desa }}</h1>
+                    <p class="text-blue-100 text-lg">{{ $desaProfile->formatted_kecamatan }}, {{ $desaProfile->formatted_kabupaten }}</p>
                     @if($desaProfile->visi)
                         <p class="text-blue-100 text-sm mt-2 max-w-md mx-auto italic">"{{ $desaProfile->visi }}"</p>
                     @endif
@@ -46,7 +46,7 @@
             <!-- Footer -->
             <div class="mt-8 text-center">
                 <p class="text-blue-100 text-sm">
-                    © {{ date('Y') }} {{ $desaProfile ? $desaProfile->nama_desa : 'Sistem Anggaran Desa' }}.
+                    © {{ date('Y') }} {{ $desaProfile ? $desaProfile->formatted_nama_desa : 'Sistem Anggaran Desa' }}.
                     Semua hak dilindungi.
                 </p>
                 @if($desaProfile && ($desaProfile->website || $desaProfile->email))

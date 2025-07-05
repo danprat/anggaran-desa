@@ -116,26 +116,79 @@
                     </div>
 
                     @if($profiles->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
+                        <!-- Mobile-friendly card layout for small screens -->
+                        <div class="block md:hidden space-y-4">
+                            @foreach($profiles as $profile)
+                                <div class="village-card p-4">
+                                    <div class="flex items-start space-x-3">
+                                        <x-desa-logo type="desa" size="sm" :profile="$profile" />
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between">
+                                                <h3 class="text-base font-medium text-gray-900 truncate">
+                                                    {{ $profile->nama_desa }}
+                                                </h3>
+                                                @if($profile->is_active)
+                                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                        Aktif
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                        Nonaktif
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">
+                                                {{ $profile->kecamatan }}, {{ $profile->kabupaten }}
+                                            </p>
+                                            <p class="text-sm text-gray-500 mt-1">
+                                                Kepala Desa: {{ $profile->kepala_desa }}
+                                            </p>
+                                            <div class="flex space-x-2 mt-3">
+                                                @can('view-desa-profile')
+                                                    <x-action-button
+                                                        href="{{ route('admin.desa-profile.show', $profile) }}"
+                                                        icon="eye"
+                                                        variant="info"
+                                                        size="sm"
+                                                    >
+                                                        Lihat
+                                                    </x-action-button>
+                                                @endcan
+                                                @can('manage-desa-profile')
+                                                    <x-action-button
+                                                        href="{{ route('admin.desa-profile.edit', $profile) }}"
+                                                        icon="edit"
+                                                        variant="primary"
+                                                        size="sm"
+                                                    >
+                                                        Edit
+                                                    </x-action-button>
+                                                @endcan
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Desktop table layout -->
+                        <div class="hidden md:block overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 village-table">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                                             Desa
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                                             Wilayah
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                                             Kepala Desa
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Logo
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                                             Status
                                         </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
                                             Aksi
                                         </th>
                                     </tr>
@@ -143,51 +196,37 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($profiles as $profile)
                                         <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-4 py-4">
                                                 <div class="flex items-center">
-                                                    <x-desa-logo type="desa" size="sm" class="mr-3" />
-                                                    <div>
-                                                        <div class="text-sm font-medium text-gray-900">
+                                                    <x-desa-logo type="desa" size="sm" class="mr-3" :profile="$profile" />
+                                                    <div class="min-w-0 flex-1">
+                                                        <div class="text-sm font-medium text-gray-900 truncate">
                                                             {{ $profile->nama_desa }}
                                                         </div>
-                                                        <div class="text-sm text-gray-500">
-                                                            {{ $profile->alamat_lengkap }}
+                                                        <div class="text-sm text-gray-500 truncate">
+                                                            {{ Str::limit($profile->alamat_lengkap, 30) }}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                <div>{{ $profile->kecamatan }}</div>
-                                                <div class="text-gray-500">{{ $profile->kabupaten }}</div>
-                                                <div class="text-gray-500">{{ $profile->provinsi }}</div>
+                                            <td class="px-4 py-4 text-sm text-gray-900">
+                                                <div class="truncate">{{ $profile->kecamatan }}</div>
+                                                <div class="text-gray-500 truncate">{{ $profile->kabupaten }}</div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                <div class="font-medium">{{ $profile->kepala_desa }}</div>
+                                            <td class="px-4 py-4 text-sm text-gray-900">
+                                                <div class="font-medium truncate">{{ Str::limit($profile->kepala_desa, 20) }}</div>
                                                 @if($profile->nip_kepala_desa)
-                                                    <div class="text-gray-500">NIP: {{ $profile->nip_kepala_desa }}</div>
+                                                    <div class="text-gray-500 text-xs">{{ $profile->nip_kepala_desa }}</div>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                <div class="flex space-x-1">
-                                                    @if($profile->logo_desa)
-                                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Desa</span>
-                                                    @endif
-                                                    @if($profile->logo_kabupaten)
-                                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Kab</span>
-                                                    @endif
-                                                    @if($profile->logo_provinsi)
-                                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">Prov</span>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-4 py-4">
                                                 @if($profile->is_active)
                                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
                                                 @else
                                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Nonaktif</span>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <td class="px-4 py-4 text-sm font-medium">
                                                 <div class="flex space-x-1">
                                                     @can('view-admin')
                                                         <x-action-button
@@ -221,14 +260,6 @@
                                                                 />
                                                             </form>
                                                         @endif
-
-                                                        <x-action-button
-                                                            href="{{ route('admin.desa-profile.export-pdf', $profile) }}"
-                                                            icon="download"
-                                                            variant="secondary"
-                                                            size="sm"
-                                                            tooltip="Export PDF"
-                                                        />
                                                     @endcan
                                                 </div>
                                             </td>

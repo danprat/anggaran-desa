@@ -46,7 +46,11 @@
 
     /* Enhanced form elements */
     .village-input {
-        @apply text-base px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+        @apply text-base px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white placeholder-gray-500;
+    }
+
+    .village-input:focus {
+        @apply outline-none ring-2 ring-blue-500 border-blue-500 bg-white;
     }
 
     .village-label {
@@ -77,5 +81,38 @@
 
     .village-table td {
         @apply text-base text-gray-700 py-4 px-4;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+        .village-table th,
+        .village-table td {
+            @apply px-2 py-3 text-sm;
+        }
+
+        .village-card {
+            @apply mx-2;
+        }
+
+        .dashboard-stat-card {
+            @apply p-4;
+        }
+
+        .dashboard-stat-value {
+            @apply text-2xl;
+        }
+    }
+
+    /* Prevent horizontal scroll */
+    .admin-form-container {
+        @apply max-w-4xl mx-auto;
+    }
+
+    .admin-table-container {
+        @apply overflow-x-auto;
+    }
+
+    .admin-table-container table {
+        @apply min-w-full;
     }
 }
