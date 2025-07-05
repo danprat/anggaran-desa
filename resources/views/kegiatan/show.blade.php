@@ -75,7 +75,7 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
+
             <!-- Success/Error Messages -->
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
@@ -89,6 +89,76 @@
                 </div>
             @endif
 
+            <!-- Quick Actions Section -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <!-- Verification & Approval Actions -->
+                        <div class="flex flex-wrap gap-2">
+                            @can('verify', $kegiatan)
+                                @if($kegiatan->status === 'draft')
+                                    <form method="POST" action="{{ route('kegiatan.verify', $kegiatan) }}" class="inline">
+                                        @csrf
+                                        <x-action-button
+                                            type="button"
+                                            icon="verify"
+                                            variant="verify"
+                                            size="md"
+                                            tooltip="Verifikasi Kegiatan"
+                                            onclick="if(confirm('Yakin ingin memverifikasi kegiatan ini?')) this.closest('form').submit();"
+                                        >
+                                            Verifikasi
+                                        </x-action-button>
+                                    </form>
+                                @endif
+                            @endcan
+
+                            @can('approve', $kegiatan)
+                                @if($kegiatan->status === 'verifikasi')
+                                    <form method="POST" action="{{ route('kegiatan.approve', $kegiatan) }}" class="inline">
+                                        @csrf
+                                        <x-action-button
+                                            type="button"
+                                            icon="approve"
+                                            variant="success"
+                                            size="md"
+                                            tooltip="Setujui Kegiatan"
+                                            onclick="if(confirm('Yakin ingin menyetujui kegiatan ini?')) this.closest('form').submit();"
+                                        >
+                                            Setujui
+                                        </x-action-button>
+                                    </form>
+                                @endif
+                            @endcan
+                        </div>
+
+                        <!-- Export Actions -->
+                        <div class="flex flex-wrap gap-2">
+                            <x-action-button
+                                href="{{ route('kegiatan.export-pdf', $kegiatan) }}"
+                                icon="download"
+                                variant="outline"
+                                size="md"
+                                tooltip="Export PDF"
+                            >
+                                Export PDF
+                            </x-action-button>
+
+                            <x-action-button
+                                href="{{ route('kegiatan.print', $kegiatan) }}"
+                                icon="printer"
+                                variant="outline"
+                                size="md"
+                                tooltip="Print"
+                                target="_blank"
+                            >
+                                Print
+                            </x-action-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Budget Progress Overview -->
             @php
                 $totalRealisasi = $kegiatan->realisasi->sum('jumlah_realisasi');
@@ -96,55 +166,55 @@
                 $sisaAnggaran = $kegiatan->pagu_anggaran - $totalRealisasi;
             @endphp
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Progress Anggaran</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
+                <div class="p-4">
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">Progress Anggaran</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600">Rp {{ number_format($kegiatan->pagu_anggaran, 0, ',', '.') }}</div>
-                            <div class="text-sm text-gray-500">Pagu Anggaran</div>
+                            <div class="text-xl font-bold text-blue-600">Rp {{ number_format($kegiatan->pagu_anggaran, 0, ',', '.') }}</div>
+                            <div class="text-xs text-gray-500">Pagu Anggaran</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-green-600">Rp {{ number_format($totalRealisasi, 0, ',', '.') }}</div>
-                            <div class="text-sm text-gray-500">Total Realisasi</div>
+                            <div class="text-xl font-bold text-green-600">Rp {{ number_format($totalRealisasi, 0, ',', '.') }}</div>
+                            <div class="text-xs text-gray-500">Total Realisasi</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-orange-600">Rp {{ number_format($sisaAnggaran, 0, ',', '.') }}</div>
-                            <div class="text-sm text-gray-500">Sisa Anggaran</div>
+                            <div class="text-xl font-bold text-orange-600">Rp {{ number_format($sisaAnggaran, 0, ',', '.') }}</div>
+                            <div class="text-xs text-gray-500">Sisa Anggaran</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-purple-600">{{ number_format($persentaseRealisasi, 1) }}%</div>
-                            <div class="text-sm text-gray-500">Persentase Realisasi</div>
+                            <div class="text-xl font-bold text-purple-600">{{ number_format($persentaseRealisasi, 1) }}%</div>
+                            <div class="text-xs text-gray-500">Persentase Realisasi</div>
                         </div>
                     </div>
 
                     <!-- Progress Bar -->
-                    <div class="mt-6">
-                        <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <div class="mt-4">
+                        <div class="flex justify-between text-xs text-gray-600 mb-1">
                             <span>Progress Realisasi</span>
                             <span>{{ number_format($persentaseRealisasi, 1) }}%</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-500"
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-500"
                                  style="width: {{ min($persentaseRealisasi, 100) }}%"></div>
                         </div>
                         @if($persentaseRealisasi > 100)
-                            <div class="text-red-600 text-sm mt-1">⚠️ Realisasi melebihi pagu anggaran!</div>
+                            <div class="text-red-600 text-xs mt-1">⚠️ Realisasi melebihi pagu anggaran!</div>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
                 <!-- Main Info -->
-                <div class="lg:col-span-2 space-y-6">
+                <div class="lg:col-span-2 space-y-4">
                     <!-- Kegiatan Details -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <div class="flex justify-between items-start mb-6">
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 class="text-2xl font-bold text-gray-900">{{ $kegiatan->nama_kegiatan }}</h3>
+                                    <h3 class="text-xl font-bold text-gray-900">{{ $kegiatan->nama_kegiatan }}</h3>
                                     <p class="text-gray-600 mt-1">{{ $kegiatan->bidang }}</p>
                                 </div>
                                 <span class="px-3 py-1 text-sm font-medium rounded-full
@@ -157,7 +227,7 @@
                                 </span>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Pagu Anggaran</h4>
                                     <p class="mt-1 text-2xl font-semibold text-gray-900">
@@ -205,8 +275,8 @@
                     <!-- Realisasi Management Section -->
                     @if($kegiatan->status === 'disetujui')
                         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6">
-                                <div class="flex justify-between items-center mb-6">
+                            <div class="p-4">
+                                <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-lg font-medium text-gray-900">Manajemen Realisasi</h3>
                                     @can('create-realisasi')
                                         <x-action-button
@@ -220,9 +290,16 @@
                                 </div>
 
                                 @if($kegiatan->realisasi->count() > 0)
-                                    <div class="space-y-4">
-                                        @foreach($kegiatan->realisasi->sortByDesc('tanggal') as $realisasi)
-                                            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                                    @php
+                                        $realisasiSorted = $kegiatan->realisasi->sortByDesc('tanggal');
+                                        $showLimit = 3;
+                                        $totalRealisasi = $realisasiSorted->count();
+                                    @endphp
+
+                                    <div class="space-y-3" id="realisasi-list">
+                                        @foreach($realisasiSorted->take($showLimit) as $realisasi)
+                                            <div class="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                                                 onclick="window.location.href='{{ route('realisasi.show', $realisasi) }}'">
                                                 <div class="flex justify-between items-start">
                                                     <div class="flex-1">
                                                         <div class="flex items-center justify-between mb-2">
@@ -235,12 +312,12 @@
                                                                 {{ ucfirst($realisasi->status) }}
                                                             </span>
                                                         </div>
-                                                        <p class="text-sm text-gray-600 mb-2">{{ Str::limit($realisasi->deskripsi, 100) }}</p>
+                                                        <p class="text-sm text-gray-600 mb-2">{{ Str::limit($realisasi->deskripsi, 80) }}</p>
                                                         <div class="flex items-center justify-between">
-                                                            <span class="text-lg font-semibold text-green-600">
+                                                            <span class="text-base font-semibold text-green-600">
                                                                 Rp {{ number_format($realisasi->jumlah_realisasi, 0, ',', '.') }}
                                                             </span>
-                                                            <div class="flex space-x-1">
+                                                            <div class="flex space-x-1" onclick="event.stopPropagation();">
                                                                 @can('view', $realisasi)
                                                                     <x-action-button
                                                                         href="{{ route('realisasi.show', $realisasi) }}"
@@ -262,7 +339,7 @@
                                                             </div>
                                                         </div>
                                                         @if($realisasi->buktiFiles->count() > 0)
-                                                            <div class="mt-2 text-xs text-gray-500">
+                                                            <div class="mt-1 text-xs text-gray-500">
                                                                 📎 {{ $realisasi->buktiFiles->count() }} file bukti
                                                             </div>
                                                         @endif
@@ -270,19 +347,71 @@
                                                 </div>
                                             </div>
                                         @endforeach
+
+                                        @if($totalRealisasi > $showLimit)
+                                            <div class="hidden space-y-3" id="realisasi-additional">
+                                                @foreach($realisasiSorted->skip($showLimit) as $realisasi)
+                                                    <div class="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 transition-colors cursor-pointer"
+                                                         onclick="window.location.href='{{ route('realisasi.show', $realisasi) }}'">
+                                                        <div class="flex justify-between items-start">
+                                                            <div class="flex-1">
+                                                                <div class="flex items-center justify-between mb-2">
+                                                                    <h4 class="font-medium text-gray-900">{{ $realisasi->tanggal->format('d M Y') }}</h4>
+                                                                    <span class="px-2 py-1 text-xs font-medium rounded-full
+                                                                        @if($realisasi->status === 'selesai') bg-green-100 text-green-800
+                                                                        @elseif($realisasi->status === 'sebagian') bg-yellow-100 text-yellow-800
+                                                                        @else bg-gray-100 text-gray-800
+                                                                        @endif">
+                                                                        {{ ucfirst($realisasi->status) }}
+                                                                    </span>
+                                                                </div>
+                                                                <p class="text-sm text-gray-600 mb-2">{{ Str::limit($realisasi->deskripsi, 80) }}</p>
+                                                                <div class="flex items-center justify-between">
+                                                                    <span class="text-base font-semibold text-green-600">
+                                                                        Rp {{ number_format($realisasi->jumlah_realisasi, 0, ',', '.') }}
+                                                                    </span>
+                                                                    <div class="flex space-x-1" onclick="event.stopPropagation();">
+                                                                        @can('view', $realisasi)
+                                                                            <x-action-button
+                                                                                href="{{ route('realisasi.show', $realisasi) }}"
+                                                                                icon="eye"
+                                                                                variant="info"
+                                                                                size="xs"
+                                                                                tooltip="Lihat Detail"
+                                                                            />
+                                                                        @endcan
+                                                                        @can('update', $realisasi)
+                                                                            <x-action-button
+                                                                                href="{{ route('realisasi.edit', $realisasi) }}"
+                                                                                icon="edit"
+                                                                                variant="primary"
+                                                                                size="xs"
+                                                                                tooltip="Edit Realisasi"
+                                                                            />
+                                                                        @endcan
+                                                                    </div>
+                                                                </div>
+                                                                @if($realisasi->buktiFiles->count() > 0)
+                                                                    <div class="mt-1 text-xs text-gray-500">
+                                                                        📎 {{ $realisasi->buktiFiles->count() }} file bukti
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     </div>
 
-                                    @if($kegiatan->realisasi->count() > 3)
-                                        <div class="mt-4 text-center">
-                                            <x-action-button
-                                                href="{{ route('realisasi.index', ['kegiatan_id' => $kegiatan->id]) }}"
-                                                icon="eye"
-                                                variant="outline"
-                                                size="sm"
-                                                tooltip="Lihat Semua Realisasi"
-                                            >
-                                                Lihat Semua ({{ $kegiatan->realisasi->count() }})
-                                            </x-action-button>
+                                    @if($totalRealisasi > $showLimit)
+                                        <div class="mt-3 text-center">
+                                            <button type="button"
+                                                    id="toggle-realisasi"
+                                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                                                <x-icon name="eye" class="w-4 h-4 mr-2" />
+                                                <span id="toggle-text">Lihat Semua ({{ $totalRealisasi }})</span>
+                                            </button>
                                         </div>
                                     @endif
                                 @else
@@ -310,40 +439,40 @@
                 </div>
 
                 <!-- Sidebar -->
-                <div class="space-y-6">
+                <div class="space-y-4">
 
                     <!-- Quick Stats -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Statistik Cepat</h3>
+                        <div class="p-4">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">Statistik Cepat</h3>
 
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-2 bg-blue-50 rounded-lg">
                                     <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                            <x-icon name="plus" class="w-4 h-4 text-white" />
+                                        <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                            <x-icon name="plus" class="w-3 h-3 text-white" />
                                         </div>
-                                        <span class="ml-3 text-sm font-medium text-blue-900">Total Realisasi</span>
+                                        <span class="ml-2 text-sm font-medium text-blue-900">Total Realisasi</span>
                                     </div>
                                     <span class="text-sm font-bold text-blue-900">{{ $kegiatan->realisasi->count() }}</span>
                                 </div>
 
-                                <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                <div class="flex items-center justify-between p-2 bg-green-50 rounded-lg">
                                     <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                            <x-icon name="check" class="w-4 h-4 text-white" />
+                                        <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                            <x-icon name="check" class="w-3 h-3 text-white" />
                                         </div>
-                                        <span class="ml-3 text-sm font-medium text-green-900">Selesai</span>
+                                        <span class="ml-2 text-sm font-medium text-green-900">Selesai</span>
                                     </div>
                                     <span class="text-sm font-bold text-green-900">{{ $kegiatan->realisasi->where('status', 'selesai')->count() }}</span>
                                 </div>
 
-                                <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                                <div class="flex items-center justify-between p-2 bg-yellow-50 rounded-lg">
                                     <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                                            <x-icon name="refresh" class="w-4 h-4 text-white" />
+                                        <div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+                                            <x-icon name="refresh" class="w-3 h-3 text-white" />
                                         </div>
-                                        <span class="ml-3 text-sm font-medium text-yellow-900">Dalam Proses</span>
+                                        <span class="ml-2 text-sm font-medium text-yellow-900">Dalam Proses</span>
                                     </div>
                                     <span class="text-sm font-bold text-yellow-900">{{ $kegiatan->realisasi->whereIn('status', ['belum', 'sebagian'])->count() }}</span>
                                 </div>
@@ -634,6 +763,32 @@
         document.getElementById('rejectModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 hideRejectModal();
+            }
+        });
+
+        // Toggle realisasi view more functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('toggle-realisasi');
+            const additionalRealisasi = document.getElementById('realisasi-additional');
+            const toggleText = document.getElementById('toggle-text');
+
+            if (toggleButton && additionalRealisasi && toggleText) {
+                let isExpanded = false;
+                const totalCount = {{ $kegiatan->realisasi->count() ?? 0 }};
+
+                toggleButton.addEventListener('click', function() {
+                    if (isExpanded) {
+                        // Collapse
+                        additionalRealisasi.classList.add('hidden');
+                        toggleText.textContent = `Lihat Semua (${totalCount})`;
+                        isExpanded = false;
+                    } else {
+                        // Expand
+                        additionalRealisasi.classList.remove('hidden');
+                        toggleText.textContent = 'Lihat Lebih Sedikit';
+                        isExpanded = true;
+                    }
+                });
             }
         });
     </script>
