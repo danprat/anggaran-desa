@@ -211,33 +211,43 @@
         width: 100%;
     }
 
-    /* Force Logo & Media section to match other sections exactly */
-    #content-media .grid {
-        display: grid !important;
-        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-        gap: 1.5rem !important;
+    /* Logo Section Styling */
+    .logo-display-container {
+        @apply bg-gray-50 rounded-lg p-6 border border-gray-200;
     }
 
-    @media (min-width: 768px) {
-        #content-media .grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        }
+    .logo-upload-section {
+        @apply bg-white border border-gray-200 rounded-lg p-4;
     }
 
-    /* Ensure Logo Provinsi doesn't span full width */
-    #content-media .grid > div:nth-child(3) {
-        grid-column: span 1 !important;
+    .additional-logos-toggle {
+        @apply transition-all duration-200 ease-in-out;
     }
 
-    /* Match container width with other sections */
-    #content-media {
-        width: 100% !important;
-        max-width: 100% !important;
+    .additional-logos-toggle:hover {
+        @apply bg-gray-50 rounded-md p-2 -m-2;
     }
 
-    #content-media .p-6 {
-        width: 100% !important;
-        max-width: 100% !important;
+    /* Logo preview styling */
+    .logo-preview {
+        @apply transition-all duration-200 ease-in-out;
+    }
+
+    .logo-preview img {
+        @apply shadow-sm border border-gray-200 rounded-md;
+    }
+
+    /* Consistent logo sizing */
+    .logo-size-xl {
+        @apply w-24 h-24;
+    }
+
+    .logo-size-lg {
+        @apply w-16 h-16;
+    }
+
+    .logo-size-md {
+        @apply w-12 h-12;
     }
 
 }

@@ -69,7 +69,7 @@
                             <button type="button" onclick="showTab('media')"
                                     class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
                                     id="tab-media">
-                                🖼️ Logo & Media
+                                🏛️ Logo Desa
                             </button>
                         </nav>
                     </div>
@@ -419,63 +419,97 @@
                             <div class="p-6">
                                 <div class="flex items-center mb-6">
                                     <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
-                                        <span class="text-indigo-600 text-xl">🖼️</span>
+                                        <span class="text-indigo-600 text-xl">🏛️</span>
                                     </div>
                                     <div>
-                                        <h3 class="text-lg font-medium text-gray-900">Logo & Media</h3>
-                                        <p class="text-sm text-gray-600">Upload logo desa, kabupaten, dan provinsi</p>
+                                        <h3 class="text-lg font-medium text-gray-900">Logo Desa</h3>
+                                        <p class="text-sm text-gray-600">Logo utama yang mewakili identitas desa</p>
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label for="logo_desa" class="village-label">Logo Desa</label>
-                                        @if($desaProfile->logo_desa)
-                                            <div class="mb-2">
-                                                <img src="{{ $desaProfile->logo_desa_url }}" alt="Logo Desa" class="h-16 w-16 object-contain">
-                                            </div>
-                                        @endif
+                                <!-- Logo Desa Utama -->
+                                <div class="text-center mb-8">
+                                    <label class="village-label">Logo Desa Saat Ini</label>
+                                    <div class="flex justify-center mb-4">
+                                        <x-desa-logo type="desa" size="xl" class="mx-auto" :profile="$desaProfile" />
+                                    </div>
+                                    @if($desaProfile->logo_desa)
+                                        <p class="text-sm text-green-600 font-medium">✓ Logo desa tersedia</p>
+                                    @else
+                                        <p class="text-sm text-gray-500">Belum ada logo desa</p>
+                                    @endif
+                                </div>
+
+                                <!-- Upload Logo Desa Baru -->
+                                <div class="border-t border-gray-200 pt-6">
+                                    <h4 class="text-md font-medium text-gray-900 mb-4">Upload Logo Desa Baru (Opsional)</h4>
+
+                                    <div class="max-w-md mx-auto">
+                                        <label for="logo_desa" class="village-label">Logo Desa Baru</label>
                                         <input type="file" name="logo_desa" id="logo_desa"
                                                accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
                                                class="village-input block w-full"
                                                onchange="previewImage(this, 'preview-logo-desa')">
                                         <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                        <div id="preview-logo-desa" class="mt-2 hidden">
-                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
+                                        <div id="preview-logo-desa" class="mt-4 text-center hidden">
+                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Desa">
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div>
-                                        <label for="logo_kabupaten" class="village-label">Logo Kabupaten</label>
-                                        @if($desaProfile->logo_kabupaten)
-                                            <div class="mb-2">
-                                                <img src="{{ $desaProfile->logo_kabupaten_url }}" alt="Logo Kabupaten" class="h-16 w-16 object-contain">
-                                            </div>
-                                        @endif
-                                        <input type="file" name="logo_kabupaten" id="logo_kabupaten"
-                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                               class="village-input block w-full"
-                                               onchange="previewImage(this, 'preview-logo-kabupaten')">
-                                        <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                        <div id="preview-logo-kabupaten" class="mt-2 hidden">
-                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
-                                        </div>
-                                    </div>
+                                <!-- Logo Tambahan (Collapsed) -->
+                                <div class="border-t border-gray-200 pt-6 mt-6">
+                                    <button type="button" onclick="toggleAdditionalLogos()"
+                                            class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 hover:text-gray-900">
+                                        <span>Logo Tambahan (Kabupaten & Provinsi)</span>
+                                        <svg id="additional-logos-icon" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
 
-                                    <div>
-                                        <label for="logo_provinsi" class="village-label">Logo Provinsi</label>
-                                        @if($desaProfile->logo_provinsi)
-                                            <div class="mb-2">
-                                                <img src="{{ $desaProfile->logo_provinsi_url }}" alt="Logo Provinsi" class="h-16 w-16 object-contain">
+                                    <div id="additional-logos-content" class="hidden mt-4">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <!-- Logo Kabupaten -->
+                                            <div class="text-center">
+                                                <label class="village-label">Logo Kabupaten</label>
+                                                <div class="flex justify-center mb-2">
+                                                    <x-desa-logo type="kabupaten" size="lg" class="mx-auto" :profile="$desaProfile" />
+                                                </div>
+                                                @if($desaProfile->logo_kabupaten)
+                                                    <p class="text-xs text-green-600 mb-3">✓ Logo tersedia</p>
+                                                @else
+                                                    <p class="text-xs text-gray-500 mb-3">Belum ada logo</p>
+                                                @endif
+                                                <input type="file" name="logo_kabupaten" id="logo_kabupaten"
+                                                       accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                                       class="village-input block w-full text-sm"
+                                                       onchange="previewImage(this, 'preview-logo-kabupaten')">
+                                                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                                <div id="preview-logo-kabupaten" class="mt-2 hidden text-center">
+                                                    <img class="h-16 w-16 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Kabupaten">
+                                                </div>
                                             </div>
-                                        @endif
-                                        <input type="file" name="logo_provinsi" id="logo_provinsi"
-                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                               class="village-input block w-full"
-                                               onchange="previewImage(this, 'preview-logo-provinsi')">
-                                        <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                        <div id="preview-logo-provinsi" class="mt-2 hidden">
-                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
+
+                                            <!-- Logo Provinsi -->
+                                            <div class="text-center">
+                                                <label class="village-label">Logo Provinsi</label>
+                                                <div class="flex justify-center mb-2">
+                                                    <x-desa-logo type="provinsi" size="lg" class="mx-auto" :profile="$desaProfile" />
+                                                </div>
+                                                @if($desaProfile->logo_provinsi)
+                                                    <p class="text-xs text-green-600 mb-3">✓ Logo tersedia</p>
+                                                @else
+                                                    <p class="text-xs text-gray-500 mb-3">Belum ada logo</p>
+                                                @endif
+                                                <input type="file" name="logo_provinsi" id="logo_provinsi"
+                                                       accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                                       class="village-input block w-full text-sm"
+                                                       onchange="previewImage(this, 'preview-logo-provinsi')">
+                                                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                                <div id="preview-logo-provinsi" class="mt-2 hidden text-center">
+                                                    <img class="h-16 w-16 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Provinsi">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -611,6 +645,20 @@
                 }
             }
         });
+
+        // Toggle Additional Logos
+        function toggleAdditionalLogos() {
+            const content = document.getElementById('additional-logos-content');
+            const icon = document.getElementById('additional-logos-icon');
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
 
         // Reset specific section function
         function resetSection(sectionName) {
