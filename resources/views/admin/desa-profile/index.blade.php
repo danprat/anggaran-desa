@@ -427,60 +427,64 @@
                                     </div>
                                 </div>
 
-                                <!-- First row: Logo Desa & Logo Kabupaten -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label for="logo_desa" class="village-label">Logo Desa</label>
-                                        @if($desaProfile->logo_desa)
-                                            <div class="mb-2">
-                                                <img src="{{ $desaProfile->logo_desa_url }}" alt="Logo Desa" class="h-16 w-16 object-contain">
+                                <!-- Logo fields using flexbox for better control -->
+                                <div class="space-y-6">
+                                    <!-- Row 1: Logo Desa & Logo Kabupaten -->
+                                    <div class="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
+                                        <div class="flex-1">
+                                            <label for="logo_desa" class="village-label">Logo Desa</label>
+                                            @if($desaProfile->logo_desa)
+                                                <div class="mb-2">
+                                                    <img src="{{ $desaProfile->logo_desa_url }}" alt="Logo Desa" class="h-16 w-16 object-contain">
+                                                </div>
+                                            @endif
+                                            <input type="file" name="logo_desa" id="logo_desa"
+                                                   accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                                   class="village-input block w-full"
+                                                   onchange="previewImage(this, 'preview-logo-desa')">
+                                            <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                            <div id="preview-logo-desa" class="mt-2 hidden">
+                                                <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
                                             </div>
-                                        @endif
-                                        <input type="file" name="logo_desa" id="logo_desa"
-                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                               class="village-input block w-full"
-                                               onchange="previewImage(this, 'preview-logo-desa')">
-                                        <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                        <div id="preview-logo-desa" class="mt-2 hidden">
-                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
+                                        </div>
+
+                                        <div class="flex-1">
+                                            <label for="logo_kabupaten" class="village-label">Logo Kabupaten</label>
+                                            @if($desaProfile->logo_kabupaten)
+                                                <div class="mb-2">
+                                                    <img src="{{ $desaProfile->logo_kabupaten_url }}" alt="Logo Kabupaten" class="h-16 w-16 object-contain">
+                                                </div>
+                                            @endif
+                                            <input type="file" name="logo_kabupaten" id="logo_kabupaten"
+                                                   accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                                   class="village-input block w-full"
+                                                   onchange="previewImage(this, 'preview-logo-kabupaten')">
+                                            <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                            <div id="preview-logo-kabupaten" class="mt-2 hidden">
+                                                <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <label for="logo_kabupaten" class="village-label">Logo Kabupaten</label>
-                                        @if($desaProfile->logo_kabupaten)
-                                            <div class="mb-2">
-                                                <img src="{{ $desaProfile->logo_kabupaten_url }}" alt="Logo Kabupaten" class="h-16 w-16 object-contain">
+                                    <!-- Row 2: Logo Provinsi (half width) -->
+                                    <div class="flex flex-col md:flex-row md:space-x-6">
+                                        <div class="flex-1 md:w-1/2">
+                                            <label for="logo_provinsi" class="village-label">Logo Provinsi</label>
+                                            @if($desaProfile->logo_provinsi)
+                                                <div class="mb-2">
+                                                    <img src="{{ $desaProfile->logo_provinsi_url }}" alt="Logo Provinsi" class="h-16 w-16 object-contain">
+                                                </div>
+                                            @endif
+                                            <input type="file" name="logo_provinsi" id="logo_provinsi"
+                                                   accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                                   class="village-input block w-full"
+                                                   onchange="previewImage(this, 'preview-logo-provinsi')">
+                                            <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                            <div id="preview-logo-provinsi" class="mt-2 hidden">
+                                                <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
                                             </div>
-                                        @endif
-                                        <input type="file" name="logo_kabupaten" id="logo_kabupaten"
-                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                               class="village-input block w-full"
-                                               onchange="previewImage(this, 'preview-logo-kabupaten')">
-                                        <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                        <div id="preview-logo-kabupaten" class="mt-2 hidden">
-                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
                                         </div>
-                                    </div>
-                                </div>
-
-                                <!-- Second row: Logo Provinsi only -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label for="logo_provinsi" class="village-label">Logo Provinsi</label>
-                                        @if($desaProfile->logo_provinsi)
-                                            <div class="mb-2">
-                                                <img src="{{ $desaProfile->logo_provinsi_url }}" alt="Logo Provinsi" class="h-16 w-16 object-contain">
-                                            </div>
-                                        @endif
-                                        <input type="file" name="logo_provinsi" id="logo_provinsi"
-                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                               class="village-input block w-full"
-                                               onchange="previewImage(this, 'preview-logo-provinsi')">
-                                        <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                        <div id="preview-logo-provinsi" class="mt-2 hidden">
-                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
-                                        </div>
+                                        <div class="flex-1 hidden md:block"></div> <!-- Spacer for alignment -->
                                     </div>
                                 </div>
 
