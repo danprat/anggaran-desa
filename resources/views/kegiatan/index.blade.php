@@ -168,8 +168,8 @@
                                                                 @csrf
                                                                 <x-action-button
                                                                     type="button"
-                                                                    icon="check"
-                                                                    variant="warning"
+                                                                    icon="verify"
+                                                                    variant="verify"
                                                                     size="sm"
                                                                     tooltip="Verifikasi Kegiatan"
                                                                     onclick="if(confirm('Yakin ingin memverifikasi kegiatan ini?')) this.closest('form').submit();"
@@ -184,7 +184,7 @@
                                                                 @csrf
                                                                 <x-action-button
                                                                     type="button"
-                                                                    icon="check"
+                                                                    icon="approve"
                                                                     variant="success"
                                                                     size="sm"
                                                                     tooltip="Setujui Kegiatan"
