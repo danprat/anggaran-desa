@@ -204,22 +204,24 @@
                         </div>
                     </div>
 
-                    <!-- Realisasi Management Section -->
+                    <!-- Realisasi Management & List Section -->
                     @if($kegiatan->status === 'disetujui')
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-4">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-lg font-medium text-gray-900">Manajemen Realisasi</h3>
-                                    @can('create-realisasi')
-                                        <x-action-button
-                                            href="{{ route('realisasi.create', ['kegiatan_id' => $kegiatan->id]) }}"
-                                            icon="plus"
-                                            variant="success"
-                                            size="sm"
-                                            tooltip="Tambah Realisasi Baru"
-                                        />
-                                    @endcan
-                                </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Manajemen Realisasi -->
+                            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                                <div class="p-4">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h3 class="text-lg font-medium text-gray-900">Manajemen Realisasi</h3>
+                                        @can('create-realisasi')
+                                            <x-action-button
+                                                href="{{ route('realisasi.create', ['kegiatan_id' => $kegiatan->id]) }}"
+                                                icon="plus"
+                                                variant="success"
+                                                size="sm"
+                                                tooltip="Tambah Realisasi Baru"
+                                            />
+                                        @endcan
+                                    </div>
 
                                 @if($kegiatan->realisasi->count() > 0)
                                     @php
@@ -365,7 +367,54 @@
                                         @endcan
                                     </div>
                                 @endif
+                                </div>
                             </div>
+
+                            <!-- Daftar Realisasi -->
+                            @if($kegiatan->realisasi->count() > 0)
+                                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                                    <div class="p-4">
+                                        <h3 class="text-lg font-medium text-gray-900 mb-4">Daftar Realisasi</h3>
+
+                                        <div class="overflow-x-auto">
+                                            <table class="min-w-full divide-y divide-gray-200">
+                                                <thead class="bg-gray-50">
+                                                    <tr>
+                                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bukti</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="bg-white divide-y divide-gray-200">
+                                                    @foreach($kegiatan->realisasi as $realisasi)
+                                                        <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='{{ route('realisasi.show', $realisasi) }}'">
+                                                            <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                                {{ $realisasi->tanggal->format('d/m/Y') }}
+                                                            </td>
+                                                            <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                                Rp {{ number_format($realisasi->jumlah_realisasi, 0, ',', '.') }}
+                                                            </td>
+                                                            <td class="px-3 py-2 whitespace-nowrap">
+                                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                                    @if($realisasi->status === 'belum') bg-gray-100 text-gray-800
+                                                                    @elseif($realisasi->status === 'sebagian') bg-yellow-100 text-yellow-800
+                                                                    @else bg-green-100 text-green-800
+                                                                    @endif">
+                                                                    {{ ucfirst($realisasi->status) }}
+                                                                </span>
+                                                            </td>
+                                                            <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                                {{ $realisasi->buktiFiles->count() }} file
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     @endif
                 </div>
@@ -493,55 +542,7 @@
                 </div>
             </div>
 
-            <!-- Realisasi List -->
-            @if($kegiatan->realisasi->count() > 0)
-                <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Daftar Realisasi</h3>
-                        
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bukti</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dibuat Oleh</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($kegiatan->realisasi as $realisasi)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $realisasi->tanggal->format('d/m/Y') }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                Rp {{ number_format($realisasi->jumlah_realisasi, 0, ',', '.') }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                    @if($realisasi->status === 'belum') bg-gray-100 text-gray-800
-                                                    @elseif($realisasi->status === 'sebagian') bg-yellow-100 text-yellow-800
-                                                    @else bg-green-100 text-green-800
-                                                    @endif">
-                                                    {{ ucfirst($realisasi->status) }}
-                                                </span>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $realisasi->buktiFiles->count() }} file
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ $realisasi->pembuat->name }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            @endif
+
 
         </div>
     </div>
