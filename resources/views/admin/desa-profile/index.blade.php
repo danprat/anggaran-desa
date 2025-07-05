@@ -438,7 +438,7 @@
                                 </div>
 
                                 <!-- Form Fields - Same structure as Geography -->
-                                <div style="max-width: 32rem;">
+                                <div class="mx-auto" style="max-width: 32rem;">
                                     <label for="logo_desa" class="village-label">Logo Desa Baru</label>
                                     <input type="file" name="logo_desa" id="logo_desa"
                                            accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
@@ -463,7 +463,7 @@
 
                                     <div id="additional-logos-content" class="hidden mt-4">
                                         <!-- Logo Kabupaten -->
-                                        <div class="mb-6" style="max-width: 32rem;">
+                                        <div class="mb-6 mx-auto" style="max-width: 32rem;">
                                             <div class="text-center mb-3">
                                                 <x-desa-logo type="kabupaten" size="lg" class="mx-auto mb-2" :profile="$desaProfile" />
                                                 @if($desaProfile->logo_kabupaten)
@@ -482,7 +482,7 @@
                                         </div>
 
                                         <!-- Logo Provinsi -->
-                                        <div style="max-width: 32rem;">
+                                        <div class="mx-auto" style="max-width: 32rem;">
                                             <div class="text-center mb-3">
                                                 <x-desa-logo type="provinsi" size="lg" class="mx-auto mb-2" :profile="$desaProfile" />
                                                 @if($desaProfile->logo_provinsi)
