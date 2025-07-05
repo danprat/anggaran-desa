@@ -88,6 +88,13 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     @if($realisasi->count() > 0)
+                        <!-- Info untuk user -->
+                        <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p class="text-sm text-blue-700">
+                                💡 <strong>Tips:</strong> Klik pada baris tabel untuk melihat detail realisasi
+                            </p>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -117,7 +124,9 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($realisasi as $item)
-                                        <tr>
+                                        <tr class="hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                                            onclick="window.location.href='{{ route('realisasi.show', $item) }}'"
+                                            title="Klik untuk melihat detail realisasi">
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div>
                                                     <div class="text-sm font-medium text-gray-900">
@@ -222,4 +231,17 @@
 
         </div>
     </div>
+
+    <!-- JavaScript untuk clickable rows -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mencegah navigasi saat mengklik tombol aksi
+            const actionButtons = document.querySelectorAll('button, a[href], form');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+        });
+    </script>
 </x-app-layout>
