@@ -90,11 +90,22 @@
             @endif
 
             <!-- Quick Actions Section -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4">
                 <div class="p-4">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <!-- Verification & Approval Actions -->
-                        <div class="flex flex-wrap gap-2">
+                        <!-- Status & Workflow Actions -->
+                        <div class="flex flex-wrap items-center gap-2">
+                            <!-- Current Status Badge -->
+                            <span class="px-3 py-1 text-sm font-medium rounded-full
+                                @if($kegiatan->status === 'draft') bg-gray-100 text-gray-800
+                                @elseif($kegiatan->status === 'verifikasi') bg-yellow-100 text-yellow-800
+                                @elseif($kegiatan->status === 'disetujui') bg-green-100 text-green-800
+                                @else bg-red-100 text-red-800
+                                @endif">
+                                Status: {{ ucfirst($kegiatan->status) }}
+                            </span>
+
+                            <!-- Workflow Actions -->
                             @can('verify', $kegiatan)
                                 @if($kegiatan->status === 'draft')
                                     <form method="POST" action="{{ route('kegiatan.verify', $kegiatan) }}" class="inline">
@@ -130,6 +141,13 @@
                                     </form>
                                 @endif
                             @endcan
+
+                            <!-- Status Information for Approved -->
+                            @if($kegiatan->status === 'disetujui')
+                                <span class="text-sm text-green-600 font-medium">
+                                    ✓ Kegiatan telah disetujui dan dapat direalisasikan
+                                </span>
+                            @endif
                         </div>
 
                         <!-- Export Actions -->
