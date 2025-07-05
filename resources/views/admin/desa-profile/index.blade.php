@@ -478,6 +478,9 @@
                                             <img class="h-20 w-20 object-contain border border-gray-200 rounded" alt="Preview">
                                         </div>
                                     </div>
+
+                                    <!-- Empty div to balance the grid -->
+                                    <div></div>
                                 </div>
 
                                 <!-- Save Button for Media -->

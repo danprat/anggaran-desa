@@ -211,43 +211,5 @@
         width: 100%;
     }
 
-    /* Media section specific fixes */
-    #content-media .grid {
-        @apply w-full;
-        max-width: 100%;
-    }
 
-    #content-media .grid > div {
-        @apply w-full;
-        max-width: 100%;
-        min-width: 0;
-        flex: 1;
-    }
-
-    /* Force media section to use same width as other sections */
-    #content-media {
-        @apply w-full;
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-
-    #content-media .p-6 {
-        @apply w-full;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-
-    #content-media input,
-    #content-media label,
-    #content-media p,
-    #content-media div {
-        max-width: 100%;
-        word-wrap: break-word;
-        box-sizing: border-box;
-    }
-
-    /* Ensure grid columns don't expand beyond container */
-    #content-media .grid > div:nth-child(3) {
-        @apply md:col-span-2;
-    }
 }
