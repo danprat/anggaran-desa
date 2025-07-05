@@ -427,32 +427,31 @@
                                     </div>
                                 </div>
 
-                                <!-- Logo Desa Utama -->
-                                <div class="mb-6">
-                                    <div class="text-center mb-4">
-                                        <x-desa-logo type="desa" size="xl" class="mx-auto mb-3" :profile="$desaProfile" />
-                                        @if($desaProfile->logo_desa)
-                                            <p class="text-sm text-green-600 font-medium">✓ Logo desa tersedia</p>
-                                        @else
-                                            <p class="text-sm text-gray-500">Belum ada logo desa</p>
-                                        @endif
-                                    </div>
+                                <!-- Logo Desa Display -->
+                                <div class="text-center mb-6">
+                                    <x-desa-logo type="desa" size="xl" class="mx-auto mb-3" :profile="$desaProfile" />
+                                    @if($desaProfile->logo_desa)
+                                        <p class="text-sm text-green-600 font-medium">✓ Logo desa tersedia</p>
+                                    @else
+                                        <p class="text-sm text-gray-500">Belum ada logo desa</p>
+                                    @endif
+                                </div>
 
-                                    <div>
-                                        <label for="logo_desa" class="village-label">Logo Desa Baru</label>
-                                        <input type="file" name="logo_desa" id="logo_desa"
-                                               accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
-                                               class="village-input block w-full"
-                                               onchange="previewImage(this, 'preview-logo-desa')">
-                                        <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                        <div id="preview-logo-desa" class="mt-3 text-center hidden">
-                                            <img class="h-20 w-20 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Desa">
-                                        </div>
+                                <!-- Form Fields - Same structure as Geography -->
+                                <div>
+                                    <label for="logo_desa" class="village-label">Logo Desa Baru</label>
+                                    <input type="file" name="logo_desa" id="logo_desa"
+                                           accept="image/jpeg,image/png,image/jpg,image/gif,image/svg+xml"
+                                           class="village-input block w-full"
+                                           onchange="previewImage(this, 'preview-logo-desa')">
+                                    <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
+                                    <div id="preview-logo-desa" class="mt-3 text-center hidden">
+                                        <img class="h-20 w-20 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Desa">
                                     </div>
                                 </div>
 
                                 <!-- Logo Tambahan (Collapsed) -->
-                                <div class="border-t border-gray-200 pt-6">
+                                <div class="mt-6">
                                     <button type="button" onclick="toggleAdditionalLogos()"
                                             class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md p-2 -m-2 transition-colors">
                                         <span>Logo Tambahan (Kabupaten & Provinsi)</span>
@@ -461,10 +460,10 @@
                                         </svg>
                                     </button>
 
-                                    <div id="additional-logos-content" class="hidden mt-4 space-y-6">
+                                    <div id="additional-logos-content" class="hidden mt-4">
                                         <!-- Logo Kabupaten -->
-                                        <div>
-                                            <div class="text-center mb-4">
+                                        <div class="mb-6">
+                                            <div class="text-center mb-3">
                                                 <x-desa-logo type="kabupaten" size="lg" class="mx-auto mb-2" :profile="$desaProfile" />
                                                 @if($desaProfile->logo_kabupaten)
                                                     <p class="text-xs text-green-600">✓ Logo tersedia</p>
@@ -478,14 +477,11 @@
                                                    class="village-input block w-full"
                                                    onchange="previewImage(this, 'preview-logo-kabupaten')">
                                             <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                            <div id="preview-logo-kabupaten" class="mt-3 text-center hidden">
-                                                <img class="h-16 w-16 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Kabupaten">
-                                            </div>
                                         </div>
 
                                         <!-- Logo Provinsi -->
                                         <div>
-                                            <div class="text-center mb-4">
+                                            <div class="text-center mb-3">
                                                 <x-desa-logo type="provinsi" size="lg" class="mx-auto mb-2" :profile="$desaProfile" />
                                                 @if($desaProfile->logo_provinsi)
                                                     <p class="text-xs text-green-600">✓ Logo tersedia</p>
@@ -499,9 +495,6 @@
                                                    class="village-input block w-full"
                                                    onchange="previewImage(this, 'preview-logo-provinsi')">
                                             <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, SVG. Max: 2MB</p>
-                                            <div id="preview-logo-provinsi" class="mt-3 text-center hidden">
-                                                <img class="h-16 w-16 object-contain border border-gray-200 rounded mx-auto" alt="Preview Logo Provinsi">
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
