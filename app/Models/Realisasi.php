@@ -39,6 +39,11 @@ class Realisasi extends Model
         return $this->belongsTo(User::class, 'dibuat_oleh');
     }
 
+    public function dibuatOleh()
+    {
+        return $this->belongsTo(User::class, 'dibuat_oleh');
+    }
+
     public function buktiFiles()
     {
         return $this->hasMany(BuktiFile::class);
