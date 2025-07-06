@@ -17,6 +17,9 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="antialiased">
     <!-- Navigation -->
@@ -92,11 +95,12 @@
         <section class="py-16 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Statistik Anggaran</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Dashboard Anggaran Desa</h2>
                     <p class="text-lg text-gray-600">Tahun Anggaran {{ $selectedTahun->tahun }}</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Key Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
                     <div class="dashboard-stat-card text-center">
                         <div class="dashboard-stat-value text-blue-600">{{ number_format($stats['total_kegiatan']) }}</div>
                         <div class="dashboard-stat-label">Total Kegiatan</div>
@@ -109,7 +113,64 @@
                         <div class="dashboard-stat-value text-purple-600">Rp {{ number_format($stats['total_pagu'], 0, ',', '.') }}</div>
                         <div class="dashboard-stat-label">Total Pagu Anggaran</div>
                     </div>
+                    @if(!empty($realisasiStats))
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value text-orange-600">{{ number_format($realisasiStats['persentase_realisasi'], 1) }}%</div>
+                            <div class="dashboard-stat-label">Realisasi Anggaran</div>
+                        </div>
+                    @endif
                 </div>
+
+                <!-- Charts Section -->
+                @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                        <!-- Pie Chart - Anggaran per Bidang -->
+                        <div class="village-card p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Distribusi Anggaran per Bidang</h3>
+                            <div class="relative h-64">
+                                <canvas id="bidangChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Progress Chart - Realisasi vs Target -->
+                        <div class="village-card p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Realisasi vs Target Anggaran</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-medium text-gray-700">Total Realisasi</span>
+                                    <span class="text-sm text-gray-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-4">
+                                    <div class="bg-gradient-to-r from-green-400 to-green-600 h-4 rounded-full transition-all duration-1000"
+                                         style="width: {{ $realisasiStats['persentase_realisasi'] }}%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>0%</span>
+                                    <span class="font-medium">{{ number_format($realisasiStats['persentase_realisasi'], 1) }}%</span>
+                                    <span>100%</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-200">
+                                    <div class="text-center">
+                                        <div class="text-lg font-semibold text-green-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</div>
+                                        <div class="text-xs text-gray-500">Sudah Direalisasi</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-lg font-semibold text-gray-600">Rp {{ number_format($realisasiStats['sisa_anggaran'], 0, ',', '.') }}</div>
+                                        <div class="text-xs text-gray-500">Sisa Anggaran</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Chart - Realisasi Bulanan -->
+                    <div class="village-card p-6 mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Trend Realisasi Bulanan</h3>
+                        <div class="relative h-64">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                @endif
             </div>
         </section>
     @endif
@@ -475,7 +536,7 @@
         </div>
     </footer>
 
-    <!-- JavaScript for enhanced UX -->
+    <!-- JavaScript for enhanced UX and Charts -->
     <script>
         function handleYearChange() {
             const form = document.getElementById('yearFilterForm');
@@ -489,6 +550,108 @@
             // Submit form
             form.submit();
         }
+
+        // Chart initialization
+        @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data dari PHP
+            const chartData = @json($realisasiStats['chart_data']);
+
+            // Pie Chart - Distribusi Anggaran per Bidang
+            if (document.getElementById('bidangChart') && chartData.bidang) {
+                const bidangCtx = document.getElementById('bidangChart').getContext('2d');
+                const bidangLabels = chartData.bidang.map(item => item.bidang);
+                const bidangValues = chartData.bidang.map(item => parseFloat(item.total_anggaran));
+
+                new Chart(bidangCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: bidangLabels,
+                        datasets: [{
+                            data: bidangValues,
+                            backgroundColor: [
+                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444',
+                                '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    usePointStyle: true
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.parsed;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return context.label + ': Rp ' + value.toLocaleString('id-ID') + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Bar Chart - Realisasi Bulanan
+            if (document.getElementById('monthlyChart') && chartData.monthly) {
+                const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+                const monthlyLabels = chartData.monthly.map(item => item.month_name);
+                const monthlyValues = chartData.monthly.map(item => parseFloat(item.total));
+
+                new Chart(monthlyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: monthlyLabels,
+                        datasets: [{
+                            label: 'Realisasi (Rp)',
+                            data: monthlyValues,
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'Rp ' + value.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        @endif
 
         // Smooth scroll for anchor links
         document.addEventListener('DOMContentLoaded', function() {

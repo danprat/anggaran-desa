@@ -86,6 +86,9 @@ class LandingController extends Controller
         // Top 5 kegiatan dengan realisasi tertinggi
         $topKegiatan = $this->getTopKegiatan($tahun);
 
+        // Data untuk charts
+        $chartData = $this->getChartData($tahun);
+
         return [
             'total_anggaran' => $totalAnggaran,
             'total_realisasi' => $totalRealisasi,
@@ -93,6 +96,7 @@ class LandingController extends Controller
             'persentase_realisasi' => round($persentaseRealisasi, 2),
             'stats_bidang' => $statsBidang,
             'top_kegiatan' => $topKegiatan,
+            'chart_data' => $chartData,
         ];
     }
 
@@ -145,5 +149,64 @@ class LandingController extends Controller
                     : 0;
                 return $kegiatan;
             });
+    }
+
+    /**
+     * Get chart data for visualizations
+     */
+    private function getChartData($tahun)
+    {
+        // Data untuk pie chart bidang
+        $bidangData = $this->getStatsBidang($tahun);
+
+        // Data untuk progress chart realisasi bulanan
+        $monthlyData = $this->getMonthlyRealisasi($tahun);
+
+        // Data untuk status kegiatan
+        $statusData = $this->getStatusData($tahun);
+
+        return [
+            'bidang' => $bidangData,
+            'monthly' => $monthlyData,
+            'status' => $statusData,
+        ];
+    }
+
+    /**
+     * Get monthly realisasi data
+     */
+    private function getMonthlyRealisasi($tahun)
+    {
+        $monthlyData = [];
+        for ($month = 1; $month <= 12; $month++) {
+            $totalRealisasi = Realisasi::whereHas('kegiatan', function($q) use ($tahun) {
+                    $q->where('tahun_id', $tahun->id)
+                      ->where('status', 'disetujui');
+                })
+                ->whereMonth('tanggal', $month)
+                ->whereYear('tanggal', $tahun->tahun)
+                ->sum('jumlah_realisasi');
+
+            $monthlyData[] = [
+                'month' => $month,
+                'month_name' => date('M', mktime(0, 0, 0, $month, 1)),
+                'total' => $totalRealisasi,
+            ];
+        }
+
+        return $monthlyData;
+    }
+
+    /**
+     * Get status distribution data
+     */
+    private function getStatusData($tahun)
+    {
+        return [
+            'draft' => Kegiatan::where('tahun_id', $tahun->id)->where('status', 'draft')->count(),
+            'verifikasi' => Kegiatan::where('tahun_id', $tahun->id)->where('status', 'verifikasi')->count(),
+            'disetujui' => Kegiatan::where('tahun_id', $tahun->id)->where('status', 'disetujui')->count(),
+            'ditolak' => Kegiatan::where('tahun_id', $tahun->id)->where('status', 'ditolak')->count(),
+        ];
     }
 }
