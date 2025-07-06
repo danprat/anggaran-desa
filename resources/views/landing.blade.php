@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $desaProfile ? $desaProfile->nama_desa : 'Sistem Anggaran Desa' }}</title>
+    @php
+        $titleSuffix = $desaProfile ? " {$desaProfile->nama_desa}" : '';
+    @endphp
+    <title>Anggaran Desa{{ $titleSuffix }}</title>
 
     <!-- Dynamic Favicon -->
     <x-favicon />

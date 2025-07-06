@@ -4,7 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        @php
+            $desaProfile = \App\Models\DesaProfile::getActive();
+            $titleSuffix = $desaProfile ? " {$desaProfile->nama_desa}" : '';
+        @endphp
+        <title>Anggaran Desa{{ $titleSuffix }}</title>
 
         <!-- Dynamic Favicon -->
         <x-favicon />
