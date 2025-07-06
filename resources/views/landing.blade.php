@@ -208,7 +208,7 @@
                 <!-- Chart Visualizations -->
                 @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
                     <!-- Primary Charts - Anggaran vs Realisasi & Trend Bulanan -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                         <!-- Anggaran vs Realisasi per Bidang -->
                         <div class="village-card p-6">
                             <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
