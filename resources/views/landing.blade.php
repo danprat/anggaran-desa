@@ -201,28 +201,7 @@
                     </div>
                 @endif
 
-                <!-- Large Charts Section -->
-                @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
 
-                    <!-- 2 Column Charts - Same Style as Top 5 Kegiatan -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                        <!-- Anggaran vs Realisasi per Bidang -->
-                        <div class="village-card p-6">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
-                            <div class="relative h-80">
-                                <canvas id="bidangHorizontalChart"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Trend Realisasi Bulanan -->
-                        <div class="village-card p-6">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Trend Realisasi Bulanan</h3>
-                            <div class="relative h-80">
-                                <canvas id="monthlyHorizontalChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                @endif
             </div>
         </section>
     @endif
@@ -268,6 +247,27 @@
 
 
                 <!-- Chart Visualizations -->
+                @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
+                    <!-- Primary Charts - Anggaran vs Realisasi & Trend Bulanan -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        <!-- Anggaran vs Realisasi per Bidang -->
+                        <div class="village-card p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
+                            <div class="relative h-80">
+                                <canvas id="bidangHorizontalChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Trend Realisasi Bulanan -->
+                        <div class="village-card p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Trend Realisasi Bulanan</h3>
+                            <div class="relative h-80">
+                                <canvas id="monthlyHorizontalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 @if($realisasiStats['stats_bidang']->count() > 0)
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                         <!-- Donut Chart - Realisasi per Bidang -->
