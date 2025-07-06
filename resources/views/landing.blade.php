@@ -230,7 +230,7 @@
                             </div>
                         </div>
 
-                        <!-- Horizontal Bar Chart - Top 5 Kegiatan -->
+                        <!-- Vertical Bar Chart - Top 5 Kegiatan -->
                         @if($realisasiStats['top_kegiatan']->count() > 0)
                             <div class="village-card p-6">
                                 <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Top 5 Kegiatan Realisasi</h3>
@@ -676,14 +676,18 @@
                 });
             }
 
-            // Horizontal Bar Chart - Top 5 Kegiatan
+            // Vertical Bar Chart - Top 5 Kegiatan
             if (document.getElementById('topKegiatanChart') && chartData.top_kegiatan) {
                 const topCtx = document.getElementById('topKegiatanChart').getContext('2d');
                 const topLabels = chartData.top_kegiatan.map(item => {
-                    // Truncate long names
-                    return item.nama_kegiatan.length > 25 ?
-                           item.nama_kegiatan.substring(0, 25) + '...' :
-                           item.nama_kegiatan;
+                    // Split long names into multiple lines
+                    const words = item.nama_kegiatan.split(' ');
+                    if (words.length > 3) {
+                        const firstLine = words.slice(0, 3).join(' ');
+                        const secondLine = words.slice(3).join(' ');
+                        return [firstLine, secondLine];
+                    }
+                    return item.nama_kegiatan;
                 });
                 const topValues = chartData.top_kegiatan.map(item => parseFloat(item.total_realisasi || 0));
 
@@ -715,7 +719,6 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         aspectRatio: 1,
-                        indexAxis: 'y',
                         plugins: {
                             legend: {
                                 display: false
@@ -729,7 +732,7 @@
                                     label: function(context) {
                                         const kegiatan = chartData.top_kegiatan[context.dataIndex];
                                         return [
-                                            'Realisasi: Rp ' + context.parsed.x.toLocaleString('id-ID'),
+                                            'Realisasi: Rp ' + context.parsed.y.toLocaleString('id-ID'),
                                             'Bidang: ' + kegiatan.bidang,
                                             'Progress: ' + kegiatan.persentase_realisasi + '%'
                                         ];
@@ -738,7 +741,7 @@
                             }
                         },
                         scales: {
-                            x: {
+                            y: {
                                 beginAtZero: true,
                                 ticks: {
                                     callback: function(value) {
@@ -746,8 +749,10 @@
                                     }
                                 }
                             },
-                            y: {
+                            x: {
                                 ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45,
                                     font: {
                                         size: 10
                                     }
