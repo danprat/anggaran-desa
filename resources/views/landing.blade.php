@@ -50,37 +50,35 @@
         </div>
     </nav>
 
-    <!-- Hero Section - Compact -->
+    <!-- Hero Section -->
     @if($desaProfile)
-        <section class="village-header py-12">
+        <section class="village-header py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                    <!-- Left: Logo & Basic Info -->
-                    <div class="flex flex-col sm:flex-row sm:items-center text-center sm:text-left mb-6 lg:mb-0">
-                        <div class="flex justify-center sm:justify-start mb-4 sm:mb-0 sm:mr-6">
-                            <x-desa-logo type="desa" size="lg" />
-                        </div>
-                        <div>
-                            <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">
-                                {{ $desaProfile->formatted_nama_desa }}
-                            </h1>
-                            <p class="text-lg text-blue-100 mb-1">
-                                {{ $desaProfile->formatted_kecamatan }}, {{ $desaProfile->formatted_kabupaten }}
-                            </p>
-                            @if($desaProfile->kepala_desa)
-                                <p class="text-sm text-blue-200">
-                                    Kepala Desa: {{ $desaProfile->kepala_desa }}
-                                </p>
-                            @endif
-                        </div>
+                <div class="text-center">
+                    <!-- Logo -->
+                    <div class="flex justify-center mb-6">
+                        <x-desa-logo type="desa" size="lg" />
                     </div>
 
-                    <!-- Right: Visi (Compact) -->
+                    <!-- Village Name & Location -->
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-3">
+                        {{ $desaProfile->formatted_nama_desa }}
+                    </h1>
+                    <p class="text-xl text-blue-100 mb-2">
+                        {{ $desaProfile->formatted_kecamatan }}, {{ $desaProfile->formatted_kabupaten }}
+                    </p>
+                    @if($desaProfile->kepala_desa)
+                        <p class="text-blue-200 mb-6">
+                            Kepala Desa: {{ $desaProfile->kepala_desa }}
+                        </p>
+                    @endif
+
+                    <!-- Visi -->
                     @if($desaProfile->visi)
-                        <div class="max-w-md text-center lg:text-right">
-                            <h2 class="text-lg font-semibold text-white mb-2">Visi</h2>
-                            <p class="text-sm text-blue-100 italic leading-relaxed">
-                                "{{ Str::limit($desaProfile->visi, 120) }}"
+                        <div class="max-w-3xl mx-auto">
+                            <h2 class="text-lg font-semibold text-white mb-3">Visi</h2>
+                            <p class="text-blue-100 italic leading-relaxed">
+                                "{{ $desaProfile->visi }}"
                             </p>
                         </div>
                     @endif
@@ -340,162 +338,123 @@
         </section>
     @endif
 
-    <!-- Village Information - Compact -->
-    @if($desaProfile)
-        <section class="py-12 bg-gray-50">
+    <!-- Village Information -->
+    @if($desaProfile && ($desaProfile->misi || $desaProfile->sejarah_singkat || $desaProfile->alamat_lengkap))
+        <section class="py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Profil Desa</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Profile Information -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Profil Desa</h2>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Misi -->
-                    @if($desaProfile->misi)
-                        <div class="village-card p-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                                </svg>
-                                Misi
-                            </h3>
-                            <div class="text-sm text-gray-700 leading-relaxed">
-                                {!! nl2br(e(Str::limit($desaProfile->misi, 300))) !!}
+                        @if($desaProfile->misi)
+                            <div class="mb-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Misi</h3>
+                                <div class="prose prose-lg text-gray-700">
+                                    {!! nl2br(e($desaProfile->misi)) !!}
+                                </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
 
-                    <!-- Sejarah -->
-                    @if($desaProfile->sejarah_singkat)
-                        <div class="village-card p-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-                                <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                </svg>
-                                Sejarah Singkat
-                            </h3>
-                            <div class="text-sm text-gray-700 leading-relaxed">
-                                {!! nl2br(e(Str::limit($desaProfile->sejarah_singkat, 300))) !!}
+                        @if($desaProfile->sejarah_singkat)
+                            <div class="mb-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Sejarah Singkat</h3>
+                                <div class="prose prose-lg text-gray-700">
+                                    {!! nl2br(e($desaProfile->sejarah_singkat)) !!}
+                                </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
 
-                    <!-- Kontak & Informasi -->
-                    <div class="village-card p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-                            <svg class="w-5 h-5 text-purple-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                            </svg>
-                            Informasi Kontak
-                        </h3>
-                        <div class="space-y-3 text-sm text-gray-700">
-                            <div>
-                                <span class="font-medium">Alamat:</span><br>
-                                {{ $desaProfile->formatted_address }}
+                    <!-- Contact & Details -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Informasi Kontak</h2>
+
+                        <div class="space-y-6">
+                            <div class="village-card p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Alamat</h3>
+                                <p class="text-gray-700">{{ $desaProfile->formatted_address }}</p>
                             </div>
 
                             @if($desaProfile->telepon || $desaProfile->email || $desaProfile->website)
-                                <div class="pt-2 border-t border-gray-200">
-                                    @if($desaProfile->telepon)
-                                        <div class="mb-1">
-                                            <span class="font-medium">Telepon:</span> {{ $desaProfile->telepon }}
-                                        </div>
-                                    @endif
-                                    @if($desaProfile->email)
-                                        <div class="mb-1">
-                                            <span class="font-medium">Email:</span>
-                                            <a href="mailto:{{ $desaProfile->email }}" class="text-blue-600 hover:text-blue-800">
-                                                {{ $desaProfile->email }}
-                                            </a>
-                                        </div>
-                                    @endif
-                                    @if($desaProfile->website)
-                                        <div>
-                                            <span class="font-medium">Website:</span>
-                                            <a href="{{ $desaProfile->website }}" target="_blank" class="text-blue-600 hover:text-blue-800">
-                                                {{ Str::limit($desaProfile->website, 30) }}
-                                            </a>
-                                        </div>
-                                    @endif
+                                <div class="village-card p-6">
+                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Kontak</h3>
+                                    <div class="space-y-2">
+                                        @if($desaProfile->telepon)
+                                            <p class="text-gray-700">
+                                                <span class="font-medium">Telepon:</span> {{ $desaProfile->telepon }}
+                                            </p>
+                                        @endif
+                                        @if($desaProfile->email)
+                                            <p class="text-gray-700">
+                                                <span class="font-medium">Email:</span>
+                                                <a href="mailto:{{ $desaProfile->email }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $desaProfile->email }}
+                                                </a>
+                                            </p>
+                                        @endif
+                                        @if($desaProfile->website)
+                                            <p class="text-gray-700">
+                                                <span class="font-medium">Website:</span>
+                                                <a href="{{ $desaProfile->website }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $desaProfile->website }}
+                                                </a>
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+
+                            @php $demographic = $desaProfile->demographic_info; @endphp
+                            @if(array_filter($demographic))
+                                <div class="village-card p-6">
+                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Data Demografis</h3>
+                                    <div class="space-y-2">
+                                        @if($demographic['luas_wilayah'])
+                                            <p class="text-gray-700">
+                                                <span class="font-medium">Luas Wilayah:</span> {{ $demographic['luas_wilayah'] }}
+                                            </p>
+                                        @endif
+                                        @if($demographic['jumlah_penduduk'])
+                                            <p class="text-gray-700">
+                                                <span class="font-medium">Jumlah Penduduk:</span> {{ $demographic['jumlah_penduduk'] }}
+                                            </p>
+                                        @endif
+                                        @if($demographic['jumlah_kk'])
+                                            <p class="text-gray-700">
+                                                <span class="font-medium">Jumlah KK:</span> {{ $demographic['jumlah_kk'] }}
+                                            </p>
+                                        @endif
+                                    </div>
                                 </div>
                             @endif
                         </div>
                     </div>
                 </div>
-
-                @php $demographic = $desaProfile->demographic_info; @endphp
-                @if(array_filter($demographic))
-                    <!-- Data Demografis sebagai card terpisah -->
-                    <div class="mt-6">
-                        <div class="village-card p-6 max-w-md mx-auto">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-orange-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                Data Demografis
-                            </h3>
-                            <div class="grid grid-cols-1 gap-2 text-sm text-gray-700 text-center">
-                                @if($demographic['luas_wilayah'])
-                                    <div>
-                                        <span class="font-medium">Luas Wilayah:</span> {{ $demographic['luas_wilayah'] }}
-                                    </div>
-                                @endif
-                                @if($demographic['jumlah_penduduk'])
-                                    <div>
-                                        <span class="font-medium">Jumlah Penduduk:</span> {{ $demographic['jumlah_penduduk'] }}
-                                    </div>
-                                @endif
-                                @if($demographic['jumlah_kk'])
-                                    <div>
-                                        <span class="font-medium">Jumlah KK:</span> {{ $demographic['jumlah_kk'] }}
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                @endif
             </div>
         </section>
     @endif
 
-    <!-- Footer - Compact -->
-    <footer class="bg-gray-800 text-white py-8">
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <!-- Left: Logo & Name -->
-                <div class="flex items-center justify-center md:justify-start space-x-3 mb-4 md:mb-0">
+            <div class="text-center">
+                <div class="flex justify-center items-center space-x-4 mb-4">
                     @if($desaProfile)
                         <x-desa-logo type="desa" size="sm" class="text-white" />
                         <div>
-                            <div class="text-base font-semibold">{{ $desaProfile->formatted_nama_desa }}</div>
-                            <div class="text-xs text-gray-300">{{ $desaProfile->formatted_kabupaten }}</div>
+                            <div class="text-lg font-semibold">{{ $desaProfile->formatted_nama_desa }}</div>
+                            <div class="text-sm text-gray-300">{{ $desaProfile->formatted_kabupaten }}</div>
                         </div>
                     @endif
                 </div>
-
-                <!-- Right: Copyright & Credits -->
-                <div class="text-center md:text-right">
-                    <p class="text-sm text-gray-300 mb-1">
-                        © {{ date('Y') }} {{ $desaProfile ? $desaProfile->nama_desa : 'Sistem Anggaran Desa' }}
-                    </p>
-                    <p class="text-xs text-gray-400">
-                        Transparansi & Akuntabilitas Anggaran Desa
-                    </p>
-                </div>
-            </div>
-
-            <!-- Bottom: Developer Credit -->
-            <div class="mt-4 pt-4 border-t border-gray-700 text-center">
-                <p class="text-xs text-gray-400">
-                    Dibuat oleh
-                    <a href="https://wa.me/6208974041777" target="_blank"
-                       class="font-medium text-gray-300 hover:text-white transition-colors duration-200">
-                        Dany Pratmanto
-                    </a>
-                    • WA:
-                    <a href="https://wa.me/6208974041777" target="_blank"
-                       class="font-medium text-green-400 hover:text-green-300 transition-colors duration-200">
-                        08974041777
-                    </a>
+                <p class="text-gray-300">
+                    © {{ date('Y') }} {{ $desaProfile ? $desaProfile->nama_desa : 'Sistem Anggaran Desa' }}.
+                    Semua hak dilindungi.
                 </p>
-            </div>
+                <p class="text-sm text-gray-400 mt-2">
+                    Sistem Informasi Anggaran Desa - Transparansi dan Akuntabilitas
+                </p>
                 <div class="mt-4 pt-4 border-t border-gray-700">
                     <p class="text-sm text-gray-400">
                         Dibuat oleh
