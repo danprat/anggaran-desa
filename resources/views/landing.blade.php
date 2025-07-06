@@ -235,8 +235,8 @@
                                 <select name="tahun" id="tahun" onchange="handleYearChange()"
                                         class="village-input py-2 px-3 text-sm min-w-[120px]">
                                     @foreach($availableYears as $tahun)
-                                        <option value="{{ $tahun->id }}"
-                                                {{ $selectedTahun->id == $tahun->id ? 'selected' : '' }}>
+                                        <option value="{{ $tahun->tahun }}"
+                                                {{ $selectedTahun && $selectedTahun->tahun == $tahun->tahun ? 'selected' : '' }}>
                                             {{ $tahun->tahun }}
                                         </option>
                                     @endforeach

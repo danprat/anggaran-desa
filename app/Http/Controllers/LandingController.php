@@ -23,8 +23,13 @@ class LandingController extends Controller
         $availableYears = TahunAnggaran::orderBy('tahun', 'desc')->get();
 
         // Get selected year from request or use active year
-        $selectedYear = $request->get('tahun', $tahunAktif?->id);
-        $selectedTahun = $selectedYear ? TahunAnggaran::find($selectedYear) : $tahunAktif;
+        $requestedYear = $request->get('tahun');
+        if ($requestedYear) {
+            // Cari berdasarkan tahun asli (2024, 2025, dst)
+            $selectedTahun = TahunAnggaran::where('tahun', $requestedYear)->first();
+        } else {
+            $selectedTahun = $tahunAktif;
+        }
 
         // Get basic statistics
         $stats = [];
