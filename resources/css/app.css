@@ -258,21 +258,21 @@ html, body {
 
     /* Ensure content doesn't get hidden behind sticky footer */
     body {
-        padding-bottom: 80px; /* Adjust based on footer height */
+        padding-bottom: 40px; /* Adjust based on footer height */
     }
 
     /* Footer responsive adjustments */
     @media (max-width: 640px) {
         .sticky-footer {
-            padding: 8px 16px;
+            padding: 4px 8px;
         }
 
         .sticky-footer p {
-            font-size: 12px;
+            font-size: 10px;
         }
 
         body {
-            padding-bottom: 70px;
+            padding-bottom: 35px;
         }
     }
 
