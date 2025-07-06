@@ -204,20 +204,20 @@
                 <!-- Large Charts Section -->
                 @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
 
-                    <!-- Large 2 Column Charts -->
+                    <!-- 2 Column Charts - Same Style as Top 5 Kegiatan -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                         <!-- Anggaran vs Realisasi per Bidang -->
                         <div class="village-card p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
-                            <div class="relative h-96">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
+                            <div class="relative h-80">
                                 <canvas id="bidangHorizontalChart"></canvas>
                             </div>
                         </div>
 
                         <!-- Trend Realisasi Bulanan -->
                         <div class="village-card p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Trend Realisasi Bulanan</h3>
-                            <div class="relative h-96">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Trend Realisasi Bulanan</h3>
+                            <div class="relative h-80">
                                 <canvas id="monthlyHorizontalChart"></canvas>
                             </div>
                         </div>
@@ -534,12 +534,7 @@
                         },
                         plugins: {
                             legend: {
-                                position: 'top',
-                                labels: {
-                                    padding: 20,
-                                    usePointStyle: true,
-                                    font: { size: 14 }
-                                }
+                                display: false
                             },
                             tooltip: {
                                 callbacks: {
@@ -567,12 +562,12 @@
                                     callback: function(value) {
                                         return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
                                     },
-                                    font: { size: 12 }
+                                    font: { size: 10 }
                                 }
                             },
                             y: {
                                 ticks: {
-                                    font: { size: 12 }
+                                    font: { size: 10 }
                                 }
                             }
                         }
@@ -631,12 +626,12 @@
                                     callback: function(value) {
                                         return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
                                     },
-                                    font: { size: 12 }
+                                    font: { size: 10 }
                                 }
                             },
                             y: {
                                 ticks: {
-                                    font: { size: 12 }
+                                    font: { size: 10 }
                                 }
                             }
                         }
