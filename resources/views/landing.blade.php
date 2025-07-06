@@ -158,62 +158,68 @@
                     @endif
                 </div>
 
-                <!-- Key Statistics Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                    <div class="dashboard-stat-card text-center">
-                        <div class="dashboard-stat-value text-blue-600">{{ number_format($stats['total_kegiatan']) }}</div>
-                        <div class="dashboard-stat-label">Total Kegiatan</div>
-                    </div>
-                    <div class="dashboard-stat-card text-center">
-                        <div class="dashboard-stat-value text-green-600">{{ number_format($stats['kegiatan_approved']) }}</div>
-                        <div class="dashboard-stat-label">Kegiatan Disetujui</div>
-                    </div>
-                    <div class="dashboard-stat-card text-center">
-                        <div class="dashboard-stat-value text-purple-600">Rp {{ number_format($stats['total_pagu'], 0, ',', '.') }}</div>
-                        <div class="dashboard-stat-label">Total Pagu Anggaran</div>
-                    </div>
-                    @if(!empty($realisasiStats))
+                <!-- Consolidated Statistics Cards -->
+                @if(!empty($realisasiStats))
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
                         <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-orange-600">{{ number_format($realisasiStats['persentase_realisasi'], 1) }}%</div>
-                            <div class="dashboard-stat-label">Realisasi Anggaran</div>
+                            <div class="dashboard-stat-value text-blue-600">{{ number_format($stats['total_kegiatan']) }}</div>
+                            <div class="dashboard-stat-label">Total Kegiatan</div>
                         </div>
-                    @endif
-                </div>
-
-                <!-- Combined Chart Section -->
-                @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
-                    <div class="village-card p-6 mb-12">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
-
-                        <!-- Summary Stats -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
-                            <div class="text-center">
-                                <div class="text-lg font-semibold text-blue-600">Rp {{ number_format($realisasiStats['total_anggaran'], 0, ',', '.') }}</div>
-                                <div class="text-sm text-gray-600">Total Anggaran</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-lg font-semibold text-green-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</div>
-                                <div class="text-sm text-gray-600">Total Realisasi</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-lg font-semibold {{ $realisasiStats['persentase_realisasi'] > 100 ? 'text-orange-600' : 'text-green-600' }}">
-                                    {{ number_format($realisasiStats['persentase_realisasi'], 1) }}%
-                                </div>
-                                <div class="text-sm text-gray-600">Persentase Realisasi</div>
-                            </div>
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value text-green-600">{{ number_format($stats['kegiatan_approved']) }}</div>
+                            <div class="dashboard-stat-label">Kegiatan Disetujui</div>
                         </div>
-
-                        <!-- Combined Bar Chart -->
-                        <div class="relative h-96">
-                            <canvas id="combinedChart"></canvas>
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value text-purple-600">Rp {{ number_format($realisasiStats['total_anggaran'], 0, ',', '.') }}</div>
+                            <div class="dashboard-stat-label">Total Anggaran</div>
+                        </div>
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value text-indigo-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</div>
+                            <div class="dashboard-stat-label">Total Realisasi</div>
+                        </div>
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value {{ $realisasiStats['persentase_realisasi'] > 100 ? 'text-orange-600' : 'text-green-600' }}">
+                                {{ number_format($realisasiStats['persentase_realisasi'], 1) }}%
+                            </div>
+                            <div class="dashboard-stat-label">Persentase Realisasi</div>
                         </div>
                     </div>
+                @else
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value text-blue-600">{{ number_format($stats['total_kegiatan']) }}</div>
+                            <div class="dashboard-stat-label">Total Kegiatan</div>
+                        </div>
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value text-green-600">{{ number_format($stats['kegiatan_approved']) }}</div>
+                            <div class="dashboard-stat-label">Kegiatan Disetujui</div>
+                        </div>
+                        <div class="dashboard-stat-card text-center">
+                            <div class="dashboard-stat-value text-purple-600">Rp {{ number_format($stats['total_pagu'], 0, ',', '.') }}</div>
+                            <div class="dashboard-stat-label">Total Pagu Anggaran</div>
+                        </div>
+                    </div>
+                @endif
 
-                    <!-- Bar Chart - Realisasi Bulanan -->
-                    <div class="village-card p-6 mb-8">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Trend Realisasi Bulanan</h3>
-                        <div class="relative h-64">
-                            <canvas id="monthlyChart"></canvas>
+                <!-- Large Charts Section -->
+                @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
+
+                    <!-- Large 2 Column Charts -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        <!-- Anggaran vs Realisasi per Bidang -->
+                        <div class="village-card p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
+                            <div class="relative h-96">
+                                <canvas id="bidangHorizontalChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Trend Realisasi Bulanan -->
+                        <div class="village-card p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Trend Realisasi Bulanan</h3>
+                            <div class="relative h-96">
+                                <canvas id="monthlyHorizontalChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -490,14 +496,14 @@
             // Data dari PHP
             const chartData = @json($realisasiStats['chart_data']);
 
-            // Combined Chart - Anggaran vs Realisasi per Bidang
-            if (document.getElementById('combinedChart') && chartData.bidang) {
-                const combinedCtx = document.getElementById('combinedChart').getContext('2d');
+            // Horizontal Bar Chart - Anggaran vs Realisasi per Bidang
+            if (document.getElementById('bidangHorizontalChart') && chartData.bidang) {
+                const bidangCtx = document.getElementById('bidangHorizontalChart').getContext('2d');
                 const bidangLabels = chartData.bidang.map(item => item.bidang);
                 const anggaranValues = chartData.bidang.map(item => parseFloat(item.total_anggaran));
                 const realisasiValues = chartData.bidang.map(item => parseFloat(item.total_realisasi || 0));
 
-                new Chart(combinedCtx, {
+                new Chart(bidangCtx, {
                     type: 'bar',
                     data: {
                         labels: bidangLabels,
@@ -505,14 +511,14 @@
                             {
                                 label: 'Anggaran',
                                 data: anggaranValues,
-                                backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                                backgroundColor: 'rgba(59, 130, 246, 0.7)',
                                 borderColor: 'rgb(59, 130, 246)',
                                 borderWidth: 1
                             },
                             {
                                 label: 'Realisasi',
                                 data: realisasiValues,
-                                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                                backgroundColor: 'rgba(16, 185, 129, 0.7)',
                                 borderColor: 'rgb(16, 185, 129)',
                                 borderWidth: 1
                             }
@@ -521,6 +527,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        indexAxis: 'y',
                         interaction: {
                             mode: 'index',
                             intersect: false,
@@ -530,20 +537,21 @@
                                 position: 'top',
                                 labels: {
                                     padding: 20,
-                                    usePointStyle: true
+                                    usePointStyle: true,
+                                    font: { size: 14 }
                                 }
                             },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        const value = context.parsed.y;
+                                        const value = context.parsed.x;
                                         const label = context.dataset.label;
                                         return label + ': Rp ' + value.toLocaleString('id-ID');
                                     },
                                     afterBody: function(tooltipItems) {
                                         if (tooltipItems.length === 2) {
-                                            const anggaran = tooltipItems[0].parsed.y;
-                                            const realisasi = tooltipItems[1].parsed.y;
+                                            const anggaran = tooltipItems[0].parsed.x;
+                                            const realisasi = tooltipItems[1].parsed.x;
                                             const percentage = anggaran > 0 ? ((realisasi / anggaran) * 100).toFixed(1) : 0;
                                             return 'Persentase Realisasi: ' + percentage + '%';
                                         }
@@ -554,16 +562,17 @@
                         },
                         scales: {
                             x: {
-                                grid: {
-                                    display: false
-                                }
-                            },
-                            y: {
                                 beginAtZero: true,
                                 ticks: {
                                     callback: function(value) {
                                         return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
-                                    }
+                                    },
+                                    font: { size: 12 }
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    font: { size: 12 }
                                 }
                             }
                         }
@@ -571,9 +580,9 @@
                 });
             }
 
-            // Bar Chart - Realisasi Bulanan
-            if (document.getElementById('monthlyChart') && chartData.monthly) {
-                const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            // Horizontal Bar Chart - Realisasi Bulanan
+            if (document.getElementById('monthlyHorizontalChart') && chartData.monthly) {
+                const monthlyCtx = document.getElementById('monthlyHorizontalChart').getContext('2d');
                 const monthlyLabels = chartData.monthly.map(item => item.month_name);
                 const monthlyValues = chartData.monthly.map(item => parseFloat(item.total));
 
@@ -582,17 +591,27 @@
                     data: {
                         labels: monthlyLabels,
                         datasets: [{
-                            label: 'Realisasi (Rp)',
+                            label: 'Realisasi',
                             data: monthlyValues,
-                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 1,
-                            borderRadius: 4
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(245, 158, 11, 0.7)',
+                                'rgba(239, 68, 68, 0.7)', 'rgba(139, 92, 246, 0.7)', 'rgba(6, 182, 212, 0.7)',
+                                'rgba(132, 204, 22, 0.7)', 'rgba(249, 115, 22, 0.7)', 'rgba(236, 72, 153, 0.7)',
+                                'rgba(107, 114, 128, 0.7)', 'rgba(75, 85, 99, 0.7)', 'rgba(55, 65, 81, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgb(59, 130, 246)', 'rgb(16, 185, 129)', 'rgb(245, 158, 11)',
+                                'rgb(239, 68, 68)', 'rgb(139, 92, 246)', 'rgb(6, 182, 212)',
+                                'rgb(132, 204, 22)', 'rgb(249, 115, 22)', 'rgb(236, 72, 153)',
+                                'rgb(107, 114, 128)', 'rgb(75, 85, 99)', 'rgb(55, 65, 81)'
+                            ],
+                            borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        indexAxis: 'y',
                         plugins: {
                             legend: {
                                 display: false
@@ -600,18 +619,24 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        return 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                        return 'Realisasi: Rp ' + context.parsed.x.toLocaleString('id-ID');
                                     }
                                 }
                             }
                         },
                         scales: {
-                            y: {
+                            x: {
                                 beginAtZero: true,
                                 ticks: {
                                     callback: function(value) {
-                                        return 'Rp ' + value.toLocaleString('id-ID');
-                                    }
+                                        return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
+                                    },
+                                    font: { size: 12 }
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    font: { size: 12 }
                                 }
                             }
                         }
