@@ -43,7 +43,7 @@
 
                     @if(auth()->user()->can('manage-users') || auth()->user()->can('view-admin') || auth()->user()->can('view-desa-profile') || auth()->user()->can('view-log'))
                         <!-- Admin Dropdown -->
-                        <div class="relative" x-data="{ open: false }">
+                        <div class="relative inline-flex items-center" x-data="{ open: false }">
                             <button @click="open = ! open" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out" :class="{ 'text-gray-900 border-gray-300': open }">
                                 <div>{{ __('Admin') }}</div>
                                 <div class="ms-1">
