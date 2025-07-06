@@ -43,7 +43,7 @@
 
                     @if(auth()->user()->can('manage-users') || auth()->user()->can('view-admin') || auth()->user()->can('view-desa-profile') || auth()->user()->can('view-log'))
                         <!-- Admin Dropdown -->
-                        <div class="relative h-16 flex items-center" x-data="{ open: false }">
+                        <div class="relative" x-data="{ open: false }">
                             <button @click="open = ! open" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out" :class="{ 'text-gray-900 border-gray-300': open }">
                                 <div>{{ __('Admin') }}</div>
                                 <div class="ms-1">
@@ -53,7 +53,7 @@
                                 </div>
                             </button>
 
-                            <div x-show="open" x-cloak @click.outside="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute top-full left-0 z-[9999] mt-1 w-48 rounded-md shadow-lg bg-white border border-gray-200 ring-1 ring-black ring-opacity-5">
+                            <div x-show="open" x-cloak @click.outside="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute left-0 z-[9999] mt-2 w-48 rounded-md shadow-lg bg-white border border-gray-200 ring-1 ring-black ring-opacity-5" style="top: 100%;">
                                 <div class="py-1">
                                     @can('manage-users')
                                         <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.users.*') ? 'bg-gray-100 text-gray-900' : '' }}">
