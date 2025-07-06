@@ -479,7 +479,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        aspectRatio: 1,
+                        aspectRatio: 0.75,
                         indexAxis: 'y',
                         interaction: {
                             mode: 'index',
@@ -559,7 +559,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        aspectRatio: 1,
+                        aspectRatio: 0.75,
                         indexAxis: 'y',
                         plugins: {
                             legend: {
