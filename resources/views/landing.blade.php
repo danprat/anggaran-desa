@@ -94,13 +94,13 @@
     @if($selectedTahun && !empty($stats))
         <section class="py-16 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
+                <div class="text-center mb-8">
                     <!-- Main Title -->
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                             Dashboard Anggaran Desa
                         </h2>
-                        <h3 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">
+                        <h3 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">
                             Laporan Realisasi Anggaran
                         </h3>
                         <div class="max-w-4xl mx-auto">
@@ -117,7 +117,7 @@
 
                     <!-- Year Filter -->
                     @if($availableYears->count() > 1)
-                        <div class="flex justify-center mb-8">
+                        <div class="flex justify-center mb-6">
                             <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4">
                                 <form method="GET" action="{{ route('landing') }}" class="flex items-center space-x-4" id="yearFilterForm">
                                     <div class="flex items-center space-x-3">
@@ -147,7 +147,7 @@
                             </div>
                         </div>
                     @else
-                        <div class="mb-8">
+                        <div class="mb-6">
                             <div class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -167,7 +167,7 @@
 
     <!-- Laporan Realisasi Section -->
     @if($selectedTahun)
-        <section class="py-16 bg-white">
+        <section class="py-8 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
 
