@@ -158,48 +158,7 @@
                     @endif
                 </div>
 
-                <!-- Consolidated Statistics Cards -->
-                @if(!empty($realisasiStats))
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-12">
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-blue-600">{{ number_format($stats['total_kegiatan']) }}</div>
-                            <div class="dashboard-stat-label">Total Kegiatan</div>
-                        </div>
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-green-600">{{ number_format($stats['kegiatan_approved']) }}</div>
-                            <div class="dashboard-stat-label">Kegiatan Disetujui</div>
-                        </div>
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-purple-600">Rp {{ number_format($realisasiStats['total_anggaran'], 0, ',', '.') }}</div>
-                            <div class="dashboard-stat-label">Total Anggaran</div>
-                        </div>
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-indigo-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</div>
-                            <div class="dashboard-stat-label">Total Realisasi</div>
-                        </div>
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value {{ $realisasiStats['persentase_realisasi'] > 100 ? 'text-orange-600' : 'text-green-600' }}">
-                                {{ number_format($realisasiStats['persentase_realisasi'], 1) }}%
-                            </div>
-                            <div class="dashboard-stat-label">Persentase Realisasi</div>
-                        </div>
-                    </div>
-                @else
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-blue-600">{{ number_format($stats['total_kegiatan']) }}</div>
-                            <div class="dashboard-stat-label">Total Kegiatan</div>
-                        </div>
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-green-600">{{ number_format($stats['kegiatan_approved']) }}</div>
-                            <div class="dashboard-stat-label">Kegiatan Disetujui</div>
-                        </div>
-                        <div class="dashboard-stat-card text-center">
-                            <div class="dashboard-stat-value text-purple-600">Rp {{ number_format($stats['total_pagu'], 0, ',', '.') }}</div>
-                            <div class="dashboard-stat-label">Total Pagu Anggaran</div>
-                        </div>
-                    </div>
-                @endif
+
 
 
             </div>
