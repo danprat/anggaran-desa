@@ -486,6 +486,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        aspectRatio: 1,
                         indexAxis: 'y',
                         interaction: {
                             mode: 'index',
@@ -565,6 +566,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        aspectRatio: 1,
                         indexAxis: 'y',
                         plugins: {
                             legend: {
@@ -624,6 +626,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        aspectRatio: 1,
                         cutout: '60%',
                         plugins: {
                             legend: {
@@ -718,6 +721,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        aspectRatio: 1,
                         indexAxis: 'y',
                         plugins: {
                             legend: {
