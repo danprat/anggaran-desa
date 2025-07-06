@@ -137,28 +137,70 @@
                             <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Realisasi vs Target Anggaran</h3>
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-sm font-medium text-gray-700">Total Realisasi</span>
-                                    <span class="text-sm text-gray-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</span>
+                                    <span class="text-sm font-medium text-gray-700">Progress Realisasi</span>
+                                    <span class="text-sm font-medium {{ $realisasiStats['persentase_realisasi'] > 100 ? 'text-orange-600' : 'text-green-600' }}">
+                                        {{ number_format($realisasiStats['persentase_realisasi'], 1) }}%
+                                    </span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-4">
-                                    <div class="bg-gradient-to-r from-green-400 to-green-600 h-4 rounded-full transition-all duration-1000"
-                                         style="width: {{ $realisasiStats['persentase_realisasi'] }}%"></div>
+
+                                <!-- Progress Bar -->
+                                <div class="w-full bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                                    @php
+                                        $progressWidth = min($realisasiStats['persentase_realisasi'], 100);
+                                        $isOverBudget = $realisasiStats['persentase_realisasi'] > 100;
+                                    @endphp
+                                    <div class="h-6 rounded-full transition-all duration-1000 {{ $isOverBudget ? 'bg-gradient-to-r from-orange-400 to-red-500' : 'bg-gradient-to-r from-green-400 to-green-600' }}"
+                                         style="width: {{ $progressWidth }}%"></div>
+
+                                    @if($isOverBudget)
+                                        <!-- Indicator untuk over budget -->
+                                        <div class="absolute top-0 right-0 h-6 w-2 bg-red-600 rounded-r-full"></div>
+                                        <div class="absolute top-1 right-1 text-xs text-white font-bold">!</div>
+                                    @endif
                                 </div>
+
                                 <div class="flex justify-between text-xs text-gray-500">
                                     <span>0%</span>
-                                    <span class="font-medium">{{ number_format($realisasiStats['persentase_realisasi'], 1) }}%</span>
-                                    <span>100%</span>
+                                    <span class="font-medium">Target: 100%</span>
+                                    @if($isOverBudget)
+                                        <span class="text-orange-600 font-medium">Over Budget</span>
+                                    @else
+                                        <span>100%</span>
+                                    @endif
                                 </div>
+
+                                <!-- Detail Anggaran -->
                                 <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-200">
                                     <div class="text-center">
-                                        <div class="text-lg font-semibold text-green-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</div>
-                                        <div class="text-xs text-gray-500">Sudah Direalisasi</div>
+                                        <div class="text-lg font-semibold text-blue-600">Rp {{ number_format($realisasiStats['total_anggaran'], 0, ',', '.') }}</div>
+                                        <div class="text-xs text-gray-500">Target Anggaran</div>
                                     </div>
                                     <div class="text-center">
-                                        <div class="text-lg font-semibold text-gray-600">Rp {{ number_format($realisasiStats['sisa_anggaran'], 0, ',', '.') }}</div>
-                                        <div class="text-xs text-gray-500">Sisa Anggaran</div>
+                                        <div class="text-lg font-semibold {{ $isOverBudget ? 'text-orange-600' : 'text-green-600' }}">
+                                            Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">Total Realisasi</div>
                                     </div>
                                 </div>
+
+                                @if($isOverBudget)
+                                    <div class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="text-sm text-orange-700">
+                                                Realisasi melebihi anggaran sebesar Rp {{ number_format(abs($realisasiStats['sisa_anggaran']), 0, ',', '.') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mt-3 text-center">
+                                        <div class="text-sm text-gray-600">
+                                            Sisa Anggaran: <span class="font-medium text-green-600">Rp {{ number_format($realisasiStats['sisa_anggaran'], 0, ',', '.') }}</span>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

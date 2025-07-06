@@ -157,7 +157,15 @@ class LandingController extends Controller
     private function getChartData($tahun)
     {
         // Data untuk pie chart bidang
-        $bidangData = $this->getStatsBidang($tahun);
+        $bidangData = $this->getStatsBidang($tahun)->map(function($item) {
+            return [
+                'bidang' => $item->bidang,
+                'total_anggaran' => (float) $item->total_anggaran,
+                'total_realisasi' => (float) $item->total_realisasi,
+                'jumlah_kegiatan' => $item->jumlah_kegiatan,
+                'persentase_realisasi' => $item->persentase_realisasi,
+            ];
+        })->values()->toArray();
 
         // Data untuk progress chart realisasi bulanan
         $monthlyData = $this->getMonthlyRealisasi($tahun);
@@ -190,7 +198,7 @@ class LandingController extends Controller
             $monthlyData[] = [
                 'month' => $month,
                 'month_name' => date('M', mktime(0, 0, 0, $month, 1)),
-                'total' => $totalRealisasi,
+                'total' => (float) $totalRealisasi,
             ];
         }
 
