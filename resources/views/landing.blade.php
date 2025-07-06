@@ -212,7 +212,7 @@
                         <!-- Anggaran vs Realisasi per Bidang -->
                         <div class="village-card p-6">
                             <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
-                            <div class="relative h-80">
+                            <div class="relative h-96">
                                 <canvas id="bidangHorizontalChart"></canvas>
                             </div>
                         </div>
@@ -220,7 +220,7 @@
                         <!-- Trend Realisasi Bulanan -->
                         <div class="village-card p-6">
                             <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Trend Realisasi Bulanan</h3>
-                            <div class="relative h-80">
+                            <div class="relative h-96">
                                 <canvas id="monthlyHorizontalChart"></canvas>
                             </div>
                         </div>
@@ -232,7 +232,7 @@
                         <!-- Donut Chart - Realisasi per Bidang -->
                         <div class="village-card p-6">
                             <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Realisasi per Bidang</h3>
-                            <div class="relative h-80">
+                            <div class="relative h-96">
                                 <canvas id="bidangDonutChart"></canvas>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
                         @if($realisasiStats['top_kegiatan']->count() > 0)
                             <div class="village-card p-6">
                                 <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Top 5 Kegiatan Realisasi</h3>
-                                <div class="relative h-80">
+                                <div class="relative h-96">
                                     <canvas id="topKegiatanChart"></canvas>
                                 </div>
                             </div>
