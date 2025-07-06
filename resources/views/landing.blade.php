@@ -95,8 +95,67 @@
         <section class="py-16 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Dashboard Anggaran Desa</h2>
-                    <p class="text-lg text-gray-600">Tahun Anggaran {{ $selectedTahun->tahun }}</p>
+                    <!-- Main Title -->
+                    <div class="mb-6">
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                            Dashboard Anggaran Desa
+                        </h2>
+                        <h3 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">
+                            Laporan Realisasi Anggaran
+                        </h3>
+                        <div class="max-w-4xl mx-auto">
+                            <p class="text-lg md:text-xl text-gray-600 leading-relaxed">
+                                🏛️ <span class="font-semibold text-blue-600">Transparansi Total</span> •
+                                📊 <span class="font-semibold text-green-600">Data Real-time</span> •
+                                🤝 <span class="font-semibold text-purple-600">Akuntabilitas Publik</span>
+                            </p>
+                            <p class="text-base text-gray-500 mt-2">
+                                Pantau penggunaan anggaran desa secara transparan untuk kemajuan bersama
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Year Filter -->
+                    @if($availableYears->count() > 1)
+                        <div class="flex justify-center mb-8">
+                            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4">
+                                <form method="GET" action="{{ route('landing') }}" class="flex items-center space-x-4" id="yearFilterForm">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-sm font-medium text-gray-700 flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            Tahun Anggaran:
+                                        </span>
+                                        <select name="tahun" id="tahun" onchange="handleYearChange()"
+                                                class="village-input py-2 px-4 text-sm min-w-[140px] font-medium border-2 border-blue-200 focus:border-blue-500 rounded-lg">
+                                            @foreach($availableYears as $tahun)
+                                                <option value="{{ $tahun->tahun }}"
+                                                        {{ $selectedTahun && $selectedTahun->tahun == $tahun->tahun ? 'selected' : '' }}>
+                                                    {{ $tahun->tahun }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div id="loadingIndicator" class="hidden">
+                                            <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <div class="mb-8">
+                            <div class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                Tahun Anggaran {{ $selectedTahun->tahun }}
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Key Statistics Cards -->
@@ -121,87 +180,32 @@
                     @endif
                 </div>
 
-                <!-- Charts Section -->
+                <!-- Combined Chart Section -->
                 @if(!empty($realisasiStats) && !empty($realisasiStats['chart_data']))
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                        <!-- Pie Chart - Anggaran per Bidang -->
-                        <div class="village-card p-6">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Distribusi Anggaran per Bidang</h3>
-                            <div class="relative h-64">
-                                <canvas id="bidangChart"></canvas>
+                    <div class="village-card p-6 mb-12">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Anggaran vs Realisasi per Bidang</h3>
+
+                        <!-- Summary Stats -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="text-center">
+                                <div class="text-lg font-semibold text-blue-600">Rp {{ number_format($realisasiStats['total_anggaran'], 0, ',', '.') }}</div>
+                                <div class="text-sm text-gray-600">Total Anggaran</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-lg font-semibold text-green-600">Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</div>
+                                <div class="text-sm text-gray-600">Total Realisasi</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-lg font-semibold {{ $realisasiStats['persentase_realisasi'] > 100 ? 'text-orange-600' : 'text-green-600' }}">
+                                    {{ number_format($realisasiStats['persentase_realisasi'], 1) }}%
+                                </div>
+                                <div class="text-sm text-gray-600">Persentase Realisasi</div>
                             </div>
                         </div>
 
-                        <!-- Progress Chart - Realisasi vs Target -->
-                        <div class="village-card p-6">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Realisasi vs Target Anggaran</h3>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-medium text-gray-700">Progress Realisasi</span>
-                                    <span class="text-sm font-medium {{ $realisasiStats['persentase_realisasi'] > 100 ? 'text-orange-600' : 'text-green-600' }}">
-                                        {{ number_format($realisasiStats['persentase_realisasi'], 1) }}%
-                                    </span>
-                                </div>
-
-                                <!-- Progress Bar -->
-                                <div class="w-full bg-gray-200 rounded-full h-6 relative overflow-hidden border border-gray-300">
-                                    @php
-                                        $progressWidth = min($realisasiStats['persentase_realisasi'], 100);
-                                        $isOverBudget = $realisasiStats['persentase_realisasi'] > 100;
-                                    @endphp
-                                    <div class="h-full rounded-full transition-all duration-1000 {{ $isOverBudget ? 'bg-gradient-to-r from-orange-400 to-red-500' : 'bg-gradient-to-r from-green-400 to-green-600' }}"
-                                         style="width: {{ $progressWidth }}%; min-width: {{ $progressWidth > 0 ? '2px' : '0' }};"></div>
-
-                                    @if($isOverBudget)
-                                        <!-- Indicator untuk over budget -->
-                                        <div class="absolute top-0 right-0 h-6 w-2 bg-red-600 rounded-r-full"></div>
-                                        <div class="absolute top-1 right-1 text-xs text-white font-bold">!</div>
-                                    @endif
-                                </div>
-
-                                <div class="flex justify-between text-xs text-gray-500">
-                                    <span>0%</span>
-                                    <span class="font-medium">Target: 100%</span>
-                                    @if($isOverBudget)
-                                        <span class="text-orange-600 font-medium">Over Budget</span>
-                                    @else
-                                        <span>100%</span>
-                                    @endif
-                                </div>
-
-                                <!-- Detail Anggaran -->
-                                <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-200">
-                                    <div class="text-center">
-                                        <div class="text-lg font-semibold text-blue-600">Rp {{ number_format($realisasiStats['total_anggaran'], 0, ',', '.') }}</div>
-                                        <div class="text-xs text-gray-500">Target Anggaran</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-lg font-semibold {{ $isOverBudget ? 'text-orange-600' : 'text-green-600' }}">
-                                            Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}
-                                        </div>
-                                        <div class="text-xs text-gray-500">Total Realisasi</div>
-                                    </div>
-                                </div>
-
-                                @if($isOverBudget)
-                                    <div class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            <span class="text-sm text-orange-700">
-                                                Realisasi melebihi anggaran sebesar Rp {{ number_format(abs($realisasiStats['sisa_anggaran']), 0, ',', '.') }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="mt-3 text-center">
-                                        <div class="text-sm text-gray-600">
-                                            Sisa Anggaran: <span class="font-medium text-green-600">Rp {{ number_format($realisasiStats['sisa_anggaran'], 0, ',', '.') }}</span>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
+                        <!-- Combined Bar Chart -->
+                        <div class="relative h-96">
+                            <canvas id="combinedChart"></canvas>
                         </div>
                     </div>
 
@@ -221,36 +225,7 @@
     @if($selectedTahun)
         <section class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Header with Year Filter -->
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-12">
-                    <div class="text-center lg:text-left mb-6 lg:mb-0">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Laporan Realisasi Anggaran</h2>
-                        <p class="text-lg text-gray-600">Transparansi penggunaan anggaran desa untuk masyarakat</p>
-                    </div>
 
-                    @if($availableYears->count() > 1)
-                        <div class="flex justify-center lg:justify-end">
-                            <form method="GET" action="{{ route('landing') }}" class="flex items-center space-x-3" id="yearFilterForm">
-                                <label for="tahun" class="text-sm font-medium text-gray-700">Filter Tahun:</label>
-                                <select name="tahun" id="tahun" onchange="handleYearChange()"
-                                        class="village-input py-2 px-3 text-sm min-w-[120px]">
-                                    @foreach($availableYears as $tahun)
-                                        <option value="{{ $tahun->tahun }}"
-                                                {{ $selectedTahun && $selectedTahun->tahun == $tahun->tahun ? 'selected' : '' }}>
-                                            {{ $tahun->tahun }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div id="loadingIndicator" class="hidden">
-                                    <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                </div>
-                            </form>
-                        </div>
-                    @endif
-                </div>
 
                 @if(!empty($realisasiStats) && $realisasiStats['total_anggaran'] > 0)
                     <!-- Ringkasan Realisasi -->
@@ -284,117 +259,25 @@
                     </div>
                 </div>
 
-                <!-- Progress Bar Realisasi -->
-                <div class="village-card p-6 mb-12">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Progress Realisasi Anggaran</h3>
-                    <div class="relative" role="progressbar"
-                         aria-valuenow="{{ $realisasiStats['persentase_realisasi'] }}"
-                         aria-valuemin="0"
-                         aria-valuemax="100"
-                         aria-label="Progress realisasi anggaran {{ $realisasiStats['persentase_realisasi'] }} persen">
-                        <div class="flex justify-between text-sm text-gray-600 mb-2">
-                            <span>0%</span>
-                            <span class="font-medium">{{ $realisasiStats['persentase_realisasi'] }}%</span>
-                            <span>100%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 border border-gray-300" tabindex="0">
-                            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
-                                 style="width: {{ min($realisasiStats['persentase_realisasi'], 100) }}%; min-width: {{ $realisasiStats['persentase_realisasi'] > 0 ? '2px' : '0' }};">
-                                @if($realisasiStats['persentase_realisasi'] > 10)
-                                    <span class="text-white text-xs font-medium">{{ $realisasiStats['persentase_realisasi'] }}%</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="flex justify-between text-xs text-gray-500 mt-2">
-                            <span>Rp {{ number_format($realisasiStats['total_realisasi'], 0, ',', '.') }}</span>
-                            <span>Rp {{ number_format($realisasiStats['total_anggaran'], 0, ',', '.') }}</span>
-                        </div>
-                    </div>
 
-                    <!-- Status Indicator -->
-                    <div class="mt-4 p-3 rounded-lg {{ $realisasiStats['persentase_realisasi'] >= 80 ? 'bg-green-50 border border-green-200' : ($realisasiStats['persentase_realisasi'] >= 50 ? 'bg-yellow-50 border border-yellow-200' : 'bg-red-50 border border-red-200') }}">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                @if($realisasiStats['persentase_realisasi'] >= 80)
-                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                @elseif($realisasiStats['persentase_realisasi'] >= 50)
-                                    <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
-                                @else
-                                    <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium {{ $realisasiStats['persentase_realisasi'] >= 80 ? 'text-green-800' : ($realisasiStats['persentase_realisasi'] >= 50 ? 'text-yellow-800' : 'text-red-800') }}">
-                                    @if($realisasiStats['persentase_realisasi'] >= 80)
-                                        Realisasi anggaran berjalan dengan baik
-                                    @elseif($realisasiStats['persentase_realisasi'] >= 50)
-                                        Realisasi anggaran dalam tahap normal
-                                    @else
-                                        Realisasi anggaran masih dalam tahap awal
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Realisasi per Bidang -->
+                <!-- Chart Visualizations -->
                 @if($realisasiStats['stats_bidang']->count() > 0)
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                        <!-- Donut Chart - Realisasi per Bidang -->
                         <div class="village-card p-6">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Realisasi per Bidang</h3>
-                            <div class="space-y-4">
-                                @foreach($realisasiStats['stats_bidang'] as $bidang)
-                                    <div class="border-b border-gray-100 pb-4 last:border-b-0">
-                                        <div class="flex justify-between items-center mb-2">
-                                            <span class="font-medium text-gray-900">{{ $bidang->bidang }}</span>
-                                            <span class="text-sm text-gray-600">{{ $bidang->persentase_realisasi }}%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
-                                            <div class="bg-blue-500 h-3 rounded-full transition-all duration-300"
-                                                 style="width: {{ min($bidang->persentase_realisasi, 100) }}%"></div>
-                                        </div>
-                                        <div class="flex justify-between text-xs text-gray-500">
-                                            <span>{{ $bidang->jumlah_kegiatan }} kegiatan</span>
-                                            <span>Rp {{ number_format($bidang->total_realisasi, 0, ',', '.') }} / Rp {{ number_format($bidang->total_anggaran, 0, ',', '.') }}</span>
-                                        </div>
-                                    </div>
-                                @endforeach
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Realisasi per Bidang</h3>
+                            <div class="relative h-80">
+                                <canvas id="bidangDonutChart"></canvas>
                             </div>
                         </div>
 
-                        <!-- Top Kegiatan -->
+                        <!-- Horizontal Bar Chart - Top 5 Kegiatan -->
                         @if($realisasiStats['top_kegiatan']->count() > 0)
                             <div class="village-card p-6">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-6">Top 5 Kegiatan Realisasi</h3>
-                                <div class="space-y-4">
-                                    @foreach($realisasiStats['top_kegiatan'] as $index => $kegiatan)
-                                        <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                                            <div class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                                {{ $index + 1 }}
-                                            </div>
-                                            <div class="flex-1 min-w-0">
-                                                <h4 class="text-sm font-medium text-gray-900 truncate">
-                                                    {{ $kegiatan->nama_kegiatan }}
-                                                </h4>
-                                                <p class="text-xs text-gray-500 mb-1">{{ $kegiatan->bidang }}</p>
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-sm font-medium text-green-600">
-                                                        Rp {{ number_format($kegiatan->total_realisasi, 0, ',', '.') }}
-                                                    </span>
-                                                    <span class="text-xs text-gray-500">
-                                                        {{ $kegiatan->persentase_realisasi }}%
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
+                                <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">Top 5 Kegiatan Realisasi</h3>
+                                <div class="relative h-80">
+                                    <canvas id="topKegiatanChart"></canvas>
                                 </div>
                             </div>
                         @endif
@@ -607,44 +490,79 @@
             // Data dari PHP
             const chartData = @json($realisasiStats['chart_data']);
 
-            // Pie Chart - Distribusi Anggaran per Bidang
-            if (document.getElementById('bidangChart') && chartData.bidang) {
-                const bidangCtx = document.getElementById('bidangChart').getContext('2d');
+            // Combined Chart - Anggaran vs Realisasi per Bidang
+            if (document.getElementById('combinedChart') && chartData.bidang) {
+                const combinedCtx = document.getElementById('combinedChart').getContext('2d');
                 const bidangLabels = chartData.bidang.map(item => item.bidang);
-                const bidangValues = chartData.bidang.map(item => parseFloat(item.total_anggaran));
+                const anggaranValues = chartData.bidang.map(item => parseFloat(item.total_anggaran));
+                const realisasiValues = chartData.bidang.map(item => parseFloat(item.total_realisasi || 0));
 
-                new Chart(bidangCtx, {
-                    type: 'pie',
+                new Chart(combinedCtx, {
+                    type: 'bar',
                     data: {
                         labels: bidangLabels,
-                        datasets: [{
-                            data: bidangValues,
-                            backgroundColor: [
-                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444',
-                                '#8B5CF6', '#06B6D4', '#84CC16', '#F97316'
-                            ],
-                            borderWidth: 2,
-                            borderColor: '#ffffff'
-                        }]
+                        datasets: [
+                            {
+                                label: 'Anggaran',
+                                data: anggaranValues,
+                                backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                                borderColor: 'rgb(59, 130, 246)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Realisasi',
+                                data: realisasiValues,
+                                backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                                borderColor: 'rgb(16, 185, 129)',
+                                borderWidth: 1
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
                         plugins: {
                             legend: {
-                                position: 'bottom',
+                                position: 'top',
                                 labels: {
-                                    padding: 15,
+                                    padding: 20,
                                     usePointStyle: true
                                 }
                             },
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        const value = context.parsed;
-                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        const percentage = ((value / total) * 100).toFixed(1);
-                                        return context.label + ': Rp ' + value.toLocaleString('id-ID') + ' (' + percentage + '%)';
+                                        const value = context.parsed.y;
+                                        const label = context.dataset.label;
+                                        return label + ': Rp ' + value.toLocaleString('id-ID');
+                                    },
+                                    afterBody: function(tooltipItems) {
+                                        if (tooltipItems.length === 2) {
+                                            const anggaran = tooltipItems[0].parsed.y;
+                                            const realisasi = tooltipItems[1].parsed.y;
+                                            const percentage = anggaran > 0 ? ((realisasi / anggaran) * 100).toFixed(1) : 0;
+                                            return 'Persentase Realisasi: ' + percentage + '%';
+                                        }
+                                        return '';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
                                     }
                                 }
                             }
@@ -693,6 +611,169 @@
                                 ticks: {
                                     callback: function(value) {
                                         return 'Rp ' + value.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Donut Chart - Realisasi per Bidang
+            if (document.getElementById('bidangDonutChart') && chartData.bidang) {
+                const donutCtx = document.getElementById('bidangDonutChart').getContext('2d');
+                const bidangLabels = chartData.bidang.map(item => item.bidang);
+                const bidangRealisasi = chartData.bidang.map(item => parseFloat(item.total_realisasi || 0));
+                const totalRealisasi = bidangRealisasi.reduce((a, b) => a + b, 0);
+
+                new Chart(donutCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: bidangLabels,
+                        datasets: [{
+                            data: bidangRealisasi,
+                            backgroundColor: [
+                                '#3B82F6', '#10B981', '#F59E0B', '#EF4444',
+                                '#8B5CF6', '#06B6D4', '#84CC16', '#F97316',
+                                '#EC4899', '#6B7280'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverBorderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.parsed;
+                                        const percentage = ((value / totalRealisasi) * 100).toFixed(1);
+                                        return context.label + ': Rp ' + value.toLocaleString('id-ID') + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        },
+                        // Plugin untuk menampilkan total di tengah
+                        plugins: [{
+                            beforeDraw: function(chart) {
+                                const width = chart.width;
+                                const height = chart.height;
+                                const ctx = chart.ctx;
+
+                                ctx.restore();
+                                const fontSize = (height / 200).toFixed(2);
+                                ctx.font = fontSize + "em sans-serif";
+                                ctx.textBaseline = "middle";
+                                ctx.fillStyle = "#374151";
+
+                                const text = "Total";
+                                const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                                const textY = height / 2 - 10;
+
+                                ctx.fillText(text, textX, textY);
+
+                                // Total value
+                                ctx.font = (fontSize * 1.2) + "em sans-serif";
+                                ctx.fillStyle = "#1F2937";
+                                const valueText = "Rp " + (totalRealisasi / 1000000).toFixed(0) + "M";
+                                const valueX = Math.round((width - ctx.measureText(valueText).width) / 2);
+                                const valueY = height / 2 + 15;
+
+                                ctx.fillText(valueText, valueX, valueY);
+                                ctx.save();
+                            }
+                        }]
+                    }
+                });
+            }
+
+            // Horizontal Bar Chart - Top 5 Kegiatan
+            if (document.getElementById('topKegiatanChart') && chartData.top_kegiatan) {
+                const topCtx = document.getElementById('topKegiatanChart').getContext('2d');
+                const topLabels = chartData.top_kegiatan.map(item => {
+                    // Truncate long names
+                    return item.nama_kegiatan.length > 25 ?
+                           item.nama_kegiatan.substring(0, 25) + '...' :
+                           item.nama_kegiatan;
+                });
+                const topValues = chartData.top_kegiatan.map(item => parseFloat(item.total_realisasi || 0));
+
+                new Chart(topCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: topLabels,
+                        datasets: [{
+                            label: 'Realisasi',
+                            data: topValues,
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(16, 185, 129, 0.8)',
+                                'rgba(245, 158, 11, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(139, 92, 246, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgb(59, 130, 246)',
+                                'rgb(16, 185, 129)',
+                                'rgb(245, 158, 11)',
+                                'rgb(239, 68, 68)',
+                                'rgb(139, 92, 246)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(context) {
+                                        // Show full name in tooltip
+                                        return chartData.top_kegiatan[context[0].dataIndex].nama_kegiatan;
+                                    },
+                                    label: function(context) {
+                                        const kegiatan = chartData.top_kegiatan[context.dataIndex];
+                                        return [
+                                            'Realisasi: Rp ' + context.parsed.x.toLocaleString('id-ID'),
+                                            'Bidang: ' + kegiatan.bidang,
+                                            'Progress: ' + kegiatan.persentase_realisasi + '%'
+                                        ];
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'Rp ' + (value / 1000000).toFixed(0) + 'M';
+                                    }
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    font: {
+                                        size: 10
                                     }
                                 }
                             }

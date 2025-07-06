@@ -178,10 +178,21 @@ class LandingController extends Controller
         // Data untuk status kegiatan
         $statusData = $this->getStatusData($tahun);
 
+        // Data untuk top kegiatan chart
+        $topKegiatanData = $this->getTopKegiatan($tahun)->map(function($kegiatan) {
+            return [
+                'nama_kegiatan' => $kegiatan->nama_kegiatan,
+                'bidang' => $kegiatan->bidang,
+                'total_realisasi' => (float) $kegiatan->total_realisasi,
+                'persentase_realisasi' => $kegiatan->persentase_realisasi,
+            ];
+        })->values()->toArray();
+
         return [
             'bidang' => $bidangData,
             'monthly' => $monthlyData,
             'status' => $statusData,
+            'top_kegiatan' => $topKegiatanData,
         ];
     }
 
