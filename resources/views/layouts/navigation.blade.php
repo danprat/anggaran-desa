@@ -41,29 +41,47 @@
                         </x-nav-link>
                     @endcan
 
-                    @can('manage-users')
-                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                            {{ __('Manajemen User') }}
-                        </x-nav-link>
-                    @endcan
+                    @if(auth()->user()->can('manage-users') || auth()->user()->can('view-admin') || auth()->user()->can('view-desa-profile') || auth()->user()->can('view-log'))
+                        <!-- Admin Dropdown -->
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = ! open" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150" :class="{ 'text-gray-900 bg-gray-50': open }">
+                                <div>{{ __('Admin') }}</div>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
 
-                    @can('view-admin')
-                        <x-nav-link :href="route('admin.tahun-anggaran.index')" :active="request()->routeIs('admin.tahun-anggaran.*')">
-                            {{ __('Tahun Anggaran') }}
-                        </x-nav-link>
-                    @endcan
+                            <div x-show="open" @click.outside="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" style="display: none;">
+                                <div class="py-1">
+                                    @can('manage-users')
+                                        <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.users.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                                            {{ __('Manajemen User') }}
+                                        </a>
+                                    @endcan
 
-                    @can('view-desa-profile')
-                        <x-nav-link :href="route('admin.desa-profile.index')" :active="request()->routeIs('admin.desa-profile.*')">
-                            {{ __('Profil Desa') }}
-                        </x-nav-link>
-                    @endcan
+                                    @can('view-admin')
+                                        <a href="{{ route('admin.tahun-anggaran.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.tahun-anggaran.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                                            {{ __('Tahun Anggaran') }}
+                                        </a>
+                                    @endcan
 
-                    @can('view-log')
-                        <x-nav-link :href="route('log.index')" :active="request()->routeIs('log.*')">
-                            {{ __('Log Aktivitas') }}
-                        </x-nav-link>
-                    @endcan
+                                    @can('view-desa-profile')
+                                        <a href="{{ route('admin.desa-profile.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('admin.desa-profile.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                                            {{ __('Profil Desa') }}
+                                        </a>
+                                    @endcan
+
+                                    @can('view-log')
+                                        <a href="{{ route('log.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('log.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                                            {{ __('Log Aktivitas') }}
+                                        </a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -122,6 +140,57 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @can('view-kegiatan')
+                <x-responsive-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
+                    {{ __('Kegiatan') }}
+                </x-responsive-nav-link>
+            @endcan
+
+            @can('view-realisasi')
+                <x-responsive-nav-link :href="route('realisasi.index')" :active="request()->routeIs('realisasi.*')">
+                    {{ __('Realisasi') }}
+                </x-responsive-nav-link>
+            @endcan
+
+            @can('view-laporan')
+                <x-responsive-nav-link :href="route('laporan.index')" :active="request()->routeIs('laporan.*')">
+                    {{ __('Laporan') }}
+                </x-responsive-nav-link>
+            @endcan
+
+            @if(auth()->user()->can('manage-users') || auth()->user()->can('view-admin') || auth()->user()->can('view-desa-profile') || auth()->user()->can('view-log'))
+                <!-- Admin Section for Mobile -->
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="px-4 py-2">
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Admin</div>
+                    </div>
+
+                    @can('manage-users')
+                        <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                            {{ __('Manajemen User') }}
+                        </x-responsive-nav-link>
+                    @endcan
+
+                    @can('view-admin')
+                        <x-responsive-nav-link :href="route('admin.tahun-anggaran.index')" :active="request()->routeIs('admin.tahun-anggaran.*')">
+                            {{ __('Tahun Anggaran') }}
+                        </x-responsive-nav-link>
+                    @endcan
+
+                    @can('view-desa-profile')
+                        <x-responsive-nav-link :href="route('admin.desa-profile.index')" :active="request()->routeIs('admin.desa-profile.*')">
+                            {{ __('Profil Desa') }}
+                        </x-responsive-nav-link>
+                    @endcan
+
+                    @can('view-log')
+                        <x-responsive-nav-link :href="route('log.index')" :active="request()->routeIs('log.*')">
+                            {{ __('Log Aktivitas') }}
+                        </x-responsive-nav-link>
+                    @endcan
+                </div>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
