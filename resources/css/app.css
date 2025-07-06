@@ -76,6 +76,60 @@ html, body {
         @apply text-base font-medium text-gray-600 mt-2;
     }
 
+    /* Realisasi Report Components */
+    .realisasi-progress-bar {
+        @apply w-full bg-gray-200 rounded-full h-6 overflow-hidden;
+    }
+
+    .realisasi-progress-fill {
+        @apply h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-500 ease-out;
+    }
+
+    .realisasi-stat-card {
+        @apply village-card p-6 text-center transition-transform duration-200 hover:scale-105;
+    }
+
+    .realisasi-bidang-item {
+        @apply border-b border-gray-100 pb-4 last:border-b-0;
+    }
+
+    .realisasi-bidang-progress {
+        @apply w-full bg-gray-200 rounded-full h-3 transition-all duration-300;
+    }
+
+    .realisasi-top-item {
+        @apply flex items-start space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200;
+    }
+
+    .realisasi-rank-badge {
+        @apply flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold;
+    }
+
+    /* Accessibility improvements for charts */
+    .progress-bar-accessible {
+        @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    }
+
+    /* Loading states */
+    .realisasi-loading {
+        @apply animate-pulse bg-gray-200 rounded;
+    }
+
+    /* Responsive improvements for realisasi section */
+    @media (max-width: 768px) {
+        .realisasi-stat-card {
+            @apply p-4;
+        }
+
+        .realisasi-progress-bar {
+            @apply h-4;
+        }
+
+        .realisasi-progress-fill {
+            @apply h-4;
+        }
+    }
+
     /* Table improvements */
     .village-table {
         @apply text-base;
