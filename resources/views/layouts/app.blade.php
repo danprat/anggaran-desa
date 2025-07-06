@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-gray-100 flex flex-col">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -28,13 +28,13 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-1 pb-16">
                 {{ $slot }}
             </main>
 
-            <!-- Footer -->
-            <footer class="bg-gray-50 border-t border-gray-200 mt-8">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <!-- Sticky Footer -->
+            <footer class="fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 shadow-lg z-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
                     <div class="text-center">
                         <p class="text-sm text-gray-600">
                             Dibuat oleh

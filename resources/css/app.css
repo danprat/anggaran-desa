@@ -247,6 +247,35 @@ html, body {
         box-sizing: border-box;
     }
 
+    /* Sticky Footer Styles */
+    .sticky-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+    }
+
+    /* Ensure content doesn't get hidden behind sticky footer */
+    body {
+        padding-bottom: 80px; /* Adjust based on footer height */
+    }
+
+    /* Footer responsive adjustments */
+    @media (max-width: 640px) {
+        .sticky-footer {
+            padding: 8px 16px;
+        }
+
+        .sticky-footer p {
+            font-size: 12px;
+        }
+
+        body {
+            padding-bottom: 70px;
+        }
+    }
+
     /* Logo Section Styling - Enhanced */
     #content-media .mb-6 {
         @apply space-y-4;
