@@ -144,13 +144,13 @@
                                 </div>
 
                                 <!-- Progress Bar -->
-                                <div class="w-full bg-gray-200 rounded-full h-6 relative overflow-hidden">
+                                <div class="w-full bg-gray-200 rounded-full h-6 relative overflow-hidden border border-gray-300">
                                     @php
                                         $progressWidth = min($realisasiStats['persentase_realisasi'], 100);
                                         $isOverBudget = $realisasiStats['persentase_realisasi'] > 100;
                                     @endphp
-                                    <div class="h-6 rounded-full transition-all duration-1000 {{ $isOverBudget ? 'bg-gradient-to-r from-orange-400 to-red-500' : 'bg-gradient-to-r from-green-400 to-green-600' }}"
-                                         style="width: {{ $progressWidth }}%"></div>
+                                    <div class="h-full rounded-full transition-all duration-1000 {{ $isOverBudget ? 'bg-gradient-to-r from-orange-400 to-red-500' : 'bg-gradient-to-r from-green-400 to-green-600' }}"
+                                         style="width: {{ $progressWidth }}%; min-width: {{ $progressWidth > 0 ? '2px' : '0' }};"></div>
 
                                     @if($isOverBudget)
                                         <!-- Indicator untuk over budget -->
@@ -297,9 +297,9 @@
                             <span class="font-medium">{{ $realisasiStats['persentase_realisasi'] }}%</span>
                             <span>100%</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" tabindex="0">
-                            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-6 rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
-                                 style="width: {{ min($realisasiStats['persentase_realisasi'], 100) }}%">
+                        <div class="w-full bg-gray-200 rounded-full h-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 border border-gray-300" tabindex="0">
+                            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-full rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-2"
+                                 style="width: {{ min($realisasiStats['persentase_realisasi'], 100) }}%; min-width: {{ $realisasiStats['persentase_realisasi'] > 0 ? '2px' : '0' }};">
                                 @if($realisasiStats['persentase_realisasi'] > 10)
                                     <span class="text-white text-xs font-medium">{{ $realisasiStats['persentase_realisasi'] }}%</span>
                                 @endif
