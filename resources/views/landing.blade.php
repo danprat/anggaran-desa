@@ -581,16 +581,24 @@
     <!-- JavaScript for enhanced UX and Charts -->
     <script>
         function handleYearChange() {
-            const form = document.getElementById('yearFilterForm');
-            const loadingIndicator = document.getElementById('loadingIndicator');
             const select = document.getElementById('tahun');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            // Pastikan value tidak kosong
+            if (!select.value) {
+                return;
+            }
 
             // Show loading indicator
-            loadingIndicator.classList.remove('hidden');
+            if (loadingIndicator) {
+                loadingIndicator.classList.remove('hidden');
+            }
             select.disabled = true;
 
-            // Submit form
-            form.submit();
+            // Redirect langsung dengan parameter tahun
+            const baseUrl = window.location.origin + window.location.pathname;
+            const newUrl = baseUrl + '?tahun=' + encodeURIComponent(select.value);
+            window.location.href = newUrl;
         }
 
         // Chart initialization
