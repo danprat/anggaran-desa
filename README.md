@@ -51,103 +51,97 @@ Sistem Anggaran Desa adalah aplikasi web berbasis Laravel yang dirancang khusus 
 
 ## 📦 Instalasi
 
-### 🐳 Instalasi dengan Docker + Portainer (Recommended)
+### 🐳 Quick Deploy dengan Docker + Portainer (1x Copy-Paste!)
 
-**Cara Tercepat - 1 Copy Paste!**
+**✅ Support:** AMD64, ARM64/aarch64 (VPS ARM, Apple Silicon, Raspberry Pi)  
+**📦 Database:** SQLite (No MySQL required!)  
+**🔌 Port:** 8075
 
-✅ **Support semua arsitektur:** AMD64, ARM64/aarch64 (VPS ARM, Apple Silicon)
+#### Langkah 1: Deploy Stack di Portainer
 
-1. Buka Portainer → Stacks → Add Stack
-2. Copy-paste konfigurasi berikut:
+1. Buka **Portainer** → **Stacks** → **Add Stack**
+2. Nama: `anggaran-desa`
+3. **Copy-paste** konfigurasi ini:
 
 ```yaml
 version: '3.8'
 
 services:
   app:
-    image: php:8.2-fpm-alpine
+    image: ghcr.io/danprat/anggaran-desa:latest
     container_name: anggaran-desa-app
-    working_dir: /var/www/html
-    platform: linux/arm64  # Untuk VPS ARM, gunakan linux/arm64. Untuk AMD64, gunakan linux/amd64 atau hapus baris ini
-    networks:
-      - anggaran-desa-network
-    command: >
-      sh -c "
-      apk add --no-cache git composer nodejs npm libxml2-dev oniguruma-dev libpng-dev libjpeg-turbo-dev freetype-dev icu-dev libzip-dev &&
-      docker-php-ext-install pdo pdo_mysql mysqli &&
-      docker-php-ext-install dom xml simplexml &&
-      docker-php-ext-install xmlwriter xmlreader &&
-      docker-php-ext-install session fileinfo tokenizer exif zip &&
-      docker-php-ext-configure gd --with-freetype --with-jpeg &&
-      docker-php-ext-install gd &&
-      docker-php-ext-install intl &&
-      git config --global --add safe.directory /var/www/html &&
-      git clone https://github.com/danprat/anggaran-desa.git /var/www/html &&
-      cd /var/www/html &&
-      composer install --no-interaction --optimize-autoloader &&
-      npm install && npm run build &&
-      cp .env.example .env &&
-      php artisan key:generate &&
-      php artisan migrate --force &&
-      php artisan db:seed --force &&
-      php artisan storage:link &&
-      php artisan serve --host=0.0.0.0 --port=8075
-      "
+    restart: unless-stopped
+    volumes:
+      - app-storage:/var/www/html/storage
+      - app-bootstrap-cache:/var/www/html/bootstrap/cache
+      - app-database:/var/www/html/database
     ports:
-      - "8075:8075"
+      - "8075:80"
     environment:
-      - APP_NAME=AnggaranDesa
+      - APP_NAME=Anggaran Desa
       - APP_ENV=production
       - APP_DEBUG=false
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=anggaran_desa
-      - DB_USERNAME=anggaran_user
-      - DB_PASSWORD=anggaran_pass
-    depends_on:
-      - db
-
-  db:
-    image: mysql:8.0
-    container_name: anggaran-desa-db
-    platform: linux/arm64  # Untuk VPS ARM, gunakan linux/arm64. Untuk AMD64, gunakan linux/amd64 atau hapus baris ini
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: anggaran_desa
-      MYSQL_USER: anggaran_user
-      MYSQL_PASSWORD: anggaran_pass
-    volumes:
-      - db-data:/var/lib/mysql
-    networks:
-      - anggaran-desa-network
-
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: anggaran-desa-phpmyadmin
-    platform: linux/arm64  # Untuk VPS ARM, gunakan linux/arm64. Untuk AMD64, gunakan linux/amd64 atau hapus baris ini
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: anggaran_user
-      PMA_PASSWORD: anggaran_pass
-    ports:
-      - "8076:80"
-    networks:
-      - anggaran-desa-network
-    depends_on:
-      - db
+      - APP_URL=http://YOUR_VPS_IP:8075
+      - APP_KEY=base64:GENERATE_KEY_DULU
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=/var/www/html/database/database.sqlite
+      - SESSION_DRIVER=file
+      - CACHE_DRIVER=file
+      - APP_RUN_MIGRATIONS=true
+    healthcheck:
+      test: ["CMD", "php", "artisan", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
-  db-data:
-
-networks:
-  anggaran-desa-network:
-    driver: bridge
+  app-storage:
+  app-bootstrap-cache:
+  app-database:
 ```
 
+4. **Jangan deploy dulu!** Generate APP_KEY terlebih dahulu (langkah 2)
+
+#### Langkah 2: Generate APP_KEY
+
+Jalankan di terminal VPS atau local (pastikan Docker terinstall):
+
+```bash
+docker run --rm ghcr.io/danprat/anggaran-desa:latest php artisan key:generate --show
+```
+
+Atau gunakan script helper:
+
+```bash
+./generate-key.sh
+```
+
+**Copy hasilnya** (contoh: `base64:xxxxxxxxxxxxxxxx`) dan **ganti** `APP_KEY=base64:GENERATE_KEY_DULU` di Portainer.
+
+#### Langkah 3: Update & Deploy
+
+1. Ganti `YOUR_VPS_IP` dengan IP VPS Anda
+2. Ganti `APP_KEY` dengan hasil dari langkah 2
 3. Klik **Deploy the stack**
-4. Tunggu proses instalasi selesai (5-10 menit untuk ARM)
+4. Tunggu 2-3 menit
+
+#### Langkah 4: Akses Aplikasi
+
+```
+http://YOUR_VPS_IP:8075
+```
+
+**Default login:**
+- Email: admin@example.com
+- Password: password
+
+#### 📖 Dokumentasi Lengkap
+
+Lihat [DEPLOY.md](./DEPLOY.md) atau [docs/portainer-deploy-guide.md](./docs/portainer-deploy-guide.md)
+
+---
+
+### 💻 Instalasi Manual (Development)
 5. Akses aplikasi di `http://localhost:8075` atau `http://[IP-VPS]:8075`
 6. Akses phpMyAdmin di `http://localhost:8076` atau `http://[IP-VPS]:8076`
 
