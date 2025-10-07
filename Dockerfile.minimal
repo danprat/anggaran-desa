@@ -77,29 +77,13 @@ COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
-# Startup script
-RUN echo '#!/bin/bash\n\
-set -e\n\
-if [ ! -f /var/www/html/database/database.sqlite ]; then\n\
-    touch /var/www/html/database/database.sqlite\n\
-    chown www-data:www-data /var/www/html/database/database.sqlite\n\
-    chmod 664 /var/www/html/database/database.sqlite\n\
-fi\n\
-if [ "$APP_RUN_MIGRATIONS" = "true" ]; then\n\
-    php artisan migrate --force\n\
-fi\n\
-if [ "$APP_RUN_SEEDERS" = "true" ]; then\n\
-    php artisan db:seed --force\n\
-fi\n\
-php artisan config:cache\n\
-php artisan route:cache\n\
-php artisan view:cache\n\
-exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf\n\
-' > /usr/local/bin/startup.sh && chmod +x /usr/local/bin/startup.sh
+# Copy startup script
+COPY docker/startup.sh /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh
 
 EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=40s \
     CMD php artisan --version || exit 1
 
-CMD ["/usr/local/bin/startup.sh"]
+CMD ["/bin/bash", "/usr/local/bin/startup.sh"]
