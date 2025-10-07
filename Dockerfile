@@ -72,6 +72,8 @@ RUN mkdir -p \
     storage/logs \
     bootstrap/cache \
     database \
+    /var/log/supervisor \
+    /var/log/nginx \
     && touch database/database.sqlite \
     && chown -R www-data:www-data storage bootstrap/cache database \
     && chmod -R 775 storage bootstrap/cache \

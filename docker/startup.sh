@@ -3,7 +3,8 @@ set -e
 
 echo "🚀 Starting Anggaran Desa Application..."
 
-# Ensure database directory exists
+# Create required directories
+mkdir -p /var/log/supervisor
 mkdir -p /var/www/html/database
 
 # Ensure database file exists
