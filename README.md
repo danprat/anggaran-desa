@@ -51,6 +51,98 @@ Sistem Anggaran Desa adalah aplikasi web berbasis Laravel yang dirancang khusus 
 
 ## 📦 Instalasi
 
+### 🐳 Instalasi dengan Docker + Portainer (Recommended)
+
+**Cara Tercepat - 1 Copy Paste!**
+
+1. Buka Portainer → Stacks → Add Stack
+2. Copy-paste konfigurasi berikut:
+
+```yaml
+version: '3.8'
+
+services:
+  app:
+    image: php:8.2-fpm-alpine
+    container_name: anggaran-desa-app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+    networks:
+      - anggaran-desa-network
+    command: >
+      sh -c "
+      apk add --no-cache git composer nodejs npm &&
+      composer install --no-interaction --optimize-autoloader &&
+      npm install && npm run build &&
+      php artisan key:generate &&
+      php artisan migrate --force &&
+      php artisan db:seed --force &&
+      php artisan storage:link &&
+      php artisan serve --host=0.0.0.0 --port=8000
+      "
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=AnggaranDesa
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=/var/www/html/database/database.sqlite
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: anggaran-desa-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: anggaran_desa
+      MYSQL_USER: anggaran_user
+      MYSQL_PASSWORD: anggaran_pass
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - anggaran-desa-network
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: anggaran-desa-phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: anggaran_user
+      PMA_PASSWORD: anggaran_pass
+    ports:
+      - "8080:80"
+    networks:
+      - anggaran-desa-network
+    depends_on:
+      - db
+
+volumes:
+  db-data:
+
+networks:
+  anggaran-desa-network:
+    driver: bridge
+```
+
+3. Klik **Deploy the stack**
+4. Tunggu proses instalasi selesai (3-5 menit)
+5. Akses aplikasi di `http://localhost:8000`
+6. Akses phpMyAdmin di `http://localhost:8080`
+
+**Selesai!** 🎉
+
+---
+
+### 💻 Instalasi Manual (Tanpa Docker)
+
 ### Prasyarat
 - PHP >= 8.1
 - Composer
