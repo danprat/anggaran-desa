@@ -66,17 +66,16 @@ services:
     image: php:8.2-fpm-alpine
     container_name: anggaran-desa-app
     working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-      - ./storage:/var/www/html/storage
-      - ./bootstrap/cache:/var/www/html/bootstrap/cache
     networks:
       - anggaran-desa-network
     command: >
       sh -c "
       apk add --no-cache git composer nodejs npm &&
+      git clone https://github.com/danprat/anggaran-desa.git /var/www/html &&
+      cd /var/www/html &&
       composer install --no-interaction --optimize-autoloader &&
       npm install && npm run build &&
+      cp .env.example .env &&
       php artisan key:generate &&
       php artisan migrate --force &&
       php artisan db:seed --force &&
@@ -89,8 +88,12 @@ services:
       - APP_NAME=AnggaranDesa
       - APP_ENV=production
       - APP_DEBUG=false
-      - DB_CONNECTION=sqlite
-      - DB_DATABASE=/var/www/html/database/database.sqlite
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=anggaran_desa
+      - DB_USERNAME=anggaran_user
+      - DB_PASSWORD=anggaran_pass
     depends_on:
       - db
 
@@ -106,8 +109,6 @@ services:
       - db-data:/var/lib/mysql
     networks:
       - anggaran-desa-network
-    ports:
-      - "3306:3306"
 
   phpmyadmin:
     image: phpmyadmin:latest
