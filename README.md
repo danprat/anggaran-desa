@@ -80,10 +80,10 @@ services:
       php artisan migrate --force &&
       php artisan db:seed --force &&
       php artisan storage:link &&
-      php artisan serve --host=0.0.0.0 --port=8000
+      php artisan serve --host=0.0.0.0 --port=8075
       "
     ports:
-      - "8000:8000"
+      - "8075:8075"
     environment:
       - APP_NAME=AnggaranDesa
       - APP_ENV=production
@@ -119,7 +119,7 @@ services:
       PMA_USER: anggaran_user
       PMA_PASSWORD: anggaran_pass
     ports:
-      - "8080:80"
+      - "8076:80"
     networks:
       - anggaran-desa-network
     depends_on:
@@ -135,8 +135,8 @@ networks:
 
 3. Klik **Deploy the stack**
 4. Tunggu proses instalasi selesai (3-5 menit)
-5. Akses aplikasi di `http://localhost:8000`
-6. Akses phpMyAdmin di `http://localhost:8080`
+5. Akses aplikasi di `http://localhost:8075`
+6. Akses phpMyAdmin di `http://localhost:8076`
 
 **Selesai!** 🎉
 
@@ -257,7 +257,7 @@ Dokumentasi lengkap tersedia di folder `docs/`:
 
 **Dany Pratmanto**
 - 📱 WhatsApp: [08974041777](https://wa.me/6208974041777)
-- 📧 Email: dany@example.com
+- 📧 Email: pratmanto@gmail.com
 
 ---
 
