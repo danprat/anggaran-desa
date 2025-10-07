@@ -70,7 +70,12 @@ services:
       - anggaran-desa-network
     command: >
       sh -c "
-      apk add --no-cache git composer nodejs npm &&
+      apk add --no-cache git composer nodejs npm 
+        php83-dom php83-xml php83-xmlwriter php83-xmlreader 
+        php83-session php83-fileinfo php83-tokenizer 
+        php83-simplexml php83-pdo php83-pdo_mysql 
+        php83-gd php83-intl php83-exif &&
+      git config --global --add safe.directory /var/www/html &&
       git clone https://github.com/danprat/anggaran-desa.git /var/www/html &&
       cd /var/www/html &&
       composer install --no-interaction --optimize-autoloader &&
