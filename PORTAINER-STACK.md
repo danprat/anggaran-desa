@@ -6,22 +6,38 @@
 - **Database:** SQLite (No MySQL!)
 - **Port:** 8075
 - **Platform:** ARM64/AMD64 (Universal)
-- **Image:** ghcr.io/danprat/anggaran-desa:latest
+- **Build:** From GitHub Repository
 
 ---
 
-## 🚀 Copy Stack Ini ke Portainer
+## 🚀 METODE 1: Build Manual di VPS (Paling Mudah & Pasti Jalan!)
 
-**1x Copy-Paste! Build otomatis dari GitHub!**
+### Step 1: Build Image di VPS
+
+SSH ke VPS Anda, lalu jalankan:
+
+```bash
+# Clone repository
+git clone https://github.com/danprat/anggaran-desa.git
+cd anggaran-desa
+
+# Build Docker image
+docker build -t anggaran-desa:latest .
+
+# Verify image created
+docker images | grep anggaran-desa
+```
+
+### Step 2: Copy Stack Ini ke Portainer
+
+Buka **Portainer** → **Stacks** → **Add Stack**, lalu paste:
 
 ```yaml
 version: '3.8'
 
 services:
   app:
-    build:
-      context: https://github.com/danprat/anggaran-desa.git#main
-      dockerfile: Dockerfile
+    image: anggaran-desa:latest
     container_name: anggaran-desa-app
     restart: unless-stopped
     volumes:
@@ -47,6 +63,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 40s
 
 volumes:
   app-storage:
@@ -54,41 +71,88 @@ volumes:
   app-database:
 ```
 
-**✅ Sudah include APP_KEY default!** (Ganti di production untuk keamanan)
+### Step 3: Deploy
+
+1. Ganti `YOUR_VPS_IP` dengan IP VPS Anda
+2. Klik **Deploy the stack**
+3. Tunggu 10-30 detik
+4. Akses: `http://YOUR_VPS_IP:8075`
+
+---
+
+## � METODE 2: Via Git Repository di Portainer
+
+Jika Portainer Anda support Git integration:
+
+1. **Portainer** → **Stacks** → **Add Stack**
+2. Pilih tab **"Git Repository"**
+3. Isi:
+   - **Repository URL:** `https://github.com/danprat/anggaran-desa`
+   - **Repository reference:** `refs/heads/main`
+   - **Compose path:** `docker-compose.yml`
+4. Di **Environment variables**, tambahkan:
+   ```
+   YOUR_VPS_IP=GANTI_IP_ANDA
+   ```
+5. Klik **Deploy the stack**
+
+---
+
+## 🚀 METODE 3: Direct Docker Command (Tanpa Portainer)
+
+---
+
+## � METODE 3: Direct Docker Command (Tanpa Portainer)
+
+Paling simple, langsung via terminal:
+
+```bash
+# Clone repository
+git clone https://github.com/danprat/anggaran-desa.git
+cd anggaran-desa
+
+# Build image
+docker build -t anggaran-desa:latest .
+
+# Run container
+docker run -d \
+  --name anggaran-desa-app \
+  --restart unless-stopped \
+  -p 8075:80 \
+  -e APP_NAME="Anggaran Desa" \
+  -e APP_ENV=production \
+  -e APP_DEBUG=false \
+  -e APP_URL=http://YOUR_VPS_IP:8075 \
+  -e APP_KEY=base64:ZVB4Q0tYMHhwN0FxSEdJT2Z4VjFSV3h0RjNtUTNXQnc= \
+  -e DB_CONNECTION=sqlite \
+  -e DB_DATABASE=/var/www/html/database/database.sqlite \
+  -e SESSION_DRIVER=file \
+  -e CACHE_DRIVER=file \
+  -e APP_RUN_MIGRATIONS=true \
+  -e APP_RUN_SEEDERS=true \
+  -v anggaran-desa-storage:/var/www/html/storage \
+  -v anggaran-desa-cache:/var/www/html/bootstrap/cache \
+  -v anggaran-desa-db:/var/www/html/database \
+  anggaran-desa:latest
+
+# Cek logs
+docker logs -f anggaran-desa-app
+```
+
+Ganti `YOUR_VPS_IP` dengan IP Anda.
 
 ---
 
 ## 🔑 (Opsional) Generate APP_KEY Baru
 
-Jika ingin APP_KEY unik untuk keamanan production:
+Untuk keamanan production, generate APP_KEY unik:
 
 ```bash
 # Generate di local dengan PHP
 php -r "echo 'base64:'.base64_encode(random_bytes(32)).PHP_EOL;"
 ```
 
-Atau online: https://generate-random.org/laravel-key-generator
-
-**Copy dan ganti** `APP_KEY` di stack Portainer jika mau lebih secure.
-
----
-
-## 📝 Langkah Deploy
-
-1. ✅ Copy stack YAML di atas ke Portainer
-2. ✅ Ganti `YOUR_VPS_IP` dengan IP VPS Anda  
-   (atau gunakan domain jika punya)
-3. ✅ (Opsional) Ganti `APP_KEY` untuk keamanan lebih
-4. ✅ Klik **Deploy the stack**
-5. ✅ Tunggu 5-10 menit (build pertama kali dari GitHub)
-6. ✅ Akses: `http://YOUR_VPS_IP:8075`
-
-**⚠️ Build pertama akan lama (5-10 menit) karena download & compile dari GitHub.**  
-Build selanjutnya lebih cepat karena sudah di-cache.
-
----
-
-## 👤 Default Login
+Copy dan ganti `APP_KEY` di stack atau docker command.
 
 ```
 Email: admin@example.com
