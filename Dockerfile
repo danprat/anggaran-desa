@@ -8,41 +8,53 @@ LABEL description="Laravel Application with SQLite for ARM/AMD64"
 # Set working directory
 WORKDIR /var/www/html
 
-# Install system dependencies dan PHP extensions
+# Install system dependencies
 RUN apk add --no-cache \
     git \
     curl \
-    libpng-dev \
-    libxml2-dev \
+    bash \
     zip \
     unzip \
-    oniguruma-dev \
-    libzip-dev \
-    freetype-dev \
-    libjpeg-turbo-dev \
-    sqlite \
-    sqlite-dev \
     supervisor \
     nginx \
-    bash
+    sqlite \
+    sqlite-dev \
+    libpng-dev \
+    libxml2-dev \
+    libzip-dev \
+    oniguruma-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    icu-dev \
+    autoconf \
+    g++ \
+    make
 
-# Install PHP extensions dengan urutan yang benar (dom sebelum xmlreader)
+# Install PHP extensions - Basic extensions first
 RUN docker-php-ext-install -j$(nproc) \
     pdo \
     pdo_sqlite \
     mbstring \
     exif \
     pcntl \
-    bcmath \
-    opcache \
-    dom \
-    xmlreader \
-    xml \
-    zip
+    bcmath
 
-# Install GD extension
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+# Install opcache separately
+RUN docker-php-ext-install opcache
+
+# Install XML extensions (dom must be before xmlreader)
+RUN docker-php-ext-install dom && \
+    docker-php-ext-install xml && \
+    docker-php-ext-install xmlreader
+
+# Install zip extension
+RUN docker-php-ext-install zip
+
+# Install GD extension with configuration
+RUN docker-php-ext-configure gd \
+    --with-freetype \
+    --with-jpeg && \
+    docker-php-ext-install -j$(nproc) gd
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
