@@ -58,12 +58,20 @@ RUN docker-php-ext-configure gd \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install Node.js and npm for Vite
+RUN apk add --no-cache nodejs npm
+
 # Copy application files
 COPY --chown=www-data:www-data . /var/www/html
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist \
     && composer dump-autoload --optimize
+
+# Install Node dependencies and build Vite assets
+RUN npm ci && \
+    npm run build && \
+    rm -rf node_modules
 
 # Create and setup directories
 RUN mkdir -p \
