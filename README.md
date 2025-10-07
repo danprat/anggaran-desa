@@ -55,6 +55,8 @@ Sistem Anggaran Desa adalah aplikasi web berbasis Laravel yang dirancang khusus 
 
 **Cara Tercepat - 1 Copy Paste!**
 
+✅ **Support semua arsitektur:** AMD64, ARM64/aarch64 (VPS ARM, Apple Silicon)
+
 1. Buka Portainer → Stacks → Add Stack
 2. Copy-paste konfigurasi berikut:
 
@@ -66,6 +68,7 @@ services:
     image: php:8.2-fpm-alpine
     container_name: anggaran-desa-app
     working_dir: /var/www/html
+    platform: linux/arm64  # Untuk VPS ARM, gunakan linux/arm64. Untuk AMD64, gunakan linux/amd64 atau hapus baris ini
     networks:
       - anggaran-desa-network
     command: >
@@ -107,6 +110,7 @@ services:
   db:
     image: mysql:8.0
     container_name: anggaran-desa-db
+    platform: linux/arm64  # Untuk VPS ARM, gunakan linux/arm64. Untuk AMD64, gunakan linux/amd64 atau hapus baris ini
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: anggaran_desa
@@ -120,6 +124,7 @@ services:
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: anggaran-desa-phpmyadmin
+    platform: linux/arm64  # Untuk VPS ARM, gunakan linux/arm64. Untuk AMD64, gunakan linux/amd64 atau hapus baris ini
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
@@ -141,9 +146,15 @@ networks:
 ```
 
 3. Klik **Deploy the stack**
-4. Tunggu proses instalasi selesai (3-5 menit)
-5. Akses aplikasi di `http://localhost:8075`
-6. Akses phpMyAdmin di `http://localhost:8076`
+4. Tunggu proses instalasi selesai (5-10 menit untuk ARM)
+5. Akses aplikasi di `http://localhost:8075` atau `http://[IP-VPS]:8075`
+6. Akses phpMyAdmin di `http://localhost:8076` atau `http://[IP-VPS]:8076`
+
+**📝 Catatan untuk VPS ARM:**
+- Image Docker sudah support ARM64/aarch64 secara native
+- Build PHP extensions mungkin membutuhkan waktu lebih lama di ARM
+- Pastikan VPS memiliki minimal 2GB RAM untuk proses build
+- Jika terjadi timeout, coba tingkatkan timeout di Portainer settings
 
 **Selesai!** 🎉
 
