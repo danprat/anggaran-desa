@@ -12,12 +12,16 @@
 
 ## 🚀 Copy Stack Ini ke Portainer
 
+**1x Copy-Paste! Build otomatis dari GitHub!**
+
 ```yaml
 version: '3.8'
 
 services:
   app:
-    image: ghcr.io/danprat/anggaran-desa:latest
+    build:
+      context: https://github.com/danprat/anggaran-desa.git#main
+      dockerfile: Dockerfile
     container_name: anggaran-desa-app
     restart: unless-stopped
     volumes:
@@ -31,7 +35,7 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
       - APP_URL=http://YOUR_VPS_IP:8075
-      - APP_KEY=base64:GENERATE_KEY_DULU
+      - APP_KEY=base64:ZVB4Q0tYMHhwN0FxSEdJT2Z4VjFSV3h0RjNtUTNXQnc=
       - DB_CONNECTION=sqlite
       - DB_DATABASE=/var/www/html/database/database.sqlite
       - SESSION_DRIVER=file
@@ -50,34 +54,37 @@ volumes:
   app-database:
 ```
 
+**✅ Sudah include APP_KEY default!** (Ganti di production untuk keamanan)
+
 ---
 
-## 🔑 Generate APP_KEY
+## 🔑 (Opsional) Generate APP_KEY Baru
 
-**PENTING:** Generate dulu sebelum deploy!
+Jika ingin APP_KEY unik untuk keamanan production:
 
 ```bash
-docker run --rm ghcr.io/danprat/anggaran-desa:latest php artisan key:generate --show
+# Generate di local dengan PHP
+php -r "echo 'base64:'.base64_encode(random_bytes(32)).PHP_EOL;"
 ```
 
-Hasilnya seperti ini:
-```
-base64:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
+Atau online: https://generate-random.org/laravel-key-generator
 
-**Copy dan ganti** `APP_KEY=base64:GENERATE_KEY_DULU` di stack Portainer.
+**Copy dan ganti** `APP_KEY` di stack Portainer jika mau lebih secure.
 
 ---
 
 ## 📝 Langkah Deploy
 
-1. ✅ Generate APP_KEY (lihat di atas)
-2. ✅ Copy stack YAML ke Portainer
-3. ✅ Ganti `YOUR_VPS_IP` dengan IP VPS Anda
-4. ✅ Ganti `APP_KEY` dengan hasil generate
-5. ✅ Deploy stack
-6. ✅ Tunggu 2-3 menit
-7. ✅ Akses: `http://YOUR_VPS_IP:8075`
+1. ✅ Copy stack YAML di atas ke Portainer
+2. ✅ Ganti `YOUR_VPS_IP` dengan IP VPS Anda  
+   (atau gunakan domain jika punya)
+3. ✅ (Opsional) Ganti `APP_KEY` untuk keamanan lebih
+4. ✅ Klik **Deploy the stack**
+5. ✅ Tunggu 5-10 menit (build pertama kali dari GitHub)
+6. ✅ Akses: `http://YOUR_VPS_IP:8075`
+
+**⚠️ Build pertama akan lama (5-10 menit) karena download & compile dari GitHub.**  
+Build selanjutnya lebih cepat karena sudah di-cache.
 
 ---
 

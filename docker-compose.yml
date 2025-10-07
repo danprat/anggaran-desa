@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   app:
-    image: ghcr.io/danprat/anggaran-desa:latest
+    build:
+      context: https://github.com/danprat/anggaran-desa.git#main
+      dockerfile: Dockerfile
     container_name: anggaran-desa-app
     restart: unless-stopped
     working_dir: /var/www/html
@@ -17,7 +19,7 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
       - APP_URL=http://localhost:8075
-      - APP_KEY=base64:YOUR_APP_KEY_HERE
+      - APP_KEY=base64:ZVB4Q0tYMHhwN0FxSEdJT2Z4VjFSV3h0RjNtUTNXQnc=
       - LOG_CHANNEL=stack
       - LOG_DEPRECATIONS_CHANNEL=null
       - LOG_LEVEL=info
@@ -32,6 +34,10 @@ services:
       - CACHE_DRIVER=file
       - QUEUE_CONNECTION=sync
       
+      # Auto Migration & Seeding
+      - APP_RUN_MIGRATIONS=true
+      - APP_RUN_SEEDERS=true
+      
       # Mail (optional - sesuaikan jika diperlukan)
       - MAIL_MAILER=smtp
       - MAIL_HOST=mailpit
@@ -41,10 +47,8 @@ services:
       - MAIL_ENCRYPTION=null
       - MAIL_FROM_ADDRESS=hello@example.com
       - MAIL_FROM_NAME=Anggaran Desa
-    networks:
-      - anggaran-desa-network
     healthcheck:
-      test: ["CMD", "php-fpm-healthcheck"]
+      test: ["CMD", "php", "artisan", "--version"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -57,7 +61,3 @@ volumes:
     driver: local
   app-database:
     driver: local
-
-networks:
-  anggaran-desa-network:
-    driver: bridge

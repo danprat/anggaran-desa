@@ -2,12 +2,16 @@
 
 ## Copy-Paste ke Portainer (Port 8075)
 
+**1x Copy-Paste! Build otomatis dari GitHub!**
+
 ```yaml
 version: '3.8'
 
 services:
   app:
-    image: ghcr.io/danprat/anggaran-desa:latest
+    build:
+      context: https://github.com/danprat/anggaran-desa.git#main
+      dockerfile: Dockerfile
     container_name: anggaran-desa-app
     restart: unless-stopped
     volumes:
@@ -21,12 +25,13 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
       - APP_URL=http://YOUR_VPS_IP:8075
-      - APP_KEY=base64:GENERATE_KEY_TERLEBIH_DAHULU
+      - APP_KEY=base64:ZVB4Q0tYMHhwN0FxSEdJT2Z4VjFSV3h0RjNtUTNXQnc=
       - DB_CONNECTION=sqlite
       - DB_DATABASE=/var/www/html/database/database.sqlite
       - SESSION_DRIVER=file
       - CACHE_DRIVER=file
       - APP_RUN_MIGRATIONS=true
+      - APP_RUN_SEEDERS=true
     healthcheck:
       test: ["CMD", "php", "artisan", "--version"]
       interval: 30s
@@ -39,13 +44,31 @@ volumes:
   app-database:
 ```
 
-## 🔑 Generate APP_KEY
+**✅ Sudah include APP_KEY default!**
+
+---
+
+## 📝 Langkah Deploy
+
+1. Copy stack YAML di atas
+2. Paste di Portainer → Stacks → Add Stack
+3. Ganti `YOUR_VPS_IP` dengan IP VPS Anda
+4. Klik **Deploy the stack**
+5. Tunggu 5-10 menit (build dari GitHub)
+6. Akses: `http://YOUR_VPS_IP:8075`
+
+---
+
+## 🔑 (Opsional) Generate APP_KEY Baru
+
+Untuk keamanan production, generate APP_KEY unik:
 
 ```bash
-docker run --rm ghcr.io/danprat/anggaran-desa:latest php artisan key:generate --show
+# Generate di local dengan PHP
+php -r "echo 'base64:'.base64_encode(random_bytes(32)).PHP_EOL;"
 ```
 
-Copy hasilnya dan ganti `APP_KEY` di atas.
+Copy dan ganti `APP_KEY` di stack.
 
 ## 📖 Dokumentasi Lengkap
 
