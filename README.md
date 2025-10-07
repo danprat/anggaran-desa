@@ -70,11 +70,13 @@ services:
       - anggaran-desa-network
     command: >
       sh -c "
-      apk add --no-cache git composer nodejs npm &&
-      docker-php-ext-install pdo pdo_mysql mysqli &&
-      docker-php-ext-install dom xml xmlwriter xmlreader simplexml &&
-      docker-php-ext-install session fileinfo tokenizer &&
-      docker-php-ext-install gd intl exif &&
+      apk add --no-cache git composer nodejs npm 
+        libxml2-dev oniguruma-dev libpng-dev libjpeg-turbo-dev 
+        freetype-dev icu-dev libzip-dev &&
+      docker-php-ext-configure gd --with-freetype --with-jpeg &&
+      docker-php-ext-install pdo pdo_mysql mysqli dom xml 
+        xmlwriter xmlreader simplexml session fileinfo 
+        tokenizer gd intl exif zip &&
       git config --global --add safe.directory /var/www/html &&
       git clone https://github.com/danprat/anggaran-desa.git /var/www/html &&
       cd /var/www/html &&
