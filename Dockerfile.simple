@@ -43,7 +43,6 @@ RUN docker-php-ext-install opcache
 # Install XML extensions (urutan penting!)
 RUN docker-php-ext-install dom
 RUN docker-php-ext-install xml
-RUN docker-php-ext-install xmlreader
 
 # Install ZIP
 RUN docker-php-ext-install zip
